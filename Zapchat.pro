@@ -17,13 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     src/main.cpp \
-    src/landing_page.cpp
+    src/landing_page.cpp \
+    src/signiu_page.cpp
 
 HEADERS += \
-    src/landing_page.h
+    src/landing_page.h \
+    src/signiu_page.h
 
 FORMS += \
-    src/landing_page.ui
+    src/landing_page.ui \
+    src/signiu_page.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

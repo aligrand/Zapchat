@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>landing_page</class>
- <widget class="QMainWindow" name="landing_page">
+ <class>signIU_page</class>
+ <widget class="QMainWindow" name="signIU_page">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>landing_page</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
  </widget>
