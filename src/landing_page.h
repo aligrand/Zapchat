@@ -12,8 +12,13 @@ class landing_page : public QMainWindow
     Q_OBJECT
 
 public:
+    bool go_next_window = false;
+
     landing_page(QWidget *parent = nullptr);
     ~landing_page();
+
+private slots:
+    void on_goto_signiu_button_clicked();
 
 private:
     Ui::landing_page *ui;

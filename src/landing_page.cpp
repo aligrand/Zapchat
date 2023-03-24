@@ -12,3 +12,9 @@ landing_page::~landing_page()
 {
     delete ui;
 }
+
+void landing_page::on_goto_signiu_button_clicked()
+{
+    this->go_next_window = true;
+    this->close();
+}
