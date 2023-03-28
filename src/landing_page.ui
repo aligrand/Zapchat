@@ -69,9 +69,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>230</y>
+      <y>200</y>
       <width>691</width>
-      <height>201</height>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="VerticalLayout">
