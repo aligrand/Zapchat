@@ -21,8 +21,8 @@
    <widget class="QLabel" name="Backgrand">
     <property name="geometry">
      <rect>
-      <x>-2</x>
-      <y>-10</y>
+      <x>0</x>
+      <y>10</y>
       <width>801</width>
       <height>611</height>
      </rect>

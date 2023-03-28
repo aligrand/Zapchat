@@ -15,6 +15,9 @@ public:
     landing_page(QWidget *parent = nullptr);
     ~landing_page();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::landing_page *ui;
 };

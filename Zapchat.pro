@@ -20,15 +20,15 @@ DESTDIR = $$PWD/run
 SOURCES += \
     src/main.cpp \
     src/landing_page.cpp \
-    src/signiu_page.cpp
+    src/signin_page.cpp
 
 HEADERS += \
     src/landing_page.h \
-    src/signiu_page.h
+    src/signin_page.h
 
 FORMS += \
     src/landing_page.ui \
-    src/signiu_page.ui
+    src/signin_page.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
