@@ -23,7 +23,7 @@ class auth_page : public QMainWindow
 public:
     explicit auth_page(QWidget *parent = nullptr);
     ~auth_page();
-    uByte start_process();
+    void start_process();
 
 private slots:
     void on_reSend_sms_button_clicked();
@@ -34,13 +34,16 @@ private slots:
 
 private:
     Ui::auth_page *ui;
-    uByte status = 0; // 0:still in process --- 1:verified --- 2:change info
     phone_screen *ph;
     QRandomGenerator random;
     QString code;
     QTimer timer;
+    uByte status = 0; // 0:still in process --- 1:verified --- 2:change info
 
     QString code_gen();
+
+signals:
+    void result_ready(uByte res);
 };
 
 #endif // AUTH_PAGE_H

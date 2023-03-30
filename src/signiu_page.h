@@ -5,6 +5,9 @@
 
 #include <QMainWindow>
 
+typedef char Byte;
+typedef unsigned char uByte;
+
 namespace Ui {
 class signIU_page;
 }
@@ -16,6 +19,9 @@ class signIU_page : public QMainWindow
 public:
     explicit signIU_page(QWidget *parent = nullptr);
     ~signIU_page();
+
+public slots:
+    uByte return_res(uByte res);
 
 private slots:
     void on_pushButton_clicked();

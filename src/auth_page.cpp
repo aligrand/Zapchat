@@ -40,7 +40,7 @@ QString auth_page::code_gen()
     return code;
 }
 
-uByte auth_page::start_process() // timer + process
+void auth_page::start_process() // timer + process
 {
     uByte min, sec;
 
@@ -63,7 +63,7 @@ uByte auth_page::start_process() // timer + process
 
         if(status != 0)
         {
-            return status;
+            emit result_ready(status);
         }
     }
 }

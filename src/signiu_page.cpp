@@ -18,8 +18,10 @@ void signIU_page::on_pushButton_clicked()
     ap_window = new auth_page;
     this->setVisible(false);
     ap_window->show();
-    int stat = ap_window->start_process();
-    if(stat == 1)
+
+    while (ap_window->status == 0);
+
+    if(ap_window->status == 1)
     {
         delete this;
     }
