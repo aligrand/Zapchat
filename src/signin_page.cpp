@@ -12,7 +12,8 @@ signin_page::signin_page(QWidget *parent) :
     ui->label->setPixmap(Wel.scaled(800,600));
     ui->groupBox_2->setStyleSheet("QGroupBox {background-color: #ffffff;	border-radius: 8px;} QGroupBox > * {background-color: transparent;}");
     ui->groupBox_3->setStyleSheet("QGroupBox {background-color: #ffffff;	border-radius: 8px;} QGroupBox > * {background-color: transparent;}");
-
+    QPixmap hod("C:/Users/MostafaXD/OneDrive/Desktop/zapchat/Zapchat/res/img/hood.png");
+    ui->label_5->setPixmap(hod.scaled(250,500));
 }
 
 signin_page::~signin_page()

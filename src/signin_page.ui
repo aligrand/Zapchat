@@ -103,7 +103,7 @@
      <property name="title">
       <string>name and last name</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="name">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -126,7 +126,7 @@
      <property name="title">
       <string>Email</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="email">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -149,7 +149,7 @@
      <property name="title">
       <string>phone number</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit_11">
+     <widget class="QLineEdit" name="phone">
       <property name="geometry">
        <rect>
         <x>70</x>
@@ -256,7 +256,7 @@
      <property name="title">
       <string>confirm password</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit_13">
+     <widget class="QLineEdit" name="passc">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -279,7 +279,7 @@
      <property name="title">
       <string>captcha</string>
      </property>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="c">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -300,7 +300,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_14">
+     <widget class="QLineEdit" name="captchaL">
       <property name="geometry">
        <rect>
         <x>90</x>
@@ -310,6 +310,19 @@
        </rect>
       </property>
      </widget>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>251</width>
+       <height>501</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
@@ -391,7 +404,7 @@
      <property name="title">
       <string>username</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="username">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -414,7 +427,7 @@
      <property name="title">
       <string>password</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="password">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -469,5 +482,22 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>label_5</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>323</x>
+     <y>498</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-67</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
