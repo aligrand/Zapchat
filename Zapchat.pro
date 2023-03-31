@@ -19,22 +19,30 @@ DESTDIR = $$PWD/run
 
 SOURCES += \
     src/auth_page.cpp \
+    src/dbmanager.cpp \
     src/main.cpp \
     src/landing_page.cpp \
     src/phone_screen.cpp \
-    src/signiu_page.cpp
+    src/signin_widget.cpp \
+    src/signiu_page.cpp \
+    src/signup_widget.cpp
 
 HEADERS += \
     src/auth_page.h \
+    src/dbmanager.h \
     src/landing_page.h \
     src/phone_screen.h \
-    src/signiu_page.h
+    src/signin_widget.h \
+    src/signiu_page.h \
+    src/signup_widget.h
 
 FORMS += \
     src/auth_page.ui \
     src/landing_page.ui \
     src/phone_screen.ui \
-    src/signiu_page.ui
+    src/signin_widget.ui \
+    src/signiu_page.ui \
+    src/signup_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

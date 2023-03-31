@@ -10,6 +10,18 @@
     <height>477</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>690</width>
+    <height>477</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>690</width>
+    <height>477</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Zapchat</string>
   </property>

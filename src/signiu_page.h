@@ -2,11 +2,10 @@
 #define SIGNIU_PAGE_H
 
 #include "auth_page.h"
+#include "signin_widget.h"
+#include "signup_widget.h"
 
 #include <QMainWindow>
-
-typedef char Byte;
-typedef unsigned char uByte;
 
 namespace Ui {
 class signIU_page;
@@ -21,14 +20,14 @@ public:
     ~signIU_page();
 
 public slots:
-    uByte return_res(uByte res);
-
-private slots:
-    void on_pushButton_clicked();
+    void goto_signin();
+    void goto_signup();
 
 private:
     Ui::signIU_page *ui;
     auth_page *ap_window;
+    signin_widget *si_w;
+    signup_widget *su_w;
 };
 
 #endif // SIGNIU_PAGE_H
