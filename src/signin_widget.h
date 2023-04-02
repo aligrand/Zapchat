@@ -8,6 +8,7 @@
 #include <QRegularExpressionValidator>
 #include <QLabel>
 #include <QPixmap>
+#include <QString>
 
 namespace Ui {
 class signin_widget;
@@ -23,6 +24,7 @@ public:
 
 signals:
     void goto_su();
+    void si(QString username, QString password);
 
 private slots:
     void on_username_lineEdit_textChanged(const QString &text);

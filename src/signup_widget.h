@@ -10,7 +10,7 @@
 #include <QString>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
-
+#include <QMessageBox>
 
 namespace Ui {
 class signup_widget;
@@ -26,6 +26,8 @@ public:
 
 signals:
     void goto_si();
+    void su(QString username, QString password, QString pn, QString email);
+    void is_username_avalable(QString text, bool &result);
 
 private slots:
     void on_username_lineEdit_textChanged(const QString &arg1);

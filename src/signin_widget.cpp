@@ -93,7 +93,7 @@ void signin_widget::on_visible_OF_clicked()
 
 void signin_widget::on_login_pushButton_clicked()
 {
-
+    emit si(ui->username_lineEdit->text(), ui->password_lineEdit->text());
 }
 
 void signin_widget::on_goto_signup_link_linkActivated(const QString &link)

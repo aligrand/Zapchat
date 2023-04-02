@@ -50,6 +50,13 @@ int main(int argc, char *argv[])
         delete lp_window;
 
         sp_window->show();
+
+        while (!sp_window->go_next_window)
+        {
+            a.processEvents();
+        }
+
+        delete sp_window;
     }
 
     return a.exec();

@@ -29,14 +29,17 @@
    <iconset>
     <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(224, 234, 243);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="logo_pic">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>0</y>
-      <width>141</width>
-      <height>151</height>
+      <x>295</x>
+      <y>160</y>
+      <width>100</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -61,10 +64,10 @@
    <widget class="QLabel" name="welcome_pic">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>541</width>
-      <height>151</height>
+      <x>10</x>
+      <y>20</y>
+      <width>672</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="text">
@@ -81,9 +84,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>200</y>
+      <y>270</y>
       <width>691</width>
-      <height>231</height>
+      <height>197</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="VerticalLayout">
@@ -91,7 +94,7 @@
       <widget class="QLabel" name="welcome_title_lable">
        <property name="font">
         <font>
-         <family>Segoe Print</family>
+         <family>SimSun</family>
          <pointsize>25</pointsize>
          <weight>75</weight>
          <bold>true</bold>
@@ -99,6 +102,9 @@
        </property>
        <property name="autoFillBackground">
         <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
        </property>
        <property name="text">
         <string>Zapchat</string>
@@ -120,8 +126,13 @@
         <font>
          <family>MS PGothic</family>
          <pointsize>13</pointsize>
+         <weight>75</weight>
          <italic>false</italic>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
        </property>
        <property name="text">
         <string>Welcome to Zapchat</string>
@@ -130,19 +141,6 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>21</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -190,13 +188,21 @@
          </property>
          <property name="font">
           <font>
-           <family>Roman</family>
+           <family>MS Shell Dlg 2</family>
            <pointsize>17</pointsize>
            <weight>75</weight>
            <italic>true</italic>
            <bold>true</bold>
            <strikeout>false</strikeout>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-radius:10px;
+background-color: rgb(224, 234, 255);
+border-color: rgb(20, 134, 255);
+border-style: solid;
+border-width: 2px;
+color: rgb(141, 141, 211);</string>
          </property>
          <property name="text">
           <string>Continue</string>
