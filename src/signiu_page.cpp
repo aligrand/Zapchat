@@ -70,6 +70,7 @@ void signIU_page::auth_result(uByte res)
     // goto signup server
     if (res == 1) {
         signup_server(su_info[0], su_info[1], su_info[2], su_info[3]);
+        delete ap_window;
     }
     // back to signIU
     else {

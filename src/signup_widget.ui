@@ -58,7 +58,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>only Alphabetic leters and Numbers and _ character</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic&lt;/span&gt; leters and&lt;span style=&quot; font-weight:600;&quot;&gt; Numbers&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;_&lt;/span&gt; character&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-left-color: #fff;

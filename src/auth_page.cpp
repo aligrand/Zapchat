@@ -11,17 +11,23 @@ auth_page::auth_page(QWidget *parent) :
 
     ui->reSend_sms_button->setEnabled(false);
 
+    ui->back2info_link->setText("<a style=\"text-decoration:none; color:rgb(118, 118, 118);\"; href=\"#\">Is your informations wrong?</a>");
+
+
     connect(timer, &QTimer::timeout, this, &auth_page::auth_page_timer);
     timer->setTimerType(Qt::PreciseTimer);
     timer->setInterval(1000);
 
-    random();
+    connect(this, &auth_page::send_sms_code, this, &auth_page::on_reSend_sms_button_clicked);
+
+    srand(time((time_t *)nullptr));
 }
 
 auth_page::~auth_page()
 {
     delete ui;
     delete timer;
+    delete ph;
 }
 
 void auth_page::closeEvent(QCloseEvent *event)
@@ -33,8 +39,7 @@ void auth_page::closeEvent(QCloseEvent *event)
 
 void auth_page::showEvent(QShowEvent *event)
 {
-    timer->start(100000); // 100 SECs
-    ph->show();
+    emit send_sms_code();
 }
 
 void auth_page::auth_page_timer()
@@ -61,8 +66,7 @@ void auth_page::on_reSend_sms_button_clicked()
 
 QString auth_page::code_gen()
 {
-    int rand = random.bounded(0,9999);
-    code.number(rand);
+    code = QString::number(random(1000, 9999));
 
     return code;
 }
@@ -74,7 +78,7 @@ void auth_page::on_verify_button_clicked()
 
     if(user_input == code)
     {
-        result_ready(1);
+        emit result_ready(1);
     }
     else
     {
@@ -84,7 +88,12 @@ void auth_page::on_verify_button_clicked()
 
 void auth_page::on_back2info_link_linkActivated(const QString &link)
 {
-    result_ready(2);
+    emit result_ready(2);
+}
+
+inline int auth_page::random(int min, int max)
+{
+    return (rand() % (max - min + 1)) + min;
 }
 
 

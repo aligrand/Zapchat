@@ -41,18 +41,18 @@ void signup_widget::on_username_lineEdit_textChanged(const QString &text)
         emit is_username_avalable(ui->username_lineEdit->text(), res);
         if (res) {
             is_username_val = true;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
+            ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
                                                  border-left-style: solid;\
                     border-left-width: 5px;\
-                    background-color: #a5d6a7;\
+                    background-color: #c8e6c9;\
             padding-left:3px;");
         }
         else {
             is_username_val = false;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
+            ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
                                                  border-left-style: solid;\
                     border-left-width: 5px;\
-                    background-color: #ef9a9a;\
+                    background-color: #ffcdd2;\
             padding-left:3px;");
         }
     }

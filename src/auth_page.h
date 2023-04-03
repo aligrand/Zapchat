@@ -10,6 +10,9 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QCloseEvent>
+#include <cstdlib>
+#include <ctime>
+#include <QDebug>
 
 typedef char Byte;
 typedef unsigned char uByte;
@@ -47,11 +50,15 @@ private slots:
 private:
     Ui::auth_page *ui;
     phone_screen *ph;
-    QRandomGenerator random;
     QString code;
     QTimer *timer;
 
     QString code_gen();
+
+    inline int random(int min, int max);
+
+signals:
+    void send_sms_code();
 };
 
 #endif // AUTH_PAGE_H
