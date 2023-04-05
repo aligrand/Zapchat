@@ -147,12 +147,19 @@
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-radius:10px;
-background-color: rgb(224, 234, 255);
-border-color: rgb(20, 134, 255);
-border-style: solid;
-border-width: 2px;
-color: rgb(141, 141, 211);</string>
+          <string notr="true">QPushButton
+{
+	background-color: #00c0ff;
+	color: #fff;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 17px;
+	border-color: #00c0ff;
+	padding: 10px;
+
+}
+</string>
          </property>
          <property name="text">
           <string>Continue</string>
