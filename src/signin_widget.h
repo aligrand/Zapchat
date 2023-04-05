@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QString>
+#include <QMessageBox>
 
 namespace Ui {
 class signin_widget;
@@ -24,7 +25,7 @@ public:
 
 signals:
     void goto_su();
-    void si(QString username, QString password);
+    void si(QString username, QString password, bool &result);
 
 private slots:
     void on_username_lineEdit_textChanged(const QString &text);

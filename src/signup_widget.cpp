@@ -38,8 +38,8 @@ void signup_widget::on_username_lineEdit_textChanged(const QString &text)
 
     if (username_regex_val.validate(text_tmp, pos) == QValidator::Acceptable){
         bool res;
-        emit is_username_avalable(ui->username_lineEdit->text(), res);
-        if (res) {
+        emit is_username_exist(ui->username_lineEdit->text(), res);
+        if (!res) {
             is_username_val = true;
             ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
                                                  border-left-style: solid;\

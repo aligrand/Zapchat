@@ -7,6 +7,11 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QFile>
+#include <QTextStream>
 
 typedef unsigned char uByte;
 
@@ -27,10 +32,10 @@ public:
 private slots:
     void goto_signin();
     void goto_signup();
-    void signin(QString username, QString password);
+    void signin(QString username, QString password, bool &result);
     void signup(QString username, QString password, QString pn, QString email);
     void auth_result(uByte res);
-    void is_username_avalable(QString username, bool &result);
+    void is_username_exist(QString username, bool &result);
 
 private:
     Ui::signIU_page *ui;
@@ -38,6 +43,8 @@ private:
     signin_widget *si_w;
     signup_widget *su_w;
     QString su_info[4];
+    QJsonDocument database;
+    QFile database_file;
 
     void signup_server(QString username, QString password, QString pn, QString email);
 };

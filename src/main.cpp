@@ -2,27 +2,17 @@
 #include "signiu_page.h"
 
 #include <QApplication>
-#include <iostream>
-#include <fstream>
+#include <QDebug>
+#include <QFile>
+#include <cstdlib>
 
 using namespace std;
 
 bool is_user_avalable()
 {
-    ifstream userinfo_file;
+    QFile userinfo_file("./userinfo.dat");
 
-    userinfo_file.open("./userinfo.dat");
-
-    if(!userinfo_file)
-    {
-        cout << "error in opening/creating file";
-        exit(0);
-    }
-
-    userinfo_file.seekg(0, ios::end);
-
-    long long curser_pos = userinfo_file.tellg();
-    if(curser_pos == 0)
+    if(userinfo_file.size() == 0)
     {
         return false;
     }
@@ -34,6 +24,10 @@ bool is_user_avalable()
 
 int main(int argc, char *argv[])
 {
+    system("mkdir Audios, Chats, Files, Images, Videos");
+    system("if not exist server-config.ini type nul > server-config.ini");
+    system("if not exist userinfo.dat type nul > userinfo.txt");
+
     QApplication a(argc, argv);
     landing_page *lp_window = new landing_page();
     signIU_page *sp_window = new signIU_page();

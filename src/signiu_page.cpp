@@ -4,7 +4,8 @@
 signIU_page::signIU_page(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::signIU_page),
-    ap_window(new auth_page())
+    ap_window(new auth_page()),
+    database_file("./DB-temp/db-temp.json")
 {
     ui->setupUi(this);
 
@@ -24,12 +25,14 @@ signIU_page::signIU_page(QWidget *parent) :
     connect(si_w, &signin_widget::si, this, &signIU_page::signin);
     connect(su_w, &signup_widget::goto_si, this, &signIU_page::goto_signin);
     connect(su_w, &signup_widget::su, this, &signIU_page::signup);
-    connect(su_w, &signup_widget::is_username_avalable, this, &signIU_page::is_username_avalable);
+    connect(su_w, &signup_widget::is_username_exist, this, &signIU_page::is_username_exist);
+
+    database_file.open(QFile::ReadWrite | QFile::Text);
+    database = QJsonDocument::fromJson(database_file.readAll());
 }
 
 signIU_page::~signIU_page()
-{
-
+{         
     delete ui;
     delete si_w;
     delete su_w;
@@ -49,9 +52,35 @@ void signIU_page::goto_signup()
     su_w->setVisible(true);
 }
 
-void signIU_page::signin(QString username, QString password)
+void signIU_page::signin(QString username, QString password, bool &result)
 {
+    bool res;
 
+    is_username_exist(username, res);
+
+    if(res == false)
+    {
+        result = false;
+        return;
+    }
+
+    if(database[username]["password"] == password)
+    {
+        result = true;
+
+        QFile user_file("./userinfo.txt");
+        user_file.open(QFile::WriteOnly);
+        QTextStream data(&user_file);
+        data << username << QString(" ") << password;
+        user_file.close();
+
+        go_next_window = true;
+    }
+    else
+    {
+        result = false;
+        return;
+    }
 }
 
 void signIU_page::signup(QString username, QString password, QString pn, QString email)
@@ -69,6 +98,12 @@ void signIU_page::auth_result(uByte res)
 {
     // goto signup server
     if (res == 1) {
+        QFile user_file("./userinfo.txt");
+        user_file.open(QFile::WriteOnly);
+        QTextStream data(&user_file);
+        data << su_info[0] << QString(" ") << su_info[1];
+        user_file.close();
+
         signup_server(su_info[0], su_info[1], su_info[2], su_info[3]);
         delete ap_window;
     }
@@ -79,17 +114,31 @@ void signIU_page::auth_result(uByte res)
     }
 }
 
-void signIU_page::is_username_avalable(QString username, bool &result)
+void signIU_page::is_username_exist(QString username, bool &result)
 {
+    if(database[username] == QJsonValue::Undefined)
+    {
+       result = false;
+       return;
+    }
+
     result = true;
 }
 
 void signIU_page::signup_server(QString username, QString password, QString pn, QString email)
 {
+    // we already check that username not exist
 
-}
+    QJsonObject root;
+    QJsonObject info_obj;
+    QJsonArray AI_arr;
 
-bool is_username_avalable(QString username)
-{
+    info_obj.insert("password", password);
+    AI_arr.push_back(pn);
+    AI_arr.push_back(email);
+    info_obj.insert("AI", AI_arr);
+    root.insert(username, info_obj);
 
+    database_file.write(QJsonDocument(root).toJson(QJsonDocument::Indented));
+    database_file.close();
 }
