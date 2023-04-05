@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>331</height>
+    <width>331</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,9 +22,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
-      <width>701</width>
-      <height>331</height>
+      <y>-30</y>
+      <width>331</width>
+      <height>631</height>
      </rect>
     </property>
     <property name="text">
@@ -40,9 +40,9 @@
    <widget class="QLabel" name="auth_code_lable">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>209</y>
-      <width>121</width>
+      <x>210</x>
+      <y>390</y>
+      <width>41</width>
       <height>41</height>
      </rect>
     </property>
@@ -59,60 +59,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>284</x>
-      <y>80</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(249, 249, 249);</string>
-    </property>
-    <property name="text">
-     <string>Zapchat</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>264</x>
-      <y>160</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(146, 145, 151);
-</string>
-    </property>
-    <property name="text">
-     <string>Now</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

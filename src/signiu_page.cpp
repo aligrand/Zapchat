@@ -89,7 +89,4 @@ void signIU_page::signup_server(QString username, QString password, QString pn, 
 
 }
 
-bool is_username_avalable(QString username)
-{
 
-}

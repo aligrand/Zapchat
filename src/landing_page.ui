@@ -30,44 +30,16 @@
     <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(224, 234, 243);</string>
+   <string notr="true">background-color:rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="logo_pic">
-    <property name="geometry">
-     <rect>
-      <x>295</x>
-      <y>160</y>
-      <width>100</width>
-      <height>100</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../res/img/Zapchat.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="indent">
-     <number>-1</number>
-    </property>
-   </widget>
    <widget class="QLabel" name="welcome_pic">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>672</width>
-      <height>121</height>
+      <x>0</x>
+      <y>0</y>
+      <width>691</width>
+      <height>281</height>
      </rect>
     </property>
     <property name="text">
@@ -84,19 +56,22 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>270</y>
+      <y>306</y>
       <width>691</width>
-      <height>197</height>
+      <height>161</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="VerticalLayout">
+     <property name="bottomMargin">
+      <number>11</number>
+     </property>
      <item>
       <widget class="QLabel" name="welcome_title_lable">
        <property name="font">
         <font>
-         <family>SimSun</family>
-         <pointsize>25</pointsize>
-         <weight>75</weight>
+         <family>Fira Sans</family>
+         <pointsize>24</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -104,10 +79,12 @@
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));
+font: 800 24pt &quot;Fira Sans&quot;;
+color:rgb(85, 85, 85)</string>
        </property>
        <property name="text">
-        <string>Zapchat</string>
+        <string>Zapchat dasktop</string>
        </property>
        <property name="textFormat">
         <enum>Qt::AutoText</enum>
@@ -121,34 +98,21 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="welcome_caption_lable">
-       <property name="font">
-        <font>
-         <family>MS PGothic</family>
-         <pointsize>13</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
-       </property>
-       <property name="text">
-        <string>Welcome to Zapchat</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="bottomMargin">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
         <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>11</number>
+       </property>
+       <property name="bottomMargin">
+        <number>18</number>
        </property>
        <item>
         <spacer name="horizontalSpacer">
@@ -188,21 +152,30 @@
          </property>
          <property name="font">
           <font>
-           <family>MS Shell Dlg 2</family>
+           <family>Fira Sans ExtraBold</family>
            <pointsize>17</pointsize>
-           <weight>75</weight>
            <italic>true</italic>
            <bold>true</bold>
            <strikeout>false</strikeout>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
-          <string notr="true">border-radius:10px;
-background-color: rgb(224, 234, 255);
-border-color: rgb(20, 134, 255);
-border-style: solid;
-border-width: 2px;
-color: rgb(141, 141, 211);</string>
+          <string notr="true">QPushButton
+{
+	background-color: #00c0ff;
+	color: #fff;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 17px;
+	border-color: #00c0ff;
+	padding: 10px;
+
+}
+</string>
          </property>
          <property name="text">
           <string>Continue</string>

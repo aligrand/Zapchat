@@ -170,6 +170,17 @@ padding-left:3px;
       <height>31</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox
+{
+    background-color: rgb(255, 255, 255)
+    border: 1px solid #000;
+    padding-left: 6px;
+    color: #000;
+    height: 20px;
+
+}</string>
+    </property>
     <property name="frame">
      <bool>true</bool>
     </property>
@@ -351,7 +362,7 @@ padding-left:3px;
      <x>270</x>
      <y>220</y>
      <width>241</width>
-     <height>161</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="title">
@@ -361,9 +372,9 @@ padding-left:3px;
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>21</y>
+      <y>30</y>
       <width>221</width>
-      <height>81</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -385,7 +396,7 @@ padding-left:3px;
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
+      <y>80</y>
       <width>181</width>
       <height>31</height>
      </rect>
@@ -409,7 +420,7 @@ padding-left:3px;
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>120</y>
+      <y>80</y>
       <width>31</width>
       <height>31</height>
      </rect>
