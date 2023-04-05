@@ -10,9 +10,11 @@ using namespace std;
 
 bool is_user_avalable()
 {
-    QFile userinfo_file("./userinfo.dat");
+    QFile userinfo_file("./userinfo.txt");
+    qint64 size = userinfo_file.size();
+    userinfo_file.close();
 
-    if(userinfo_file.size() == 0)
+    if(size == 0)
     {
         return false;
     }
@@ -26,7 +28,7 @@ int main(int argc, char *argv[])
 {
     system("mkdir Audios, Chats, Files, Images, Videos");
     system("if not exist server-config.ini type nul > server-config.ini");
-    system("if not exist userinfo.dat type nul > userinfo.txt");
+    system("if not exist userinfo.txt type nul > userinfo.txt");
 
     QApplication a(argc, argv);
     landing_page *lp_window = new landing_page();

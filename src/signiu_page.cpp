@@ -137,8 +137,14 @@ void signIU_page::signup_server(QString username, QString password, QString pn, 
     AI_arr.push_back(pn);
     AI_arr.push_back(email);
     info_obj.insert("AI", AI_arr);
-    root.insert(username, info_obj);
 
-    database_file.write(QJsonDocument(root).toJson(QJsonDocument::Indented));
+    root = database.object();
+
+    root.insert(username, info_obj);
+    database.setObject(root);
+
+    database_file.resize(0);
+
+    database_file.write(database.toJson(QJsonDocument::Indented));
     database_file.close();
 }
