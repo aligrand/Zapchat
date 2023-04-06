@@ -52,6 +52,7 @@ private:
     phone_screen *ph;
     QString code;
     QTimer *timer;
+    int countdown_sec = 100;
 
     QString code_gen();
 

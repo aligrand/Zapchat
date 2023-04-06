@@ -13,10 +13,7 @@ auth_page::auth_page(QWidget *parent) :
 
     ui->back2info_link->setText("<a style=\"text-decoration:none; color:rgb(118, 118, 118);\"; href=\"#\">Is your informations wrong?</a>");
 
-
     connect(timer, &QTimer::timeout, this, &auth_page::auth_page_timer);
-    timer->setTimerType(Qt::PreciseTimer);
-    timer->setInterval(1000);
 
     connect(this, &auth_page::send_sms_code, this, &auth_page::on_reSend_sms_button_clicked);
 
@@ -39,15 +36,25 @@ void auth_page::closeEvent(QCloseEvent *event)
 
 void auth_page::showEvent(QShowEvent *event)
 {
+    timer->start(1000);
+
     emit send_sms_code();
 }
 
 void auth_page::auth_page_timer()
 {
-    int sec = timer->remainingTime() % 60;
-    int min = timer->remainingTime() / 60;
+    --countdown_sec;
+
+    int sec = countdown_sec % 60;
+    int min = countdown_sec / 60;
 
     ui->Timer_lable->setText(QString::number(min) + ":" + QString::number(sec));
+
+    if(countdown_sec == 0)
+    {
+        ui->reSend_sms_button->setEnabled(true);
+        timer->stop();
+    }
 }
 
 void auth_page::on_reSend_sms_button_clicked()
@@ -57,7 +64,8 @@ void auth_page::on_reSend_sms_button_clicked()
 
     ph->set_sms(code_gen());
 
-    timer->start(100000); // 100 SECs
+    countdown_sec = 100;
+    timer->start();
 
     ph->show();
 
