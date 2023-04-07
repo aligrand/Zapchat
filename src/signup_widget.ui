@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>signup_widget</class>
+ <widget class="QWidget" name="signup_widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>401</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>520</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget
+{
+	color: #263238;
+  	font: 900 14pt &quot;Exo 2&quot;;
+}</string>
+   </property>
+   <property name="text">
+    <string>Create Account</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Username</string>
+   </property>
+   <widget class="QLineEdit" name="username_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic&lt;/span&gt; leters and&lt;span style=&quot; font-weight:600;&quot;&gt; Numbers&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;_&lt;/span&gt; character&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Enter your User Name</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Email - optianal</string>
+   </property>
+   <widget class="QLineEdit" name="email_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Enter your Email</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_7">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Phone Number - optianal</string>
+   </property>
+   <widget class="QLineEdit" name="pn_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>10</number>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Enter your Phone Number</string>
+    </property>
+    <property name="cursorMoveStyle">
+     <enum>Qt::LogicalMoveStyle</enum>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="pn_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <item>
+     <property name="text">
+      <string>+98</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>+1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>+44</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>+65</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_14">
+   <property name="geometry">
+    <rect>
+     <x>269</x>
+     <y>80</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Password</string>
+   </property>
+   <widget class="QLineEdit" name="password_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic leters &lt;/span&gt;and &lt;span style=&quot; font-weight:600;&quot;&gt;Numbers.&lt;/span&gt; you must use exactly one of theas characters [&lt;span style=&quot; font-weight:600;&quot;&gt;$&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;%&lt;/span&gt;]&lt;/p&gt;&lt;p&gt;* 5 &amp;lt; len &amp;lt; 10&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+    <property name="placeholderText">
+     <string>Enter your Password</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="p_visible_OF">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	background-color: transparent;
+	color: #fff;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 17px;
+	border-color: transparent;
+	padding: 10px;
+
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../res/icon/visibility-off.png</normaloff>../res/icon/visibility-off.png</iconset>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_15">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>150</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Confirm Password</string>
+   </property>
+   <widget class="QLineEdit" name="c_password_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic leters &lt;/span&gt;and &lt;span style=&quot; font-weight:600;&quot;&gt;Numbers.&lt;/span&gt; you must use exactly one of theas characters [&lt;span style=&quot; font-weight:600;&quot;&gt;$&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;%&lt;/span&gt;]&lt;/p&gt;&lt;p&gt;* 5 &amp;lt; len &amp;lt; 10&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+    <property name="placeholderText">
+     <string>Enter your Password</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cp_visible_OF">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	background-color: transparent;
+	color: #fff;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 17px;
+	border-color: transparent;
+	padding: 10px;
+
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../res/icon/visibility-off.png</normaloff>../res/icon/visibility-off.png</iconset>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_16">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>220</y>
+     <width>241</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Captcha</string>
+   </property>
+   <widget class="QLabel" name="captcha_img">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>21</y>
+      <width>221</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget
+{
+	background-color:#18062a  ;
+	color: #000000;
+
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="captcha_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-left-color: #fff;
+border-left-style: solid;
+border-left-width: 5px;
+text-indent: 3px;
+padding-left:3px;
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Enre Captcha</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="renew_captcha_pushButton">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>120</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	background-color: transparent;
+	color: #fff;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 17px;
+	border-color: transparent;
+	padding: 10px;
+
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../res/icon/renew_icon.png</normaloff>../res/icon/renew_icon.png</iconset>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="signup_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	background-color: #003bbd;
+	color: rgb(255, 255, 255);
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	padding: 10px;
+	font: 700 9pt &quot;Exo 2&quot;;
+
+
+}
+</string>
+   </property>
+   <property name="text">
+    <string>CREATE ACCOUNT</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goto_signin_link">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>360</y>
+     <width>221</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget
+{
+	color: rgb(118, 118, 118);
+  	font: 400 10pt &quot;Exo 2&quot;;
+}</string>
+   </property>
+   <property name="text">
+    <string>have account?</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
