@@ -15,7 +15,7 @@ signup_widget::signup_widget(QWidget *parent) :
     password_regex.setPattern("^[a-zA-Z0-9]*(\\$|%)[a-zA-Z0-9]*$");
     Cpassword_regex = password_regex;
     pn_regex.setPattern("^[1-9][0-9]{9}$");
-    email_regex.setPattern("^(\\w+(\\.|-)?\\w+)+@+[a-zA-Z0-9]+\\.[a-zA-Z]+$");
+    email_regex.setPattern("^(\\w+(\\.|-)?\\w+)+@[a-zA-Z0-9]+\\.[a-zA-Z]+$");
     username_regex_val.setRegularExpression(username_regex);
     password_regex_val.setRegularExpression(password_regex);
     Cpassword_regex_val.setRegularExpression(Cpassword_regex);
