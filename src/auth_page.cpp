@@ -11,7 +11,7 @@ auth_page::auth_page(QWidget *parent) :
 
     ui->reSend_sms_button->setEnabled(false);
 
-    ui->back2info_link->setText("<a style=\"text-decoration:none; color:rgb(118, 118, 118);\"; href=\"#\">Is your informations wrong?</a>");
+    ui->back2info_link->setText("<a style=\"text-decoration:none; color:rgb(118, 118, 118)\"; href=\"#\">Is your informations wrong?</a>");
 
     connect(timer, &QTimer::timeout, this, &auth_page::auth_page_timer);
 
@@ -39,6 +39,8 @@ void auth_page::showEvent(QShowEvent *event)
     timer->start(1000);
 
     emit send_sms_code();
+
+    QWidget::showEvent(event);
 }
 
 void auth_page::auth_page_timer()
@@ -90,12 +92,14 @@ void auth_page::on_verify_button_clicked()
     }
     else
     {
-        QMessageBox::critical(this,"Zapchat","You enter wrone code");
+        QMessageBox::critical(this,"Zapchat","You enter wrong code");
     }
 }
 
 void auth_page::on_back2info_link_linkActivated(const QString &link)
 {
+    delete ph;
+
     emit result_ready(2);
 }
 

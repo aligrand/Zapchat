@@ -30,7 +30,6 @@ signup_widget::~signup_widget()
     delete ui;
 }
 
-
 void signup_widget::on_username_lineEdit_textChanged(const QString &text)
 {
     int pos = 0;
@@ -216,8 +215,7 @@ void signup_widget::on_email_lineEdit_textChanged(const QString &text)
     int pos = 0;
     QString text_tmp = text;
 
-    if ((email_regex_val.validate(text_tmp, pos) == QValidator::Acceptable) &&
-            ((5 <= text_tmp.length()) && (text_tmp.length() <= 10))){
+    if ((email_regex_val.validate(text_tmp, pos) == QValidator::Acceptable)){
         is_email_val = true;
         ui->email_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
                                           border-left-style: solid;\
@@ -245,8 +243,7 @@ void signup_widget::on_pn_lineEdit_textChanged(const QString &text)
     int pos = 0;
     QString text_tmp = text;
 
-    if ((pn_regex_val.validate(text_tmp, pos) == QValidator::Acceptable) &&
-            ((5 <= text_tmp.length()) && (text_tmp.length() <= 10))){
+    if ((pn_regex_val.validate(text_tmp, pos) == QValidator::Acceptable)){
         is_pn_val = true;
         ui->pn_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
                                        border-left-style: solid;\
