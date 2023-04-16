@@ -45,11 +45,13 @@
     <layout class="QVBoxLayout" name="VerticalLayout">
      <item>
       <widget class="QLabel" name="welcome_title_lable">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="font">
         <font>
-         <family>SimSun</family>
+         <family>Fira Sans ExtraBold</family>
          <pointsize>25</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -57,7 +59,8 @@
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));
+color:rgb(81, 81, 81)</string>
        </property>
        <property name="text">
         <string>Zapchat</string>
@@ -77,18 +80,18 @@
       <widget class="QLabel" name="welcome_caption_lable">
        <property name="font">
         <font>
-         <family>MS PGothic</family>
-         <pointsize>13</pointsize>
-         <weight>75</weight>
+         <family>Fira Sans Medium</family>
+         <pointsize>11</pointsize>
          <italic>false</italic>
-         <bold>true</bold>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));
+color:#515151;</string>
        </property>
        <property name="text">
-        <string>Welcome to Zapchat</string>
+        <string>Connect with friends and chat instantly on ZapChat.</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -143,7 +146,6 @@
           <font>
            <family>MS Shell Dlg 2</family>
            <pointsize>17</pointsize>
-           <weight>75</weight>
            <italic>true</italic>
            <bold>true</bold>
            <strikeout>false</strikeout>
@@ -207,7 +209,7 @@
       <x>0</x>
       <y>-1</y>
       <width>690</width>
-      <height>241</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="pixmap">
