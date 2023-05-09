@@ -4,6 +4,7 @@
 #include "auth_page.h"
 #include "signin_widget.h"
 #include "signup_widget.h"
+#include "userinfowindow.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -42,6 +43,7 @@ private:
     auth_page *ap_window;
     signin_widget *si_w;
     signup_widget *su_w;
+    UserInfoWindow *userinfo_w;
     QString su_info[4];
     QJsonDocument database;
     QFile database_file;

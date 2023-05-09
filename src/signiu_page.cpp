@@ -5,6 +5,7 @@ signIU_page::signIU_page(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::signIU_page),
     ap_window(new auth_page()),
+    userinfo_w(new UserInfoWindow()),
     database_file("./DB-temp/db-temp.json")
 {
     ui->setupUi(this);

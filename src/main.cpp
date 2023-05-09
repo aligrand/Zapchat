@@ -2,34 +2,9 @@
 #include "signiu_page.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QFile>
-#include <QDir>
 
 using namespace std;
-
-void mk_prerequisite()
-{
-    static QString path[7] = {"./Audios", "./Chats", "./Files", "./Images", "./Videos",
-                            "./", "./"};
-    static QString file_name[7] = {".nomedia", ".nomedia", ".nomedia", ".nomedia", ".nomedia",
-                                  "server-config.ini", "userinfo.txt"};
-
-    for (qint8 i = 0; i < 7; ++i)
-    {
-        QDir dir;
-        QFile file(path[i] + "/" + file_name[i]);
-
-        if (!dir.exists(path[i])){
-            dir.mkpath(path[i]);
-        }
-
-        if (!file.exists()){
-            file.open(QIODevice::WriteOnly);
-            file.close();
-        }
-    }
-}
 
 bool is_user_avalable()
 {
@@ -49,8 +24,6 @@ bool is_user_avalable()
 
 int main(int argc, char *argv[])
 {
-    mk_prerequisite();
-
     QApplication a(argc, argv);
     landing_page *lp_window = new landing_page();
     signIU_page *sp_window = new signIU_page();

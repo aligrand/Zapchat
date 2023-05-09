@@ -35,7 +35,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic leters &lt;/span&gt;and &lt;span style=&quot; font-weight:600;&quot;&gt;Numbers&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;_ character&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;only &lt;span style=&quot; font-weight:600;&quot;&gt;Alphabetic leters &lt;/span&gt;and &lt;span style=&quot; font-weight:600;&quot;&gt;Numbers&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;_ character&lt;/span&gt;&lt;/p&gt;&lt;p&gt;max = 20 character&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-left-color: #fff;
@@ -44,6 +44,9 @@ border-left-width: 5px;
 text-indent: 3px;
 padding-left:3px;
 </string>
+    </property>
+    <property name="maxLength">
+     <number>20</number>
     </property>
     <property name="frame">
      <bool>false</bool>
