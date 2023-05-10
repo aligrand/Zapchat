@@ -1,5 +1,7 @@
 #include "landing_page.h"
 #include "signiu_page.h"
+#include "userinfowindow.h"
+#include "chatwindow.h"
 
 #include <QApplication>
 #include <QFile>
@@ -27,6 +29,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     landing_page *lp_window = new landing_page();
     signIU_page *sp_window = new signIU_page();
+    ChatWindow *cw = new ChatWindow();
 
     if(!is_user_avalable())
     {
@@ -48,6 +51,8 @@ int main(int argc, char *argv[])
 
         delete sp_window;
     }
+
+    cw->show();
 
     return a.exec();
 }
