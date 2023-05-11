@@ -2,8 +2,8 @@
  <author/>
  <comment/>
  <exportmacro/>
- <class>RoomTablePanel</class>
- <widget class="QWidget" name="RoomTablePanel">
+ <class>MessageWidget</class>
+ <widget class="QWidget" name="MessageWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

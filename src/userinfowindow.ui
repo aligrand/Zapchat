@@ -29,7 +29,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Zapchat</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="profile_pic">
@@ -148,7 +152,7 @@ border-color: rgb(255, 255, 255);</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../res/icon/camera_icon.png</normaloff>../res/icon/camera_icon.png</iconset>
+      <normaloff>../res/icon/addPhoto_icon.png</normaloff>../res/icon/addPhoto_icon.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="goto_chat_button">

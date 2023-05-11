@@ -19,8 +19,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = $$PWD/run
 
 SOURCES += \
+    src/accountsettingspanel.cpp \
+    src/addroomwindow.cpp \
+    src/appsettingspanel.cpp \
     lib/database/dbman.cpp \
     lib/server-connection/serverman.cpp \
+    src/imageviewerwindow.cpp \
+    src/messagewidget.cpp \
+    src/pinwindow.cpp \
+    src/roomlistpanel.cpp \
+    src/roomsearchpanel.cpp \
     src/chatwindow.cpp \
     src/main.cpp \
     src/auth_page.cpp \
@@ -28,39 +36,55 @@ SOURCES += \
     src/phone_screen.cpp \
     src/roominfopanel.cpp \
     src/roomsearchpanel.cpp \
-    src/roomtablepanel.cpp \
     src/signin_widget.cpp \
     src/signiu_page.cpp \
     src/signup_widget.cpp \
-    src/userinfowindow.cpp
+    src/userinfowindow.cpp \
+    src/videoviewerwindow.cpp
 
 HEADERS += \
+    src/accountsettingspanel.h \
+    src/addroomwindow.h \
+    src/appsettingspanel.h \
     lib/database/dbman.h \
     lib/server-connection/serverman.h \
+    src/imageviewerwindow.h \
+    src/messagewidget.h \
+    src/pinwindow.h \
+    src/roomlistpanel.h \
+    src/roomsearchpanel.h \
     src/auth_page.h \
     src/chatwindow.h \
     src/landing_page.h \
     src/phone_screen.h \
     src/roominfopanel.h \
     src/roomsearchpanel.h \
-    src/roomtablepanel.h \
     src/signin_widget.h \
     src/signiu_page.h \
     src/signup_widget.h \
-    src/userinfowindow.h
+    src/userinfowindow.h \
+    src/videoviewerwindow.h
 
 FORMS += \
+    src/accountsettingspanel.ui \
+    src/addroomwindow.ui \
+    src/appsettingspanel.ui \
+    src/imageviewerwindow.ui \
+    src/messagewidget.ui \
+    src/pinwindow.ui \
+    src/roomlistpanel.ui \
+    src/roomsearchpanel.ui \
     src/auth_page.ui \
     src/chatwindow.ui \
     src/landing_page.ui \
     src/phone_screen.ui \
     src/roominfopanel.ui \
     src/roomsearchpanel.ui \
-    src/roomtablepanel.ui \
     src/signin_widget.ui \
     src/signiu_page.ui \
     src/signup_widget.ui \
-    src/userinfowindow.ui
+    src/userinfowindow.ui \
+    src/videoviewerwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
