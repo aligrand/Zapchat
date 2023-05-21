@@ -5,6 +5,11 @@ void ServerMan::run()
 
 }
 
+void ServerMan::notConnectedProc()
+{
+
+}
+
 ServerMan::ServerMan()
 {
 
