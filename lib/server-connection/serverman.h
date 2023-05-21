@@ -12,13 +12,11 @@
 #include <QVector>
 #include <QFile>
 
-class ServerMan : public QThread
+class ServerMan
 {
-private:
-    void run() override;
 public:
     ServerMan();
-    ~ServerMan() override;
+    ~ServerMan();
 
 signals:
     void isUserNameExist(QString un);
@@ -38,6 +36,8 @@ private slots:
     void messageAsDataProc();
     void messageAsDataBaseProc();
     void messageAsCommandProc();
+    void run();
+    void notConnectedProc();
 
 signals:
     void sendData(QString address);
@@ -51,6 +51,7 @@ private:
     QSqlDatabase *db;
     QSqlQuery *dbQuery;
     QVector<QString> job;
+    QThread *thread;
 };
 
 #endif // SERVERMAN_H
