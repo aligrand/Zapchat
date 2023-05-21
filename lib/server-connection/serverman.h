@@ -20,9 +20,7 @@ public:
 signals:
     void isUserNameExist(QString un);
     void userNameExistResult(bool result);
-    void sendData(QString address);
-    void sendDataBase(QString address);
-    void sendCommand(QString cmd);
+    void command(QString cmd);
     void downloadData(QString address);
     void notConnected();
     void databaseUpdated();
@@ -31,7 +29,7 @@ private slots:
     void userNameExistCheck(QString un);
     void sendDataProc(QString address);
     void sendDataBaseProc(QString address);
-    void sendCommandProc(QString cmd);
+    void commandProc(QString cmd);
     void downloadDataProc(QString address);
     void newMessage();
     void messageAsDataProc();
@@ -39,6 +37,8 @@ private slots:
     void messageAsCommandProc();
 
 signals:
+    void sendData(QString address);
+    void sendDataBase(QString address);
     void messageAsData();
     void messageAsDataBase();
     void messageAsCommand();
