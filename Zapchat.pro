@@ -1,5 +1,7 @@
 QT += core gui
 QT += sql
+QT += multimedia
+QT += multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,20 +24,17 @@ SOURCES += \
     src/accountsettingspanel.cpp \
     src/addroomwindow.cpp \
     src/appsettingspanel.cpp \
-    lib/database/dbman.cpp \
     lib/server-connection/serverman.cpp \
+    src/enterroomwindow.cpp \
     src/imageviewerwindow.cpp \
     src/messagewidget.cpp \
     src/pinwindow.cpp \
-    src/roomlistpanel.cpp \
-    src/roomsearchpanel.cpp \
     src/chatwindow.cpp \
     src/main.cpp \
     src/auth_page.cpp \
     src/landing_page.cpp \
     src/phone_screen.cpp \
     src/roominfopanel.cpp \
-    src/roomsearchpanel.cpp \
     src/signin_widget.cpp \
     src/signiu_page.cpp \
     src/signup_widget.cpp \
@@ -46,19 +45,16 @@ HEADERS += \
     src/accountsettingspanel.h \
     src/addroomwindow.h \
     src/appsettingspanel.h \
-    lib/database/dbman.h \
     lib/server-connection/serverman.h \
+    src/enterroomwindow.h \
     src/imageviewerwindow.h \
     src/messagewidget.h \
     src/pinwindow.h \
-    src/roomlistpanel.h \
-    src/roomsearchpanel.h \
     src/auth_page.h \
     src/chatwindow.h \
     src/landing_page.h \
     src/phone_screen.h \
     src/roominfopanel.h \
-    src/roomsearchpanel.h \
     src/signin_widget.h \
     src/signiu_page.h \
     src/signup_widget.h \
@@ -69,17 +65,15 @@ FORMS += \
     src/accountsettingspanel.ui \
     src/addroomwindow.ui \
     src/appsettingspanel.ui \
+    src/enterroomwindow.ui \
     src/imageviewerwindow.ui \
     src/messagewidget.ui \
     src/pinwindow.ui \
-    src/roomlistpanel.ui \
-    src/roomsearchpanel.ui \
     src/auth_page.ui \
     src/chatwindow.ui \
     src/landing_page.ui \
     src/phone_screen.ui \
     src/roominfopanel.ui \
-    src/roomsearchpanel.ui \
     src/signin_widget.ui \
     src/signiu_page.ui \
     src/signup_widget.ui \

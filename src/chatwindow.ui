@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>973</width>
+    <width>913</width>
     <height>674</height>
    </rect>
   </property>
@@ -22,22 +22,22 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
-    <number>10</number>
+    <number>5</number>
    </property>
    <property name="topMargin">
-    <number>10</number>
+    <number>5</number>
    </property>
    <property name="rightMargin">
-    <number>10</number>
+    <number>5</number>
    </property>
    <property name="bottomMargin">
-    <number>10</number>
+    <number>5</number>
    </property>
    <property name="horizontalSpacing">
     <number>7</number>
    </property>
    <item row="1" column="0">
-    <widget class="QWidget" name="items_panel" native="true">
+    <widget class="QWidget" name="room_panel" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -61,6 +61,28 @@
 border-width: 1px;
 border-color: rgb(134, 134, 134);</string>
      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QListWidget" name="listWidget_2">
+        <property name="styleSheet">
+         <string notr="true">border-width:0px;
+</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="0" column="0">
@@ -96,7 +118,7 @@ border-color: rgb(134, 134, 134);</string>
        <number>2</number>
       </property>
       <property name="rightMargin">
-       <number>2</number>
+       <number>11</number>
       </property>
       <property name="bottomMargin">
        <number>2</number>
@@ -130,64 +152,26 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="roomsButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-	border-style: solid;
-	border-width: 0px;
-	border-radius: 10px;
-	width: 50px;
-	height: 50px;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(190, 190, 190);
-}</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../res/icon/room_icon.png</normaloff>../res/icon/room_icon.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="searchButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QLineEdit" name="lineEdit">
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>0</height>
+          <height>30</height>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton {
-	border-style: solid;
-	border-width: 0px;
-	border-radius: 10px;
-	width: 50px;
-	height: 50px;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(190, 190, 190);
-}</string>
+         <string notr="true">padding-left:5px;
+background-color: rgb(241, 241, 241);
+vorder-width:0px;</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../res/icon/search_icon.png</normaloff>../res/icon/search_icon.png</iconset>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="cursorPosition">
+         <number>0</number>
+        </property>
+        <property name="placeholderText">
+         <string>Search Here</string>
         </property>
        </widget>
       </item>
@@ -351,12 +335,12 @@ font: 700 9pt &quot;Exo 2&quot;;</string>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(85, 255, 0);
+            <string notr="true">color: rgb(36, 7, 255);
 
 border-width:0px;</string>
            </property>
            <property name="text">
-            <string>Online</string>
+            <string>On/Off</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -456,13 +440,7 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView">
-        <property name="minimumSize">
-         <size>
-          <width>500</width>
-          <height>0</height>
-         </size>
-        </property>
+       <widget class="QListWidget" name="listWidget">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
@@ -517,12 +495,47 @@ QPushButton:hover {
           <number>10</number>
          </property>
          <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Forward: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reply:&lt;/span&gt; &amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+	border-style: solid;
+	border-width: 0px;
+	width: 50px;
+	height: 50px;
+	
+	background-color: rgb(255, 255, 255);
+}
+
+QPushButton:hover {
+	
+	background-color: rgb(190, 190, 190);
+}</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../res/icon/forvard_reply_icon.png</normaloff>../res/icon/forvard_reply_icon.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="attachmentButton">
            <property name="maximumSize">
             <size>
              <width>50</width>
              <height>50</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Image: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Video: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Audio: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;File: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">QPushButton {
