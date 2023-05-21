@@ -440,7 +440,7 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QListWidget" name="listWidget">
+       <widget class="QListView" name="listView">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
