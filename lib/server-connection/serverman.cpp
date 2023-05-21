@@ -1,6 +1,11 @@
 #include "serverman.h"
 
-ServerMan::ServerMan(QString username, QString password)
+void ServerMan::run()
+{
+
+}
+
+ServerMan::ServerMan()
 {
 
 }
@@ -25,7 +30,7 @@ void ServerMan::sendDataBaseProc(QString address)
 
 }
 
-void ServerMan::sendCommandProc(QString cmd)
+void ServerMan::commandProc(QString cmd)
 {
 
 }

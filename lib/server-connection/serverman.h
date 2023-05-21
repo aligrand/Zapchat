@@ -2,20 +2,23 @@
 #define SERVERMAN_H
 
 #include <QApplication>
+#include <QThread>
 #include <QString>
 #include <QByteArray>
 #include <QDataStream>
 #include <QTcpSocket>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QJsonDocument>
-#include <QJsonObject>
+#include <QVector>
+#include <QFile>
 
-class ServerMan
+class ServerMan : public QThread
 {
+private:
+    void run() override;
 public:
-    ServerMan(QString username = "", QString password = "");
-    ~ServerMan();
+    ServerMan();
+    ~ServerMan() override;
 
 signals:
     void isUserNameExist(QString un);
@@ -47,7 +50,7 @@ private:
     QTcpSocket *socket;
     QSqlDatabase *db;
     QSqlQuery *dbQuery;
-    QJsonDocument *job;
+    QVector<QString> job;
 };
 
 #endif // SERVERMAN_H
