@@ -12,7 +12,7 @@
 #include <QVector>
 #include <QFile>
 
-class ServerMan
+class ServerMan : QObject
 {
 public:
     ServerMan();
@@ -20,18 +20,21 @@ public:
 
 signals:
     void isUserNameExist(QString un);
+    void isIdExist(QString id);
     void userNameExistResult(bool result);
+    void idExistResult(bool result);
     void command(QString cmd);
-    void downloadData(QString address);
+    void downloadData(QString fileName, QString address);
     void notConnected();
     void databaseUpdated();
 
 private slots:
     void userNameExistCheck(QString un);
+    void idExistCheck(QString id);
     void sendDataProc(QString address);
     void sendDataBaseProc(QString address);
     void commandProc(QString cmd);
-    void downloadDataProc(QString address);
+    void downloadDataProc(QString fileName, QString address);
     void newMessage();
     void messageAsDataProc();
     void messageAsDataBaseProc();

@@ -5,8 +5,11 @@
 #include <QString>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QSqlDatabase>
 #include <QSqlQuery>
+
+#include "lib/server-connection/serverman.h"
+
+extern ServerMan server;
 
 namespace Ui {
 class AddRoomWindow;
@@ -20,15 +23,20 @@ public:
     explicit AddRoomWindow(QWidget *parent = nullptr);
     ~AddRoomWindow();
 
+signals:
+    void roomCreated();
+
 private slots:
     void on_profile_pic_button_clicked();
 
     void on_goto_chat_button_clicked();
 
+    void addRoom(bool id_exist);
+
+
 private:
     Ui::AddRoomWindow *ui;
-    QString name = "", info = "", image_path= "";
-    QSqlDatabase db;
+    QString name = "", info = "", image_path= "", id = "";
 };
 
 #endif // ADDROOMWINDOW_H

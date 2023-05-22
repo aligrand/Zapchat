@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>639</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,24 +61,10 @@
         <x>0</x>
         <y>0</y>
         <width>300</width>
-        <height>639</height>
+        <height>623</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="icon">
-          <iconset>
-           <normaloff>../res/icon/close.png</normaloff>../res/icon/close.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>30</width>
-           <height>25</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QWidget" name="widget" native="true">
          <property name="sizePolicy">
@@ -96,7 +82,7 @@ border-radius:10px;</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="1" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="pofile_pic">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -267,7 +253,7 @@ border-radius:10px;</string>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="usernameField">
+              <widget class="QLabel" name="IDField">
                <property name="font">
                 <font>
                  <pointsize>10</pointsize>

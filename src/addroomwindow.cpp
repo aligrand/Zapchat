@@ -7,7 +7,7 @@ AddRoomWindow::AddRoomWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
+    connect(&server, &ServerMan::idExistResult, this, &AddRoomWindow::addRoom);
 }
 
 AddRoomWindow::~AddRoomWindow()
@@ -26,12 +26,39 @@ void AddRoomWindow::on_profile_pic_button_clicked()
 
 void AddRoomWindow::on_goto_chat_button_clicked()
 {
-    if (name == "")
-    {
-        QMessageBox::critical(this, "Error", "You must enter Name");
+    emit server.isIdExist(ui->id_le->text());
+}
 
-        return;
+void AddRoomWindow::addRoom(bool id_exist)
+{
+    QSqlQuery sqlQuery;
+
+    if(id_exist == false){
+        if (name == "")
+        {
+            QMessageBox::critical(this, "Error", "You must enter Name");
+
+            return;
+        }
+
+        id = ui->id_le->text();
+        name = ui->name_le->text();
+        info = ui->info_te->toPlainText();
+
+        sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
+                         ":photoADDRESS, :info, :type, :pin)");
+        sqlQuery.bindValue(":id", id);
+        sqlQuery.bindValue(":name", name);
+        sqlQuery.bindValue(":photoADRESS", image_path);
+        sqlQuery.bindValue(":info", info);
+        sqlQuery.bindValue(":type", 1);
+        sqlQuery.bindValue(":pin", "");
+
+        sqlQuery.exec();
+
+        emit server.command("ADD-ROOM " + id);
     }
-
-
+    else {
+        QMessageBox::critical(this, "Error", "ID exist");
+    }
 }

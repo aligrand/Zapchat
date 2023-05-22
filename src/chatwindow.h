@@ -15,6 +15,9 @@ public:
     explicit ChatWindow(QWidget *parent = nullptr);
     ~ChatWindow();
 
+private slots:
+    void updateRoomList();
+
 private:
     Ui::ChatWindow *ui;
 };

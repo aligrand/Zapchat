@@ -75,7 +75,7 @@ border-color: rgb(134, 134, 134);</string>
        <number>5</number>
       </property>
       <item>
-       <widget class="QListWidget" name="listWidget_2">
+       <widget class="QListWidget" name="rooms_list">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
@@ -152,7 +152,7 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="search_le">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -306,48 +306,6 @@ font: 700 9pt &quot;Exo 2&quot;;</string>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="onoffline_lable">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: rgb(36, 7, 255);
-
-border-width:0px;</string>
-           </property>
-           <property name="text">
-            <string>On/Off</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -380,8 +338,6 @@ border-width:0px;</string>
 	border-width: 0px;
 	width: 50px;
 	height: 50px;
-	
-	background-color: rgb(255, 255, 255);
 }
 
 QPushButton:hover {
@@ -440,7 +396,7 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView">
+       <widget class="QListView" name="chat_list">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
@@ -495,7 +451,7 @@ QPushButton:hover {
           <number>10</number>
          </property>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="refoButton">
            <property name="maximumSize">
             <size>
              <width>50</width>
@@ -559,7 +515,7 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
-          <widget class="QTextEdit" name="textEdit">
+          <widget class="QTextEdit" name="text_le">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>

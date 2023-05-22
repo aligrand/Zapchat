@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>332</width>
+    <width>333</width>
     <height>289</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>333</width>
+    <height>289</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>333</width>
+    <height>289</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Zapchat</string>
@@ -47,21 +59,21 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>29</x>
+      <x>20</x>
       <y>100</y>
-      <width>271</width>
+      <width>201</width>
       <height>60</height>
      </rect>
     </property>
     <property name="title">
      <string>Username / ID</string>
     </property>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="id_le">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>251</width>
+       <width>181</width>
        <height>30</height>
       </rect>
      </property>
@@ -76,7 +88,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="goto_chat_button">
+   <widget class="QPushButton" name="enterButton">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -102,8 +114,36 @@
 </string>
     </property>
     <property name="text">
-     <string>Your Info</string>
+     <string>Enter</string>
     </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>108</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Group</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../res/icon/group_room_icon.png</normaloff>../res/icon/group_room_icon.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Private</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../res/icon/private_room_icon.png</normaloff>../res/icon/private_room_icon.png</iconset>
+     </property>
+    </item>
    </widget>
   </widget>
  </widget>

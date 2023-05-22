@@ -3,10 +3,15 @@
 #include "userinfowindow.h"
 #include "chatwindow.h"
 
+#include "lib/server-connection/serverman.h"
+
 #include <QApplication>
 #include <QFile>
+#include <QSqlDatabase>
 
 using namespace std;
+
+ServerMan server();
 
 bool is_user_avalable()
 {
@@ -30,6 +35,10 @@ int main(int argc, char *argv[])
     landing_page *lp_window = new landing_page();
     signIU_page *sp_window = new signIU_page();
     ChatWindow *cw = new ChatWindow();
+
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("database.sqlite3");
 
     if(!is_user_avalable())
     {

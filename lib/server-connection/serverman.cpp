@@ -25,6 +25,11 @@ void ServerMan::userNameExistCheck(QString un)
 
 }
 
+void ServerMan::idExistCheck(QString id)
+{
+
+}
+
 void ServerMan::sendDataProc(QString address)
 {
 
@@ -40,7 +45,7 @@ void ServerMan::commandProc(QString cmd)
 
 }
 
-void ServerMan::downloadDataProc(QString address)
+void ServerMan::downloadDataProc(QString fileName, QString address)
 {
 
 }

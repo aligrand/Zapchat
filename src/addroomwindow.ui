@@ -156,7 +156,7 @@ border-color: rgb(255, 255, 255);</string>
       <number>1</number>
      </property>
      <property name="placeholderText">
-      <string>Enter Your Info</string>
+      <string>Enter Your Room Info</string>
      </property>
     </widget>
    </widget>
@@ -195,7 +195,7 @@ border-color: rgb(255, 255, 255);</string>
     <property name="title">
      <string>ID</string>
     </property>
-    <widget class="QLineEdit" name="name_le_2">
+    <widget class="QLineEdit" name="id_le">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -222,7 +222,7 @@ padding-left:3px;
       <bool>false</bool>
      </property>
      <property name="placeholderText">
-      <string>Enter Your Name</string>
+      <string>Enter Your Room ID</string>
      </property>
     </widget>
    </widget>
@@ -231,7 +231,7 @@ padding-left:3px;
      <rect>
       <x>30</x>
       <y>230</y>
-      <width>241</width>
+      <width>341</width>
       <height>60</height>
      </rect>
     </property>
@@ -249,7 +249,7 @@ padding-left:3px;
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>221</width>
+       <width>321</width>
        <height>30</height>
       </rect>
      </property>
@@ -267,7 +267,7 @@ padding-left:3px;
       <bool>false</bool>
      </property>
      <property name="placeholderText">
-      <string>Enter Your Name</string>
+      <string>Enter Your Room Name</string>
      </property>
     </widget>
    </widget>
@@ -283,34 +283,6 @@ padding-left:3px;
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>250</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Group</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../res/icon/group_room_icon.png</normaloff>../res/icon/group_room_icon.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Channel</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../res/icon/channel_room_icon.png</normaloff>../res/icon/channel_room_icon.png</iconset>
-     </property>
-    </item>
    </widget>
   </widget>
  </widget>

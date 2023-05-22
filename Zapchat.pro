@@ -28,18 +28,19 @@ SOURCES += \
     src/enterroomwindow.cpp \
     src/imageviewerwindow.cpp \
     src/messagewidget.cpp \
-    src/pinwindow.cpp \
     src/chatwindow.cpp \
     src/main.cpp \
     src/auth_page.cpp \
     src/landing_page.cpp \
     src/phone_screen.cpp \
     src/roominfopanel.cpp \
+    src/roomwidget.cpp \
     src/signin_widget.cpp \
     src/signiu_page.cpp \
     src/signup_widget.cpp \
     src/userinfowindow.cpp \
-    src/videoviewerwindow.cpp
+    src/videoviewerwindow.cpp \
+    src/messageviewerwindow.cpp \
 
 HEADERS += \
     src/accountsettingspanel.h \
@@ -49,17 +50,18 @@ HEADERS += \
     src/enterroomwindow.h \
     src/imageviewerwindow.h \
     src/messagewidget.h \
-    src/pinwindow.h \
     src/auth_page.h \
     src/chatwindow.h \
     src/landing_page.h \
     src/phone_screen.h \
     src/roominfopanel.h \
+    src/roomwidget.h \
     src/signin_widget.h \
     src/signiu_page.h \
     src/signup_widget.h \
     src/userinfowindow.h \
-    src/videoviewerwindow.h
+    src/videoviewerwindow.h \
+    src/messageviewerwindow.h \
 
 FORMS += \
     src/accountsettingspanel.ui \
@@ -68,17 +70,18 @@ FORMS += \
     src/enterroomwindow.ui \
     src/imageviewerwindow.ui \
     src/messagewidget.ui \
-    src/pinwindow.ui \
     src/auth_page.ui \
     src/chatwindow.ui \
     src/landing_page.ui \
     src/phone_screen.ui \
     src/roominfopanel.ui \
+    src/roomwidget.ui \
     src/signin_widget.ui \
     src/signiu_page.ui \
     src/signup_widget.ui \
     src/userinfowindow.ui \
-    src/videoviewerwindow.ui
+    src/videoviewerwindow.ui \
+    src/messageviewerwindow.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
