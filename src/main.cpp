@@ -11,7 +11,8 @@
 
 using namespace std;
 
-ServerMan server();
+static ServerMan *server;
+static QString myUsername;
 
 bool is_user_avalable()
 {
@@ -39,6 +40,14 @@ int main(int argc, char *argv[])
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.sqlite3");
+    db.open();
+
+    QFile unFile("userinfo.txt");
+    unFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    myUsername = unFile.readLine();
+    unFile.close();
+
+    server = new ServerMan();
 
     if(!is_user_avalable())
     {
@@ -63,5 +72,9 @@ int main(int argc, char *argv[])
 
     cw->show();
 
-    return a.exec();
+    int exec_ret = a.exec();
+
+    db.close();
+
+    return exec_ret;
 }

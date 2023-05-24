@@ -51,8 +51,8 @@ signals:
 
 private:
     QTcpSocket *socket;
-    QSqlDatabase *db;
-    QSqlQuery *dbQuery;
+    QSqlDatabase *tempDB;
+    QSqlQuery *tempDBQuery;
     QVector<QString> job;
     QThread *thread;
 };

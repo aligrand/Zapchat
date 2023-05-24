@@ -3,10 +3,12 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QSqlQuery>
 
 #include "lib/server-connection/serverman.h"
 
-extern ServerMan server;
+extern ServerMan *server;
+extern QString myUsername;
 
 namespace Ui {
 class EnterRoomWindow;
@@ -27,6 +29,7 @@ private slots:
 
 private:
     Ui::EnterRoomWindow *ui;
+    bool isGroup;
 };
 
 #endif // ENTERROOMWINDOW_H

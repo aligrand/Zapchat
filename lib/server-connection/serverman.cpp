@@ -10,7 +10,7 @@ void ServerMan::notConnectedProc()
 
 }
 
-ServerMan::ServerMan()
+ServerMan::ServerMan(QString username, QString password)
 {
 
 }

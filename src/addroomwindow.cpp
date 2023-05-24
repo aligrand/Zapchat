@@ -7,7 +7,7 @@ AddRoomWindow::AddRoomWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&server, &ServerMan::idExistResult, this, &AddRoomWindow::addRoom);
+    connect(server, &ServerMan::idExistResult, this, &AddRoomWindow::addRoom);
 }
 
 AddRoomWindow::~AddRoomWindow()
@@ -26,14 +26,15 @@ void AddRoomWindow::on_profile_pic_button_clicked()
 
 void AddRoomWindow::on_goto_chat_button_clicked()
 {
-    emit server.isIdExist(ui->id_le->text());
+    emit server->isIdExist(ui->id_le->text());
 }
 
 void AddRoomWindow::addRoom(bool id_exist)
 {
     QSqlQuery sqlQuery;
 
-    if(id_exist == false){
+    if(id_exist == false)
+    {
         if (name == "")
         {
             QMessageBox::critical(this, "Error", "You must enter Name");
@@ -44,6 +45,12 @@ void AddRoomWindow::addRoom(bool id_exist)
         id = ui->id_le->text();
         name = ui->name_le->text();
         info = ui->info_te->toPlainText();
+
+        if (image_path != "")
+        {
+            QFile::copy(image_path, "Cache/" + id + "P." + image_path.split(".").last());
+            image_path = "Cache/" + id + "P." + image_path.split(".").last();
+        }
 
         sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
                          ":photoADDRESS, :info, :type, :pin)");
@@ -56,9 +63,19 @@ void AddRoomWindow::addRoom(bool id_exist)
 
         sqlQuery.exec();
 
-        emit server.command("ADD-ROOM " + id);
+        sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
+        sqlQuery.addBindValue(myUsername);
+        sqlQuery.addBindValue(id);
+        sqlQuery.addBindValue("M");
+
+        sqlQuery.exec();
+
+        emit server->command("ADD-ROOM " + id + " NF");
+        emit server->command("ADD-PARTICIPANT " + id + " " + myUsername);
+        emit server->databaseUpdated();
     }
-    else {
+    else
+    {
         QMessageBox::critical(this, "Error", "ID exist");
     }
 }

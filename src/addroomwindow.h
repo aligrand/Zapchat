@@ -4,12 +4,15 @@
 #include <QMainWindow>
 #include <QString>
 #include <QFileDialog>
+#include <QFile>
 #include <QMessageBox>
 #include <QSqlQuery>
+#include <QStringList>
 
 #include "lib/server-connection/serverman.h"
 
-extern ServerMan server;
+extern ServerMan *server;
+extern QString myUsername;
 
 namespace Ui {
 class AddRoomWindow;
