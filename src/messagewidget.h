@@ -16,17 +16,25 @@ public:
     ~MessageWidget();
 
 private slots:
-    void on_forwardutton_clicked();
-
     void on_replyButton_clicked();
-
-    void on_pushButton_clicked();
 
     void on_horizontalSlider_sliderMoved(int position);
 
-    void on_pushButton_2_clicked();
+    void on_profilePicLable_linkActivated(const QString &link);
 
-    void on_senderNameLable_linkActivated(const QString &link);
+    void on_audioPlayPushButton_clicked();
+
+    void on_fileDownloadPushButton_clicked();
+
+    void on_imageLable_linkActivated(const QString &link);
+
+    void on_imageLable_customContextMenuRequested(const QPoint &pos);
+
+    void on_video_customContextMenuRequested(const QPoint &pos);
+
+    void on_audio_customContextMenuRequested(const QPoint &pos);
+
+    void on_MessageWidget_customContextMenuRequested(const QPoint &pos);
 
 private:
     Ui::MessageWidget *ui;

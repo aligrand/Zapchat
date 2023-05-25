@@ -26,37 +26,26 @@ void EnterRoomWindow::on_goto_chat_button_clicked()
     if (ui->comboBox->currentText() == "Group") {
         isGroup = true;
 
-        emit server->isIdExist(ui->id_le->text());
+        emit server->command("ROOM-EXIST " + ui->id_le->text());
     }
     else {
         isGroup = false;
 
-        emit server->isUserNameExist(ui->id_le->text());
+        emit server->command("USER-EXIST " + ui->id_le->text());
     }
 }
 
 void EnterRoomWindow::enterRoom(bool result)
 {
-    QSqlQuery sqlQuery;
-
-    sqlQuery.prepare("SELECT ")
-
     if (result)
     {
         if (isGroup)
         {
-            sqlQuery.prepare("INSERT TO participants (userID, roomID, role) VALUES (?, ?, ?)");
-            sqlQuery.addBindValue(myUsername);
-            sqlQuery.addBindValue(ui->id_le->text());
-            sqlQuery.addBindValue("G");
-
-            sqlQuery.exec();
-
             emit server->command("ENTER-ROOM " + ui->id_le->text());
         }
         else
         {
-
+            emit server->command("ROOM-USER " + ui->id_le->text());
         }
     }
     else

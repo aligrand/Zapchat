@@ -6,6 +6,7 @@
 #include <QSqlQuery>
 
 #include "lib/server-connection/serverman.h"
+#include "lib/server-connection/sqlrecordqstring.h"
 
 extern ServerMan *server;
 extern QString myUsername;

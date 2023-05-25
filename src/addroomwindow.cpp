@@ -26,12 +26,13 @@ void AddRoomWindow::on_profile_pic_button_clicked()
 
 void AddRoomWindow::on_goto_chat_button_clicked()
 {
-    emit server->isIdExist(ui->id_le->text());
+    emit server->command("ROOM-EXIST " + ui->id_le->text());
 }
 
 void AddRoomWindow::addRoom(bool id_exist)
 {
     QSqlQuery sqlQuery;
+    SqlRecordQString sqlRecS;
 
     if(id_exist == false)
     {
@@ -70,9 +71,9 @@ void AddRoomWindow::addRoom(bool id_exist)
 
         sqlQuery.exec();
 
-        emit server->command("ADD-ROOM " + id + " NF");
-        emit server->command("ADD-PARTICIPANT " + id + " " + myUsername);
-        emit server->databaseUpdated();
+        sqlRecS << id << name << image_path << info << "1" << "";
+        sqlRecS.end();
+        emit server->command(QString("ADD-ROOM ") + sqlRecS);
     }
     else
     {

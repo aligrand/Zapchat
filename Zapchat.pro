@@ -21,12 +21,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = $$PWD/run
 
 SOURCES += \
+    lib/server-connection/sqlrecordqstring.cpp \
     src/accountsettingspanel.cpp \
     src/addroomwindow.cpp \
     src/appsettingspanel.cpp \
     lib/server-connection/serverman.cpp \
     src/enterroomwindow.cpp \
-    src/imageviewerwindow.cpp \
     src/messagewidget.cpp \
     src/chatwindow.cpp \
     src/main.cpp \
@@ -39,16 +39,15 @@ SOURCES += \
     src/signiu_page.cpp \
     src/signup_widget.cpp \
     src/userinfowindow.cpp \
-    src/videoviewerwindow.cpp \
     src/messageviewerwindow.cpp \
 
 HEADERS += \
+    lib/server-connection/sqlrecordqstring.h \
     src/accountsettingspanel.h \
     src/addroomwindow.h \
     src/appsettingspanel.h \
     lib/server-connection/serverman.h \
     src/enterroomwindow.h \
-    src/imageviewerwindow.h \
     src/messagewidget.h \
     src/auth_page.h \
     src/chatwindow.h \
@@ -60,7 +59,6 @@ HEADERS += \
     src/signiu_page.h \
     src/signup_widget.h \
     src/userinfowindow.h \
-    src/videoviewerwindow.h \
     src/messageviewerwindow.h \
 
 FORMS += \
@@ -68,7 +66,6 @@ FORMS += \
     src/addroomwindow.ui \
     src/appsettingspanel.ui \
     src/enterroomwindow.ui \
-    src/imageviewerwindow.ui \
     src/messagewidget.ui \
     src/auth_page.ui \
     src/chatwindow.ui \
@@ -80,7 +77,6 @@ FORMS += \
     src/signiu_page.ui \
     src/signup_widget.ui \
     src/userinfowindow.ui \
-    src/videoviewerwindow.ui \
     src/messageviewerwindow.ui \
 
 # Default rules for deployment.
