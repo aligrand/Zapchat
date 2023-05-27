@@ -12,11 +12,21 @@
 #include <QVector>
 #include <QFile>
 
-class ServerMan : QObject
+enum NetworkState
 {
+    Online,
+    Offline
+};
+
+class ServerMan : public QObject
+{
+    Q_OBJECT
+
 public:
     ServerMan();
     ~ServerMan();
+
+    NetworkState getNetworkState();
 
 signals:
     void userNameExistResult(bool result);
@@ -46,6 +56,7 @@ private:
     QSqlQuery *tempDBQuery;
     QVector<QString> job;
     QThread *thread;
+    NetworkState ns = NetworkState::Offline;
 };
 
 #endif // SERVERMAN_H

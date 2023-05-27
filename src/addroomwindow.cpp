@@ -20,6 +20,13 @@ void AddRoomWindow::on_profile_pic_button_clicked()
     image_path = QFileDialog::getOpenFileName(this,
         tr("Open Image"), "./", tr("Image Files (*.png *.jpg)"));
 
+    if (image_path == "")
+    {
+        QMessageBox::warning(this, "Warning", "No file selected");
+
+        return;
+    }
+
     QPixmap pixmap(image_path);
     ui->profile_pic->setPixmap(pixmap);
 }
@@ -71,7 +78,7 @@ void AddRoomWindow::addRoom(bool id_exist)
 
         sqlQuery.exec();
 
-        sqlRecS << id << name << image_path << info << "1" << "";
+        sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";
         sqlRecS.end();
         emit server->command(QString("ADD-ROOM ") + sqlRecS);
     }
@@ -79,4 +86,6 @@ void AddRoomWindow::addRoom(bool id_exist)
     {
         QMessageBox::critical(this, "Error", "ID exist");
     }
+
+    this->deleteLater();
 }

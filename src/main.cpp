@@ -11,8 +11,8 @@
 
 using namespace std;
 
-static ServerMan *server;
-static QString myUsername;
+ServerMan *server;
+QString myUsername;
 
 bool is_user_avalable()
 {
@@ -37,15 +37,18 @@ int main(int argc, char *argv[])
     signIU_page *sp_window = new signIU_page();
     ChatWindow *cw = new ChatWindow();
 
+    QString password = "";
+
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.sqlite3");
     db.open();
 
-    QFile unFile("userinfo.txt");
-    unFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    myUsername = unFile.readLine();
-    unFile.close();
+    QFile userpassFile("userinfo.txt");
+    userpassFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    myUsername = userpassFile.readLine().trimmed();
+    password = userpassFile.readLine().trimmed();
+    userpassFile.close();
 
     server = new ServerMan();
 

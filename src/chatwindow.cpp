@@ -12,3 +12,8 @@ ChatWindow::~ChatWindow()
 {
     delete ui;
 }
+
+void ChatWindow::updateRoomList()
+{
+
+}

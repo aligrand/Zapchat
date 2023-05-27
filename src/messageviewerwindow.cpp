@@ -1,7 +1,7 @@
 #include "messageviewerwindow.h"
 #include "ui_messageviewerwindow.h"
 
-MessageViewerWindow::MessageViewerWindow(QWidget *parent) :
+MessageViewerWindow::MessageViewerWindow(QStringList MessageIDlist, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MessageViewerWindow)
 {

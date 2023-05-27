@@ -52,4 +52,6 @@ void EnterRoomWindow::enterRoom(bool result)
     {
         QMessageBox::critical(this, "Error", "no room or user exist");
     }
+
+    this->deleteLater();
 }

@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = $$PWD/run
 
 SOURCES += \
+    lib/ini-proc/iniproc.cpp \
     lib/server-connection/sqlrecordqstring.cpp \
     src/accountsettingspanel.cpp \
     src/addroomwindow.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
     src/messageviewerwindow.cpp \
 
 HEADERS += \
+    lib/ini-proc/iniproc.h \
     lib/server-connection/sqlrecordqstring.h \
     src/accountsettingspanel.h \
     src/addroomwindow.h \

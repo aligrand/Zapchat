@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
+    <width>862</width>
     <height>674</height>
    </rect>
   </property>
@@ -459,7 +459,7 @@ QPushButton:hover {
             </size>
            </property>
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Forward: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reply:&lt;/span&gt; &amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reply:&lt;/span&gt; &amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">QPushButton {
@@ -521,6 +521,11 @@ QPushButton:hover {
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>-1</pointsize>
+            </font>
            </property>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(255, 255, 255);
