@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = $$PWD/run
 
 SOURCES += \
+    dependency/listdb.cpp \
     lib/ini-proc/iniproc.cpp \
     lib/server-connection/sqlrecordqstring.cpp \
     src/accountsettingspanel.cpp \
@@ -43,6 +44,7 @@ SOURCES += \
     src/messageviewerwindow.cpp \
 
 HEADERS += \
+    dependency/listdb.h \
     lib/ini-proc/iniproc.h \
     lib/server-connection/sqlrecordqstring.h \
     src/accountsettingspanel.h \
@@ -64,6 +66,7 @@ HEADERS += \
     src/messageviewerwindow.h \
 
 FORMS += \
+    dependency/listdb.ui \
     src/accountsettingspanel.ui \
     src/addroomwindow.ui \
     src/appsettingspanel.ui \
