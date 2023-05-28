@@ -36,56 +36,59 @@ void AddRoomWindow::on_goto_chat_button_clicked()
     emit server->command("ROOM-EXIST " + ui->id_le->text());
 }
 
-void AddRoomWindow::addRoom(bool id_exist)
+void AddRoomWindow::addRoom(bool id_exist, QString id)
 {
-    QSqlQuery sqlQuery;
-    SqlRecordQString sqlRecS;
-
-    if(id_exist == false)
+    if (id == ui->id_le->text())
     {
-        if (name == "")
-        {
-            QMessageBox::critical(this, "Error", "You must enter Name");
+        QSqlQuery sqlQuery;
+        SqlRecordQString sqlRecS;
 
-            return;
+        if(id_exist == false)
+        {
+            if (name == "")
+            {
+                QMessageBox::critical(this, "Error", "You must enter Name");
+
+                return;
+            }
+
+            id = ui->id_le->text();
+            name = ui->name_le->text();
+            info = ui->info_te->toPlainText();
+
+            if (image_path != "")
+            {
+                QFile::copy(image_path, "Cache/" + id + "P." + image_path.split(".").last());
+                image_path = "Cache/" + id + "P." + image_path.split(".").last();
+            }
+
+            sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
+                             ":photoADDRESS, :info, :type, :pin)");
+            sqlQuery.bindValue(":id", id);
+            sqlQuery.bindValue(":name", name);
+            sqlQuery.bindValue(":photoADRESS", image_path);
+            sqlQuery.bindValue(":info", info);
+            sqlQuery.bindValue(":type", 1);
+            sqlQuery.bindValue(":pin", "");
+
+            sqlQuery.exec();
+
+            sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
+            sqlQuery.addBindValue(myUsername);
+            sqlQuery.addBindValue(id);
+            sqlQuery.addBindValue("M");
+
+            sqlQuery.exec();
+
+            sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";
+            sqlRecS.end();
+            emit server->command(QString("ADD-ROOM ") + sqlRecS);
+        }
+        else
+        {
+            QMessageBox::critical(this, "Error", "ID exist");
         }
 
-        id = ui->id_le->text();
-        name = ui->name_le->text();
-        info = ui->info_te->toPlainText();
-
-        if (image_path != "")
-        {
-            QFile::copy(image_path, "Cache/" + id + "P." + image_path.split(".").last());
-            image_path = "Cache/" + id + "P." + image_path.split(".").last();
-        }
-
-        sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
-                         ":photoADDRESS, :info, :type, :pin)");
-        sqlQuery.bindValue(":id", id);
-        sqlQuery.bindValue(":name", name);
-        sqlQuery.bindValue(":photoADRESS", image_path);
-        sqlQuery.bindValue(":info", info);
-        sqlQuery.bindValue(":type", 1);
-        sqlQuery.bindValue(":pin", "");
-
-        sqlQuery.exec();
-
-        sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
-        sqlQuery.addBindValue(myUsername);
-        sqlQuery.addBindValue(id);
-        sqlQuery.addBindValue("M");
-
-        sqlQuery.exec();
-
-        sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";
-        sqlRecS.end();
-        emit server->command(QString("ADD-ROOM ") + sqlRecS);
+        this->deleteLater();
     }
-    else
-    {
-        QMessageBox::critical(this, "Error", "ID exist");
-    }
-
-    this->deleteLater();
 }

@@ -93,14 +93,7 @@ void signin_widget::on_visible_OF_clicked()
 
 void signin_widget::on_login_pushButton_clicked()
 {
-    bool res;
-
-    emit si(ui->username_lineEdit->text(), ui->password_lineEdit->text(), res);
-
-    if(res == false)
-    {
-        QMessageBox::critical(this, "error in sign in", "your informationsare wrong");
-    }
+    emit si(ui->username_lineEdit->text(), ui->password_lineEdit->text());
 }
 
 void signin_widget::on_goto_signup_link_linkActivated(const QString &link)

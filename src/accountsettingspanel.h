@@ -11,7 +11,7 @@
 #include "lib/server-connection/serverman.h"
 #include "lib/server-connection/sqlrecordqstring.h"
 
-extern ServerMan *Server;
+extern ServerMan *server;
 
 namespace Ui {
 class AccountSettingsPanel;

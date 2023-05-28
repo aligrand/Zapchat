@@ -30,7 +30,7 @@ public:
     ~auth_page();
 
 signals:
-    void result_ready(uByte res);
+    void result_ready(qint8 res);
 
 protected:
 

@@ -35,23 +35,26 @@ void EnterRoomWindow::on_goto_chat_button_clicked()
     }
 }
 
-void EnterRoomWindow::enterRoom(bool result)
+void EnterRoomWindow::enterRoom(bool result, QString un_id)
 {
-    if (result)
+    if (un_id == ui->id_le->text())
     {
-        if (isGroup)
+        if (result)
         {
-            emit server->command("ENTER-ROOM " + ui->id_le->text());
+            if (isGroup)
+            {
+                emit server->command("ENTER-ROOM " + ui->id_le->text());
+            }
+            else
+            {
+                emit server->command("ROOM-USER " + ui->id_le->text());
+            }
         }
         else
         {
-            emit server->command("ROOM-USER " + ui->id_le->text());
+            QMessageBox::critical(this, "Error", "no room or user exist");
         }
-    }
-    else
-    {
-        QMessageBox::critical(this, "Error", "no room or user exist");
-    }
 
-    this->deleteLater();
+        this->deleteLater();
+    }
 }

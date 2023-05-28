@@ -8,8 +8,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QSqlDatabase>
-
-using namespace std;
+#include <QMessageBox>
 
 ServerMan *server;
 QString myUsername;
@@ -46,14 +45,18 @@ int main(int argc, char *argv[])
 
     QFile userpassFile("userinfo.txt");
     userpassFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    myUsername = userpassFile.readLine().trimmed();
-    password = userpassFile.readLine().trimmed();
-    userpassFile.close();
 
     server = new ServerMan();
 
     if(!is_user_avalable())
     {
+        if (server->getNetworkState() == NetworkState::Offline)
+        {
+            QMessageBox::critical(nullptr, "Erorr", "Youu are offline");
+
+            return 0;
+        }
+
         lp_window->show();
 
         while (!lp_window->go_next_window)
@@ -71,6 +74,14 @@ int main(int argc, char *argv[])
         }
 
         delete sp_window;
+    }
+    else
+    {
+        myUsername = userpassFile.readLine().trimmed();
+        password = userpassFile.readLine().trimmed();
+        userpassFile.close();
+
+        emit server->command("LOGIN " + myUsername + " " + password);
     }
 
     cw->show();

@@ -22,6 +22,8 @@ signup_widget::signup_widget(QWidget *parent) :
     pn_regex_val.setRegularExpression(pn_regex);
     email_regex_val.setRegularExpression(email_regex);
 
+    connect(server, &ServerMan::userNameExistResult, this, &signup_widget::usernameExistRes);
+
     captcha_gen();
 }
 
@@ -36,24 +38,9 @@ void signup_widget::on_username_lineEdit_textChanged(const QString &text)
     QString text_tmp = text;
 
     if (username_regex_val.validate(text_tmp, pos) == QValidator::Acceptable){
-        bool res;
-        emit is_username_exist(ui->username_lineEdit->text(), res);
-        if (!res) {
-            is_username_val = true;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
-                                                 border-left-style: solid;\
-                    border-left-width: 5px;\
-                    background-color: #c8e6c9;\
-            padding-left:3px;");
-        }
-        else {
-            is_username_val = false;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
-                                                 border-left-style: solid;\
-                    border-left-width: 5px;\
-                    background-color: #ffcdd2;\
-            padding-left:3px;");
-        }
+        server_res_un = text;
+
+        emit server->command("UN-EXIST " + text);
     }
     else if (text_tmp.isEmpty()) {
         is_username_val = false;
@@ -68,6 +55,29 @@ void signup_widget::on_username_lineEdit_textChanged(const QString &text)
                                              border-left-style: solid;\
                 border-left-width: 5px;\
         padding-left:3px;");
+    }
+}
+
+void signup_widget::usernameExistRes(bool res, QString user_name)
+{
+    if (user_name == server_res_un)
+    {
+        if (!res) {
+            is_username_val = true;
+            ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
+                                                 border-left-style: solid;\
+                    border-left-width: 5px;\
+            background-color: #c8e6c9;\
+            padding-left:3px;");
+        }
+        else {
+            is_username_val = false;
+            ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
+                                                 border-left-style: solid;\
+                    border-left-width: 5px;\
+            background-color: #ffcdd2;\
+            padding-left:3px;");
+        }
     }
 }
 

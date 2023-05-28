@@ -26,7 +26,7 @@ public:
 private slots:
     void on_goto_chat_button_clicked();
 
-    void enterRoom(bool result);
+    void enterRoom(bool result, QString un_id);
 
 private:
     Ui::EnterRoomWindow *ui;

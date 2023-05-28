@@ -5,8 +5,7 @@ signIU_page::signIU_page(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::signIU_page),
     ap_window(new auth_page()),
-    userinfo_w(new UserInfoWindow()),
-    database_file("./DB-temp/db-temp.json")
+    userinfo_w(new UserInfoWindow())
 {
     ui->setupUi(this);
 
@@ -20,16 +19,12 @@ signIU_page::signIU_page(QWidget *parent) :
 
     si_w->setVisible(true);
 
-    connect(ap_window, &auth_page::result_ready, this, &signIU_page::auth_result);
-
-    connect(si_w, &signin_widget::goto_su, this, &signIU_page::goto_signup);
     connect(si_w, &signin_widget::si, this, &signIU_page::signin);
-    connect(su_w, &signup_widget::goto_si, this, &signIU_page::goto_signin);
+    connect(si_w, &signin_widget::goto_su, this, &signIU_page::goto_signup);
+    connect(server, &ServerMan::loginResult, this, &signIU_page::signin_result);
     connect(su_w, &signup_widget::su, this, &signIU_page::signup);
-    connect(su_w, &signup_widget::is_username_exist, this, &signIU_page::is_username_exist);
-
-    database_file.open(QFile::ReadWrite | QFile::Text);
-    database = QJsonDocument::fromJson(database_file.readAll());
+    connect(su_w, &signup_widget::goto_si, this, &signIU_page::goto_signin);
+    connect(ap_window, &auth_page::result_ready, this, &signIU_page::auth_result);
 }
 
 signIU_page::~signIU_page()
@@ -53,99 +48,91 @@ void signIU_page::goto_signup()
     su_w->setVisible(true);
 }
 
-void signIU_page::signin(QString username, QString password, bool &result)
+void signIU_page::signin(QString username, QString password)
 {
-    bool res;
+    sign_info[0] = username;
+    sign_info[1] = password;
 
-    is_username_exist(username, res);
+    emit server->command("LOGIN " + username + " " + password);
+}
 
-    if(res == false)
+void signIU_page::signin_result(qint8 result)
+{
+    if (result == 0)
     {
-        result = false;
-        return;
+        QMessageBox::critical(this, "Error", "User not found");
     }
-
-    if(database[username]["password"] == password)
+    else if (result == 2)
     {
-        result = true;
-
-        QFile user_file("./userinfo.txt");
-        user_file.open(QFile::WriteOnly);
-        QTextStream data(&user_file);
-        data << username << QString(" ") << password;
-        user_file.close();
-
-        go_next_window = true;
+        QMessageBox::critical(this, "Error", "Password is incorect");
     }
     else
     {
-        result = false;
-        return;
+        myUsername = sign_info[0];
+
+        QFile u_info("userinfo.txt");
+        u_info.open(QIODevice::WriteOnly | QIODevice::Text);
+        u_info.write((sign_info[0] + "\n").toStdString().c_str());
+        u_info.write((sign_info[1] + "\n").toStdString().c_str());
+        u_info.close();
+
+        emit server->command("UPDATE-DB");
+        emit server->command("MESSAGE-INDEX 0");
+
+        go_next_window = true;
     }
 }
 
 void signIU_page::signup(QString username, QString password, QString pn, QString email)
 {
-    su_info[0] = username;
-    su_info[1] = password;
-    su_info[2] = pn;
-    su_info[3] = email;
+    sign_info[0] = username;
+    sign_info[1] = password;
+    sign_info[2] = pn;
+    sign_info[3] = email;
 
-    this->hide();
     ap_window->show();
+    this->hide();
 }
 
-void signIU_page::auth_result(uByte res)
+void signIU_page::auth_result(qint8 res)
 {
-    // goto signup server
-    if (res == 1) {
-        QFile user_file("./userinfo.txt");
-        user_file.open(QFile::WriteOnly);
-        QTextStream data(&user_file);
-        data << su_info[0] << QString(" ") << su_info[1];
-        user_file.close();
+    if (res == 1)
+    {
+        SqlRecordQString record;
 
-        signup_server(su_info[0], su_info[1], su_info[2], su_info[3]);
-        delete ap_window;
+        record << sign_info[0] << sign_info[3] << sign_info[2] << "" << "" << "" << "1";
+        record.end();
+
+        emit server->command(QString("ADD-USER ") + record);
+        emit server->command("SET-PASS " + sign_info[0] + " " + sign_info[1]);
+
+        emit server->command("LOGIN " + sign_info[0] + " " + sign_info[1]);
+
+        myUsername = sign_info[0];
+
+        QFile u_info("userinfo.txt");
+        u_info.open(QIODevice::WriteOnly | QIODevice::Text);
+        u_info.write((sign_info[0] + "\n").toStdString().c_str());
+        u_info.write((sign_info[1] + "\n").toStdString().c_str());
+        u_info.close();
+
+        QFile m_index("message-index.txt");
+        m_index.open(QIODevice::WriteOnly | QIODevice::Text);
+        m_index.write("0");
+        m_index.close();
+
+        QSqlQuery sqlQuery;
+
+        sqlQuery.prepare("INSERT INTO users (username, emailAddress, phoneNumber, isOnline)"
+                         "VALUES (?, ?, ?, 1)");
+        sqlQuery.addBindValue(sign_info[0]);
+        sqlQuery.addBindValue(sign_info[3]);
+        sqlQuery.addBindValue(sign_info[2]);
+        sqlQuery.exec();
     }
-    // back to signIU
-    else {
+    else
+    {
         ap_window->hide();
         this->show();
     }
-}
-
-void signIU_page::is_username_exist(QString username, bool &result)
-{
-    if(database[username] == QJsonValue::Undefined)
-    {
-       result = false;
-       return;
-    }
-
-    result = true;
-}
-
-void signIU_page::signup_server(QString username, QString password, QString pn, QString email)
-{
-    // we already check that username not exist
-
-    QJsonObject root;
-    QJsonObject info_obj;
-    QJsonArray AI_arr;
-
-    info_obj.insert("password", password);
-    AI_arr.push_back(pn);
-    AI_arr.push_back(email);
-    info_obj.insert("AI", AI_arr);
-
-    root = database.object();
-
-    root.insert(username, info_obj);
-    database.setObject(root);
-
-    database_file.resize(0);
-
-    database_file.write(database.toJson(QJsonDocument::Indented));
-    database_file.close();
 }

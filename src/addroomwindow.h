@@ -35,7 +35,7 @@ private slots:
 
     void on_goto_chat_button_clicked();
 
-    void addRoom(bool id_exist);
+    void addRoom(bool id_exist, QString id);
 
 
 private:

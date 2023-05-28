@@ -8,13 +8,15 @@
 
 #include <QMainWindow>
 #include <QString>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
 #include <QFile>
-#include <QTextStream>
+#include <QMessageBox>
+#include <QSqlQuery>
 
-typedef unsigned char uByte;
+#include "lib/server-connection/serverman.h"
+#include "lib/server-connection/sqlrecordqstring.h"
+
+extern ServerMan *server;
+extern QString myUsername;
 
 namespace Ui {
 class signIU_page;
@@ -33,10 +35,10 @@ public:
 private slots:
     void goto_signin();
     void goto_signup();
-    void signin(QString username, QString password, bool &result);
+    void signin(QString username, QString password);
+    void signin_result(qint8 result);
     void signup(QString username, QString password, QString pn, QString email);
-    void auth_result(uByte res);
-    void is_username_exist(QString username, bool &result);
+    void auth_result(qint8 res);
 
 private:
     Ui::signIU_page *ui;
@@ -44,9 +46,7 @@ private:
     signin_widget *si_w;
     signup_widget *su_w;
     UserInfoWindow *userinfo_w;
-    QString su_info[4];
-    QJsonDocument database;
-    QFile database_file;
+    QString sign_info[4];
 
     void signup_server(QString username, QString password, QString pn, QString email);
 };

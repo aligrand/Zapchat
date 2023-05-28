@@ -65,7 +65,7 @@ void AccountSettingsPanel::on_okButton_clicked()
     SqlRecordQString record;
     QSqlQuery sqlQuery;
 
-    if (Server->getNetworkState() == NetworkState::Offline)
+    if (server->getNetworkState() == NetworkState::Offline)
     {
         QMessageBox::critical(this, "Error", "You are not connected");
 
@@ -80,10 +80,10 @@ void AccountSettingsPanel::on_okButton_clicked()
 
         record << sqlQuery.value("username").toString() << ui->emailField->text() << ui->pnField->text()
                << ui->nameField->text() << image_path.split("/").last() << ui->infoField->toPlainText()
-               << QString(Server->getNetworkState());
+               << QString(server->getNetworkState());
         record.end();
 
-        Server->command(QString("EDIT-USER ") + record);
+        server->command(QString("EDIT-USER ") + record);
     }
     else
     {
@@ -96,6 +96,6 @@ void AccountSettingsPanel::on_okButton_clicked()
                 << sqlQuery.value("pin").toString();
          record.end();
 
-         Server->command(QString("EDIT-ROOM ") + record);
+         server->command(QString("EDIT-ROOM ") + record);
     }
 }

@@ -12,6 +12,10 @@
 #include <QRegularExpressionValidator>
 #include <QMessageBox>
 
+#include "lib/server-connection/serverman.h"
+
+extern ServerMan *server;
+
 namespace Ui {
 class signup_widget;
 }
@@ -27,7 +31,6 @@ public:
 signals:
     void goto_si();
     void su(QString username, QString password, QString pn, QString email);
-    void is_username_exist(QString text, bool &result);
 
 private slots:
     void on_username_lineEdit_textChanged(const QString &arg1);
@@ -35,6 +38,10 @@ private slots:
     void on_password_lineEdit_textChanged(const QString &arg1);
 
     void on_c_password_lineEdit_textChanged(const QString &arg1);
+
+    void on_email_lineEdit_textChanged(const QString &arg1);
+
+    void on_pn_lineEdit_textChanged(const QString &arg1);
 
     void on_p_visible_OF_clicked();
 
@@ -46,9 +53,7 @@ private slots:
 
     void on_goto_signin_link_linkActivated(const QString &link);
 
-    void on_email_lineEdit_textChanged(const QString &arg1);
-
-    void on_pn_lineEdit_textChanged(const QString &arg1);
+    void usernameExistRes(bool res, QString user_name);
 
 private:
     Ui::signup_widget *ui;
@@ -62,6 +67,7 @@ private:
                                  email_regex_val;
     const QString captcha_name_arr[10] = {"12hello", "aA5Bb", "F50vs", "h23A",
                                     "hP439", "Pa33p", "Q49mn", "sEv07", "wHy32", "yU168"};
+    QString server_res_un = "";
 
     void captcha_gen();
     inline int random(int min, int max);

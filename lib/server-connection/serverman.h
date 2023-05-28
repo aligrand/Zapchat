@@ -29,8 +29,9 @@ public:
     NetworkState getNetworkState();
 
 signals:
-    void userNameExistResult(bool result);
-    void idExistResult(bool result);
+    void userNameExistResult(bool result, QString un);
+    void idExistResult(bool result, QString id);
+    void loginResult(qint8 result);
     void command(QString cmd);
     void notConnected();
     void databaseUpdated();
