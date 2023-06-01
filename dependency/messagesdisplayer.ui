@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ListDB</class>
- <widget class="QWidget" name="ListDB">
+ <class>MessagesDisplayer</class>
+ <widget class="QWidget" name="MessagesDisplayer">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
-    <height>510</height>
+    <width>400</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,8 +39,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>344</width>
-        <height>508</height>
+        <width>398</width>
+        <height>614</height>
        </rect>
       </property>
      </widget>

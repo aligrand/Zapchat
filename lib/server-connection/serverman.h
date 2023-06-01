@@ -34,7 +34,7 @@ signals:
     void loginResult(qint8 result);
     void command(QString cmd);
     void notConnected();
-    void databaseUpdated();
+    void databaseUpdated(QString additionalInfo);
     void dirUpdated();
 
 private slots:

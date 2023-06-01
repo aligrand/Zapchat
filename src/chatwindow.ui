@@ -75,7 +75,7 @@ border-color: rgb(134, 134, 134);</string>
        <number>5</number>
       </property>
       <item>
-       <widget class="QListWidget" name="rooms_list">
+       <widget class="QWidget" name="widget_5" native="true">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
@@ -396,7 +396,7 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="chat_list">
+       <widget class="QWidget" name="widget_4" native="true">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
