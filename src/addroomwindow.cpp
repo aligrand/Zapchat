@@ -12,6 +12,7 @@ AddRoomWindow::AddRoomWindow(QWidget *parent) :
 
 AddRoomWindow::~AddRoomWindow()
 {
+    emit windowClosed();
     delete ui;
 }
 
@@ -83,6 +84,7 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";
             sqlRecS.end();
             emit server->command(QString("ADD-ROOM ") + sqlRecS);
+            emit server->databaseUpdated("rooms");
         }
         else
         {

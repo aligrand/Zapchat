@@ -12,6 +12,7 @@
 
 ServerMan *server;
 QString myUsername;
+qint64 myMessageIndex;
 
 bool is_user_avalable()
 {
@@ -84,11 +85,19 @@ int main(int argc, char *argv[])
         emit server->command("LOGIN " + myUsername + " " + password);
     }
 
+    QFile mIndex("message-index.txt");
+    mIndex.open(QIODevice::ReadWrite | QIODevice::Text);
+    myMessageIndex = mIndex.readLine().toLongLong();
+
     cw->show();
 
     int exec_ret = a.exec();
 
     db.close();
+
+    mIndex.resize(0);
+    mIndex.write(QString::number(myMessageIndex).toStdString().c_str());
+    mIndex.close();
 
     return exec_ret;
 }

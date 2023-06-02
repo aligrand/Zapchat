@@ -28,7 +28,7 @@ public:
     ~AddRoomWindow();
 
 signals:
-    void roomCreated();
+    void windowClosed();
 
 private slots:
     void on_profile_pic_button_clicked();

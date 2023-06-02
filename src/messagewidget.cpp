@@ -131,11 +131,7 @@ MessageWidget::~MessageWidget()
 
 void MessageWidget::on_replyButton_clicked()
 {
-    QStringList mesList;
-
-    mesList << mID;
-
-    replyMes = new MessageViewerWindow(mesList);
+    replyMes = new MessageViewerWindow("id=" + mID);
 
     replyMes->show();
 }

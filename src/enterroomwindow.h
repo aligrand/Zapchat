@@ -23,6 +23,9 @@ public:
     explicit EnterRoomWindow(QWidget *parent = nullptr);
     ~EnterRoomWindow();
 
+signals:
+    void windowClosed();
+
 private slots:
     void on_goto_chat_button_clicked();
 

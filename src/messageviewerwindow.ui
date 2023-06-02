@@ -17,10 +17,14 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Zapchat</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <resources/>

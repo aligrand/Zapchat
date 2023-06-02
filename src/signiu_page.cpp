@@ -77,7 +77,7 @@ void signIU_page::signin_result(qint8 result)
         u_info.close();
 
         emit server->command("UPDATE-DB");
-        emit server->command("MESSAGE-INDEX 0");
+        emit server->command("MESSAGE-INDEX");
 
         go_next_window = true;
     }

@@ -13,6 +13,7 @@ EnterRoomWindow::EnterRoomWindow(QWidget *parent) :
 
 EnterRoomWindow::~EnterRoomWindow()
 {
+    emit windowClosed();
     delete ui;
 }
 

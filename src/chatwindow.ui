@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
+    <width>893</width>
     <height>674</height>
    </rect>
   </property>
@@ -36,149 +36,7 @@
    <property name="horizontalSpacing">
     <number>7</number>
    </property>
-   <item row="1" column="0">
-    <widget class="QWidget" name="room_panel" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>150</width>
-       <height>450</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-style: solid;
-border-width: 1px;
-border-color: rgb(134, 134, 134);</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="leftMargin">
-       <number>5</number>
-      </property>
-      <property name="topMargin">
-       <number>5</number>
-      </property>
-      <property name="rightMargin">
-       <number>5</number>
-      </property>
-      <property name="bottomMargin">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QWidget" name="widget_5" native="true">
-        <property name="styleSheet">
-         <string notr="true">border-width:0px;
-</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QWidget" name="widget" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>150</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-style: solid;
-border-width: 1px;
-border-color: rgb(134, 134, 134);</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>2</number>
-      </property>
-      <property name="topMargin">
-       <number>2</number>
-      </property>
-      <property name="rightMargin">
-       <number>11</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="settingsButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-	border-style: solid;
-	border-width: 0px;
-	border-radius: 10px;
-	width: 50px;
-	height: 50px;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(190, 190, 190);
-}</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../res/icon/menu_icon.png</normaloff>../res/icon/menu_icon.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="search_le">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">padding-left:5px;
-background-color: rgb(241, 241, 241);
-vorder-width:0px;</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <property name="cursorPosition">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string>Search Here</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="1" rowspan="2">
+   <item row="0" column="2" rowspan="2">
     <widget class="QWidget" name="chat_panel" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -198,6 +56,9 @@ border-width: 1px;
 border-color: rgb(134, 134, 134);</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
        <number>1</number>
       </property>
@@ -225,7 +86,7 @@ border-color: rgb(134, 134, 134);</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
+         <string notr="true">
 border-width:0px;</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -301,7 +162,7 @@ border-width:0px;</string>
 font: 700 9pt &quot;Exo 2&quot;;</string>
            </property>
            <property name="text">
-            <string>test Test</string>
+            <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none;color:black&quot;&gt;Test Test&lt;/a&gt;</string>
            </property>
           </widget>
          </item>
@@ -319,7 +180,7 @@ font: 700 9pt &quot;Exo 2&quot;;</string>
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="chatSearchButton">
+          <widget class="QPushButton" name="pinButton">
            <property name="minimumSize">
             <size>
              <width>40</width>
@@ -347,12 +208,12 @@ QPushButton:hover {
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../res/icon/search_icon.png</normaloff>../res/icon/search_icon.png</iconset>
+             <normaloff>../res/icon/pin_icon.png</normaloff>../res/icon/pin_icon.png</iconset>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="moreButton">
            <property name="minimumSize">
             <size>
              <width>40</width>
@@ -371,8 +232,6 @@ QPushButton:hover {
 	border-width: 0px;
 	width: 50px;
 	height: 50px;
-	
-	background-color: rgb(255, 255, 255);
 }
 
 QPushButton:hover {
@@ -396,11 +255,28 @@ QPushButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget_4" native="true">
+       <widget class="QWidget" name="messagesPanel" native="true">
         <property name="styleSheet">
          <string notr="true">border-width:0px;
 </string>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+        </layout>
        </widget>
       </item>
       <item>
@@ -610,6 +486,203 @@ QPushButton:hover {
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>250</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+border-width: 1px;
+border-color: rgb(134, 134, 134);</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>11</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="settingsButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+	border-style: solid;
+	border-width: 0px;
+	border-radius:20px;
+	width: 50px;
+	height: 50px;
+}
+
+QPushButton:hover {
+	
+	background-color: rgb(190, 190, 190);
+}</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../res/icon/menu_icon.png</normaloff>../res/icon/menu_icon.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="search_le">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">padding-left:5px;
+background-color: rgb(241, 241, 241);
+vorder-width:0px;</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="cursorPosition">
+         <number>0</number>
+        </property>
+        <property name="placeholderText">
+         <string>Search Here</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="3" rowspan="2">
+    <layout class="QHBoxLayout" name="rightPanel">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+    </layout>
+   </item>
+   <item row="1" column="1">
+    <widget class="QWidget" name="widget_4" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>450</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>250</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+border-width: 1px;
+border-color: rgb(134, 134, 134);</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QScrollArea" name="room_panel">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="roomPanelContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>238</width>
+           <height>591</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="2">
+    <layout class="QHBoxLayout" name="leftPanel">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+    </layout>
    </item>
   </layout>
  </widget>

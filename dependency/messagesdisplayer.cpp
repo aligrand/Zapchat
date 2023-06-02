@@ -1,7 +1,7 @@
 #include "messagesdisplayer.h"
 #include "ui_messagesdisplayer.h"
 
-MessagesDisplayer::MessagesDisplayer(QString room_id, QString queryCondition, QWidget *parent) :
+MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MessagesDisplayer),
     rid(room_id),
@@ -16,14 +16,13 @@ MessagesDisplayer::MessagesDisplayer(QString room_id, QString queryCondition, QW
 
     ui->scrollArea->verticalScrollBar()->setSingleStep(1);
 
-    sqlQuery.prepare("SELECT * FROM ? WHERE ?");
-    sqlQuery.addBindValue(rid);
+    sqlQuery.prepare("SELECT * FROM messages WHERE ?");
     sqlQuery.addBindValue(qc);
     sqlQuery.exec();
 
     sqlQuery.last();
 
-    for (int i = 0; i < 30; ++i)
+    for (int i = 0; i < 50; ++i)
     {
         QHBoxLayout *tmpLayout = new QHBoxLayout;
 
@@ -40,7 +39,10 @@ MessagesDisplayer::MessagesDisplayer(QString room_id, QString queryCondition, QW
         contentLayout->insertLayout(0, tmpLayout);
         ui->scrollArea->verticalScrollBar()->setValue(tmpValue + 1);
 
-        sqlQuery.previous();
+        if (sqlQuery.previous() == false)
+        {
+            break;
+        }
     }
 
     connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
@@ -49,7 +51,13 @@ MessagesDisplayer::MessagesDisplayer(QString room_id, QString queryCondition, QW
 
 MessagesDisplayer::~MessagesDisplayer()
 {
+    for (int i = messagesList.size() - 1; i >= 0; --i)
+    {
+        delListItem(messagesList[i]);
+    }
+
     delete ui;
+    delete contentLayout;
 }
 
 void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
@@ -60,8 +68,7 @@ void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
     }
     else if (additionalInfo == ("messages-" + rid))
     {
-        sqlQuery.prepare("SELECT * FROM ? WHERE ?");
-        sqlQuery.addBindValue(rid);
+        sqlQuery.prepare("SELECT * FROM messages WHERE ?");
         sqlQuery.addBindValue(qc);
         sqlQuery.exec();
 
@@ -73,7 +80,7 @@ void MessagesDisplayer::loadMessage(int value)
 {
     if(value > lastVScrollBarValue && value - lastVScrollBarValue < 10)
     {
-        if (sqlQuery.seek(sqlQuery.at() + 30) == false)
+        if (sqlQuery.seek(sqlQuery.at() + messagesList.size()) == false)
         {
             return;
         }
@@ -92,7 +99,7 @@ void MessagesDisplayer::loadMessage(int value)
 
         contentLayout->addLayout(tmpLayout);
 
-        sqlQuery.seek(sqlQuery.at() - 29);
+        sqlQuery.seek(sqlQuery.at() - (messagesList.size() - 1));
     }
     else if (value < lastVScrollBarValue && lastVScrollBarValue - value < 10)
     {
@@ -122,5 +129,6 @@ void MessagesDisplayer::loadMessage(int value)
 
 void MessagesDisplayer::delListItem(QHBoxLayout *layout)
 {
-    layout->
+    layout->takeAt(0)->widget()->deleteLater();
+    delete layout->takeAt(0);
 }

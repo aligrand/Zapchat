@@ -18,7 +18,7 @@ AppSettingsPanel::~AppSettingsPanel()
 void AppSettingsPanel::on_pushButton_clicked()
 {
     image_path = QFileDialog::getOpenFileName(this,
-        tr("Open Image"), "./background-image", tr("Image Files (*.png *.jpg)"));
+        tr("Open Image"), "../res/background-image", tr("Image Files (*.png *.jpg)"));
 
     if (image_path == "")
     {

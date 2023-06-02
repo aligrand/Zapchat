@@ -23,7 +23,7 @@ class MessagesDisplayer : public QWidget
     Q_OBJECT
 
 public:
-    explicit MessagesDisplayer(QString room_id, QString queryCondition = "", QWidget *parent = nullptr);
+    explicit MessagesDisplayer(QString queryCondition, QString room_id = "", QWidget *parent = nullptr);
     ~MessagesDisplayer();
 
 signals:
@@ -38,7 +38,7 @@ private:
 
 private:
     Ui::MessagesDisplayer *ui;
-    QVector<QHBoxLayout *> messagesList; // max size = 30 element
+    QVector<QHBoxLayout *> messagesList; // max size = 50 element
     QSqlQuery sqlQuery;
     QString rid, qc;
     QVBoxLayout *contentLayout = new QVBoxLayout;

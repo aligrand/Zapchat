@@ -22,13 +22,13 @@ DESTDIR = $$PWD/run
 
 SOURCES += \
     dependency/messagesdisplayer.cpp \
-    dependency/roomsdisplayer.cpp \
     lib/ini-proc/iniproc.cpp \
     lib/server-connection/sqlrecordqstring.cpp \
     src/accountsettingspanel.cpp \
     src/addroomwindow.cpp \
     src/appsettingspanel.cpp \
     lib/server-connection/serverman.cpp \
+    src/emojitable.cpp \
     src/enterroomwindow.cpp \
     src/messagewidget.cpp \
     src/chatwindow.cpp \
@@ -46,13 +46,13 @@ SOURCES += \
 
 HEADERS += \
     dependency/messagesdisplayer.h \
-    dependency/roomsdisplayer.h \
     lib/ini-proc/iniproc.h \
     lib/server-connection/sqlrecordqstring.h \
     src/accountsettingspanel.h \
     src/addroomwindow.h \
     src/appsettingspanel.h \
     lib/server-connection/serverman.h \
+    src/emojitable.h \
     src/enterroomwindow.h \
     src/messagewidget.h \
     src/auth_page.h \
@@ -69,10 +69,10 @@ HEADERS += \
 
 FORMS += \
     dependency/messagesdisplayer.ui \
-    dependency/roomsdisplayer.ui \
     src/accountsettingspanel.ui \
     src/addroomwindow.ui \
     src/appsettingspanel.ui \
+    src/emojitable.ui \
     src/enterroomwindow.ui \
     src/messagewidget.ui \
     src/auth_page.ui \
