@@ -56,7 +56,15 @@ void ChatWindow::on_settingsButton_clicked()
 
 void ChatWindow::on_search_le_textChanged(const QString &arg1)
 {
+    if (arg1 == "")
+    {
+        delRoomListItems();
+        printRoomsList();
+    }
 
+    delRoomListItems();
+
+    printRoomsList("roomID LIKE %" + arg1 + "% OR name LIKE %" + arg1 + "%");
 }
 
 void ChatWindow::on_profile_lable_linkActivated(const QString &link)
@@ -79,6 +87,16 @@ void ChatWindow::on_profile_lable_linkActivated(const QString &link)
 void ChatWindow::on_refoButton_clicked()
 {
     replyID = QInputDialog::getText(this, "Zapchat", "Enter Message ID");
+
+    QString tmp = "<html>"
+                  "<head/>"
+                  "<body>"
+                  "<p><span style=\" font-weight:600;\">Reply:</span> &quot%1&quot;</p>"
+                  "</body>"
+                  "</html>";
+    tmp = tmp.arg(replyID);
+
+    ui->refoButton->setToolTip(tmp);
 }
 
 void ChatWindow::on_attachmentButton_clicked()
@@ -251,12 +269,13 @@ void ChatWindow::delRoomListItems()
     }
 }
 
-void ChatWindow::printRoomsList()
+void ChatWindow::printRoomsList(QString additionalInfo)
 {
     roomPanelLayout.addStretch();
     ui->roomPanelContents->setLayout(&roomPanelLayout);
 
-    sqlQuery.prepare("SELECT id FROM rooms");
+    sqlQuery.prepare("SELECT id FROM rooms WHERE ?");
+    sqlQuery.addBindValue(additionalInfo);
     sqlQuery.exec();
 
     RoomWidget *rwTmp;
@@ -560,23 +579,60 @@ void ChatWindow::buttonsProc(QAction *action)
     }
     else if (action->text() == "Open Pin")
     {
+        sqlQuery.prepare("SELECT pin FROM rooms WHERE roomID=?");
+        sqlQuery.addBindValue(room_id);
+        sqlQuery.exec();
+        sqlQuery.first();
 
+        pinMessageViewerWindow = new MessageViewerWindow("id=" + sqlQuery.value("pin").toString());
     }
     else if (action->text() == "Remove Pin")
     {
+        sqlQuery.prepare("UPDATE rooms SET pin='' WHERE id=?");
+        sqlQuery.addBindValue(room_id);
+        sqlQuery.exec();
 
+        sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
+        sqlQuery.addBindValue(room_id);
+        sqlQuery.exec();
+        sqlQuery.first();
+
+        SqlRecordQString record;
+        record << sqlQuery.value("id").toString() << sqlQuery.value("name").toString()
+               << sqlQuery.value("photoADDRESS").toString() << sqlQuery.value("info").toString()
+               << sqlQuery.value("type").toString() << sqlQuery.value("pin").toString();
+        record.end();
+
+        emit server->command("EDIT-ROOM " + QString(record));
     }
     else if (action->text() == "Search")
     {
+        QString pattern = QInputDialog::getText(this, "Zapchat", "Enter your keyword");
 
+        searchMessageViewerWindow = new MessageViewerWindow("text LIKE %" + pattern + "%");
     }
     else if (action->text() == "Left")
     {
+        emit server->command("REMOVE-PARTICIPANT " + room_id + " " + myUsername);
 
+        sqlQuery.prepare("DELETE FROM rooms WHERE roomID=?");
+        sqlQuery.addBindValue(room_id);
+        sqlQuery.exec();
     }
     else if (action->text() == "Edit Room")
     {
+        if (is_roomsp_open)
+        {
+            roomsp->deleteLater();
+            is_roomsp_open = false;
+        }
+        else
+        {
+            roomsp = new AccountSettingsPanel(false, myUsername);
 
+            ui->leftPanel->addWidget(roomsp);
+            is_roomsp_open = true;
+        }
     }
 }
 
@@ -589,5 +645,6 @@ void ChatWindow::emojiProc(QListWidgetItem *item)
 
 void ChatWindow::updatePreferences()
 {
-
+    IniProc ini("settings.ini");
+    ui->messagesPanel->setStyleSheet("background-image: url(" + ini["chat-bg-image"] + ");");
 }

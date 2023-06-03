@@ -72,15 +72,18 @@ private slots:
 
 private:
     void delRoomListItems();
-    void printRoomsList();
+    void printRoomsList(QString additionalInfo = "1=1");
 
 private:
     Ui::ChatWindow *ui;
     MessagesDisplayer *md = nullptr;
     MessageViewerWindow *pinMessageViewerWindow = nullptr;
+    MessageViewerWindow *searchMessageViewerWindow = nullptr;
     bool is_mvw_open = false;
     AccountSettingsPanel *accsp = nullptr;
     bool is_accsp_open = false;
+    AccountSettingsPanel *roomsp = nullptr;
+    bool is_roomsp_open = false;
     AppSettingsPanel *appsp = nullptr;
     bool is_appsp_open = false;
     AddRoomWindow *arw = nullptr;
