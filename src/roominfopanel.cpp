@@ -13,6 +13,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         sqlQuery.prepare("SELECT * FROM users WHERE id=?");
         sqlQuery.addBindValue(id);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->IDField->setText(sqlQuery.value("username").toString());
@@ -27,6 +28,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
         sqlQuery.addBindValue(id);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->IDField->setText(sqlQuery.value("id").toString());

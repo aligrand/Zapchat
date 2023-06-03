@@ -17,6 +17,7 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
         sqlQuery.prepare("SELECT * FROM users WHERE username=?");
         sqlQuery.addBindValue(ID);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
@@ -33,6 +34,7 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
         sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
         sqlQuery.addBindValue(ID);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
@@ -77,6 +79,7 @@ void AccountSettingsPanel::on_okButton_clicked()
         sqlQuery.prepare("SELECT * FROM users WHERE username=?");
         sqlQuery.addBindValue(id);
         sqlQuery.exec();
+        sqlQuery.first();
 
         record << sqlQuery.value("username").toString() << ui->emailField->text() << ui->pnField->text()
                << ui->nameField->text() << image_path.split("/").last() << ui->infoField->toPlainText()
@@ -90,6 +93,7 @@ void AccountSettingsPanel::on_okButton_clicked()
          sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
          sqlQuery.addBindValue(id);
          sqlQuery.exec();
+         sqlQuery.first();
 
          record << sqlQuery.value("id").toString() << ui->nameField->text() << image_path.split("/").last()
                 << ui->infoField->toPlainText() << sqlQuery.value("type").toString()

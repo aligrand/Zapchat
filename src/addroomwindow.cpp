@@ -71,14 +71,12 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             sqlQuery.bindValue(":info", info);
             sqlQuery.bindValue(":type", 1);
             sqlQuery.bindValue(":pin", "");
-
             sqlQuery.exec();
 
             sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
             sqlQuery.addBindValue(myUsername);
             sqlQuery.addBindValue(id);
             sqlQuery.addBindValue("M");
-
             sqlQuery.exec();
 
             sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";

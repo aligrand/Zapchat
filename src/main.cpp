@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         {
             QMessageBox::critical(nullptr, "Erorr", "Youu are offline");
 
-            return 0;
+            exit(0);
         }
 
         lp_window->show();

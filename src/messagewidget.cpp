@@ -18,6 +18,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
     sqlQuery.prepare("SELECT * FROM messages WHERE id=?");
     sqlQuery.addBindValue(messageID);
     sqlQuery.exec();
+    sqlQuery.first();
 
     rID = sqlQuery.value("roomID").toString();
 
