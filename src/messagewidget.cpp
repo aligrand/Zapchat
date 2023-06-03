@@ -22,7 +22,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
 
     rID = sqlQuery.value("roomID").toString();
 
-    if (sqlQuery.value("replyID").isNull())
+    if (sqlQuery.value("replyID").toString().isEmpty())
     {
         delete ui->reply;
     }
@@ -31,7 +31,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         ui->replyLable->setText(sqlQuery.value("replyID").toString());
     }
 
-    if (sqlQuery.value("text").isNull())
+    if (sqlQuery.value("text").toString().isEmpty())
     {
         delete ui->text;
     }
@@ -40,7 +40,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         ui->text->setText(sqlQuery.value("text").toString());
     }
 
-    if (sqlQuery.value("imageADDRESS").isNull())
+    if (sqlQuery.value("imageADDRESS").toString().isEmpty())
     {
         delete ui->imageLable;
     }
@@ -56,7 +56,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         iPath = "Images/" + sqlQuery.value("imageADDRESS").toString();
     }
 
-    if (sqlQuery.value("videoADDRESS").isNull())
+    if (sqlQuery.value("videoADDRESS").toString().isEmpty())
     {
         delete ui->video;
     }
@@ -76,7 +76,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         vPath = "Videos/" + sqlQuery.value("videoADDRESS").toString();
     }
 
-    if (sqlQuery.value("audioADDRESS").isNull())
+    if (sqlQuery.value("audioADDRESS").toString().isEmpty())
     {
         delete ui->audio;
     }
@@ -95,7 +95,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         aPath = "Audios/" + sqlQuery.value("audioADDRESS").toString();
     }
 
-    if (sqlQuery.value("fileADDRESS").isNull())
+    if (sqlQuery.value("fileADDRESS").toString().isEmpty())
     {
         delete ui->file;
     }
