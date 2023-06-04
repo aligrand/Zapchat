@@ -27,7 +27,7 @@ signals:
     void clicked();
 
 private slots:
-    void newMessagesCame();
+    void newMessagesCame(QString additionalInfo);
     void clickedProc();
 
 private:

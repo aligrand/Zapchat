@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+extern QString myUsername;
+
 namespace Ui {
 class UserInfoWindow;
 }

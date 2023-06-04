@@ -36,9 +36,10 @@ private slots:
     void goto_signin();
     void goto_signup();
     void signin(QString username, QString password);
-    void signin_result(qint8 result);
+    void signin_result(int result);
     void signup(QString username, QString password, QString pn, QString email);
     void auth_result(qint8 res);
+    void uiw_result(QString name, QString info, QString image_path);
 
 private:
     Ui::signIU_page *ui;

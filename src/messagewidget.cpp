@@ -53,7 +53,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             iPathExist = true;
         }
 
-        iPath = "Images/" + sqlQuery.value("imageADDRESS").toString();
+        iPath = sqlQuery.value("imageADDRESS").toString();
     }
 
     if (sqlQuery.value("videoADDRESS").toString().isEmpty())
@@ -73,7 +73,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             vPathExist = true;
         }
 
-        vPath = "Videos/" + sqlQuery.value("videoADDRESS").toString();
+        vPath = sqlQuery.value("videoADDRESS").toString();
     }
 
     if (sqlQuery.value("audioADDRESS").toString().isEmpty())
@@ -92,7 +92,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             aPathExist = true;
         }
 
-        aPath = "Audios/" + sqlQuery.value("audioADDRESS").toString();
+        aPath = sqlQuery.value("audioADDRESS").toString();
     }
 
     if (sqlQuery.value("fileADDRESS").toString().isEmpty())
@@ -110,7 +110,7 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             fPathExist = true;
         }
 
-        fPath = "Files/" + sqlQuery.value("fileADDRESS").toString();
+        fPath = sqlQuery.value("fileADDRESS").toString();
     }
 
     ui->dtLable->setText(sqlQuery.value("DT").toString());
@@ -153,7 +153,7 @@ void MessageWidget::on_audioPlayPushButton_clicked()
 {
     if (!aPathExist)
     {
-        emit server->command("DOWNLOAD " + aPath.split("/").last());
+        emit server->command("DOWNLOAD " + aPath);
 
         return;
     }
@@ -176,19 +176,19 @@ void MessageWidget::on_fileDownloadPushButton_clicked()
 {
     if (!fPathExist)
     {
-        emit server->command("DOWNLOAD " + fPath.split("/").last());
+        emit server->command("DOWNLOAD " + fPath);
 
         return;
     }
 
-    QDesktopServices::openUrl(QUrl(fPath));
+    QDesktopServices::openUrl(QUrl("Files/" + fPath));
 }
 
 void MessageWidget::on_imageLable_linkActivated(const QString &link)
 {
     if (!iPathExist)
     {
-        emit server->command("DOWNLOAD " + iPath.split("/").last());
+        emit server->command("DOWNLOAD " + iPath);
 
         return;
     }
@@ -287,15 +287,15 @@ void MessageWidget::contextMenuProc(QAction *action)
     {
         if (contextMenuParent == 'I')
         {
-            QDesktopServices::openUrl(QUrl(iPath));
+            QDesktopServices::openUrl(QUrl("Images/" + iPath));
         }
         else if (contextMenuParent == 'V')
         {
-            QDesktopServices::openUrl(QUrl(vPath));
+            QDesktopServices::openUrl(QUrl("Videos/" + vPath));
         }
         else // audio
         {
-            QDesktopServices::openUrl(QUrl(aPath));
+            QDesktopServices::openUrl(QUrl("Audios/" + aPath));
         }
     }
     else if (action->text() == "Save")
@@ -304,25 +304,25 @@ void MessageWidget::contextMenuProc(QAction *action)
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
-            QFile::copy(iPath, outputFolder + iPath.split("/").last());
+            QFile::copy(iPath, outputFolder + "/" + iPath);
         }
         else if (contextMenuParent == 'V')
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
-            QFile::copy(vPath, outputFolder + vPath.split("/").last());
+            QFile::copy(vPath, outputFolder + "/" + vPath);
         }
         else if (contextMenuParent == 'A')
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
-            QFile::copy(aPath, outputFolder + aPath.split("/").last());
+            QFile::copy(aPath, outputFolder + "/" + aPath);
         }
         else
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
-            QFile::copy(fPath, outputFolder + fPath.split("/").last());
+            QFile::copy(fPath, outputFolder + "/" + fPath);
         }
     }
     else if (action->text() == "Pin it")
@@ -342,14 +342,14 @@ void MessageWidget::contextMenuProc(QAction *action)
 
 void MessageWidget::checkResUpdated()
 {
-    if (QFile::exists(iPath) && !iPathExist)
+    if (QFile::exists("Images/" + iPath) && !iPathExist)
     {
-        ui->imageLable->setPixmap(QPixmap(iPath));
+        ui->imageLable->setPixmap(QPixmap("Images/" + iPath));
     }
-    if (QFile::exists(vPath) && !vPathExist)
+    if (QFile::exists("Videos/" + vPath) && !vPathExist)
     {
         videoPlayer = new QMediaPlayer();
-        videoPlayer->setMedia(QUrl::fromLocalFile(vPath));
+        videoPlayer->setMedia(QUrl::fromLocalFile("Videos/" + vPath));
         videoPlayer->setVideoOutput(ui->video);
         videoPlayer->setVolume(100);
         videoPlayer->play();
@@ -357,17 +357,17 @@ void MessageWidget::checkResUpdated()
         vPathExist = true;
     }
 
-    if (QFile::exists(aPath) && !aPathExist)
+    if (QFile::exists("Audios/" + aPath) && !aPathExist)
     {
         audioPlayer = new QMediaPlayer();
-        audioPlayer->setMedia(QUrl::fromLocalFile(vPath));
+        audioPlayer->setMedia(QUrl::fromLocalFile("Audios/" + aPath));
         audioPlayer->setVolume(100);
         ui->audioPlayPushButton->setIcon(QIcon("../res/icon/play_icon.png"));
 
         aPathExist = true;
     }
 
-    if (QFile::exists(fPath) && !fPathExist)
+    if (QFile::exists("Files/" + fPath) && !fPathExist)
     {
         ui->fileDownloadPushButton->setIcon(QIcon("../res/icon/folder_open_icon.png"));
 

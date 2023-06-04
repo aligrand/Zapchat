@@ -25,6 +25,7 @@ signIU_page::signIU_page(QWidget *parent) :
     connect(su_w, &signup_widget::su, this, &signIU_page::signup);
     connect(su_w, &signup_widget::goto_si, this, &signIU_page::goto_signin);
     connect(ap_window, &auth_page::result_ready, this, &signIU_page::auth_result);
+    connect(userinfo_w, &UserInfoWindow::lets_go, this, &signIU_page::uiw_result);
 }
 
 signIU_page::~signIU_page()
@@ -32,6 +33,7 @@ signIU_page::~signIU_page()
     delete ui;
     delete si_w;
     delete su_w;
+    delete userinfo_w;
 }
 
 void signIU_page::goto_signin()
@@ -56,7 +58,7 @@ void signIU_page::signin(QString username, QString password)
     emit server->command("LOGIN " + username + " " + password);
 }
 
-void signIU_page::signin_result(qint8 result)
+void signIU_page::signin_result(int result)
 {
     if (result == 0)
     {
@@ -118,6 +120,7 @@ void signIU_page::auth_result(qint8 res)
 
         QFile m_index("message-index.txt");
         m_index.open(QIODevice::WriteOnly | QIODevice::Text);
+        m_index.resize(0);
         m_index.write("0");
         m_index.close();
 
@@ -129,10 +132,25 @@ void signIU_page::auth_result(qint8 res)
         sqlQuery.addBindValue(sign_info[3]);
         sqlQuery.addBindValue(sign_info[2]);
         sqlQuery.exec();
+
+        userinfo_w->show();
     }
     else
     {
         ap_window->hide();
         this->show();
     }
+}
+
+void signIU_page::uiw_result(QString name, QString info, QString image_path)
+{
+    SqlRecordQString record;
+
+    record << sign_info[0] << sign_info[3] << sign_info[2] << name << image_path << info << "1";
+    record.end();
+
+    emit server->command("_UPLOAD_ Cache/" + image_path);
+    emit server->command(QString("EDIT-USER ") + record);
+
+    go_next_window = true;
 }

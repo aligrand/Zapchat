@@ -28,8 +28,10 @@ void AddRoomWindow::on_profile_pic_button_clicked()
         return;
     }
 
-    QPixmap pixmap(image_path);
-    ui->profile_pic->setPixmap(pixmap);
+    QFile::copy(image_path, "Cache/" + myUsername + "P." + image_path.split(".").last());
+    image_path = myUsername + "P." + image_path.split(".").last();
+
+    ui->profile_pic->setPixmap(QPixmap("Cache/" + image_path));
 }
 
 void AddRoomWindow::on_goto_chat_button_clicked()
@@ -57,12 +59,6 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             name = ui->name_le->text();
             info = ui->info_te->toPlainText();
 
-            if (image_path != "")
-            {
-                QFile::copy(image_path, "Cache/" + id + "P." + image_path.split(".").last());
-                image_path = "Cache/" + id + "P." + image_path.split(".").last();
-            }
-
             sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
                              ":photoADDRESS, :info, :type, :pin)");
             sqlQuery.bindValue(":id", id);
@@ -79,8 +75,10 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             sqlQuery.addBindValue("M");
             sqlQuery.exec();
 
-            sqlRecS << id << name << image_path.split("/").last() << info << "1" << "";
+            sqlRecS << id << name << image_path << info << "1" << "";
             sqlRecS.end();
+
+            emit server->command("_UPLOAD_ Cache/" + image_path);
             emit server->command(QString("ADD-ROOM ") + sqlRecS);
             emit server->databaseUpdated("rooms");
         }

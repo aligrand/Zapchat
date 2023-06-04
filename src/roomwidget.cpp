@@ -12,7 +12,7 @@ RoomWidget::RoomWidget(QString roomID, QWidget *parent) :
 
     rID = roomID;
 
-    newMessagesCame();
+    newMessagesCame("messages");
 
     QSqlQuery sqlQuery;
 
@@ -54,8 +54,13 @@ RoomWidget::~RoomWidget()
     delete ui;
 }
 
-void RoomWidget::newMessagesCame()
+void RoomWidget::newMessagesCame(QString additionalInfo)
 {
+    if (additionalInfo != "messages")
+    {
+        return;
+    }
+
     QSqlQuery sqlQuery;
 
     sqlQuery.prepare("SELECT count FROM new_messages WHERE roomID=?");

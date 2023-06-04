@@ -59,7 +59,10 @@ void AccountSettingsPanel::on_picSelectButton_clicked()
         return;
     }
 
-    ui->profilePic->setPixmap(QPixmap(image_path));
+    QFile::copy(image_path, "Cache/" + myUsername + "P." + image_path.split(".").last());
+    image_path = myUsername + "P." + image_path.split(".").last();
+
+    ui->profilePic->setPixmap(QPixmap("Cache/" + image_path));
 }
 
 void AccountSettingsPanel::on_okButton_clicked()
@@ -82,11 +85,12 @@ void AccountSettingsPanel::on_okButton_clicked()
         sqlQuery.first();
 
         record << sqlQuery.value("username").toString() << ui->emailField->text() << ui->pnField->text()
-               << ui->nameField->text() << image_path.split("/").last() << ui->infoField->toPlainText()
+               << ui->nameField->text() << image_path << ui->infoField->toPlainText()
                << QString(server->getNetworkState());
         record.end();
 
-        server->command(QString("EDIT-USER ") + record);
+        emit server->command("_UPLOAD_ Cache/" + image_path);
+        emit server->command(QString("EDIT-USER ") + record);
     }
     else
     {
@@ -95,11 +99,12 @@ void AccountSettingsPanel::on_okButton_clicked()
          sqlQuery.exec();
          sqlQuery.first();
 
-         record << sqlQuery.value("id").toString() << ui->nameField->text() << image_path.split("/").last()
+         record << sqlQuery.value("id").toString() << ui->nameField->text() << image_path
                 << ui->infoField->toPlainText() << sqlQuery.value("type").toString()
                 << sqlQuery.value("pin").toString();
          record.end();
 
-         server->command(QString("EDIT-ROOM ") + record);
+         emit server->command("_UPLOAD_ Cache/" + image_path);
+         emit server->command(QString("EDIT-ROOM ") + record);
     }
 }

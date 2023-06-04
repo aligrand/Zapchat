@@ -146,23 +146,35 @@ void ChatWindow::on_sendButton_clicked()
 
     if (imagePath != "")
     {
-        QFile::copy(imagePath, "Images/" + imagePath.split("/").last());
-        imagePath = imagePath.split("/").last();
+        QFile::copy(imagePath, "Images/" + room_id + "-" + myUsername + "-" +
+                    QString::number(myMessageIndex) + "I." + imagePath.split(".").last());
+        imagePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + imagePath.split(".").last();
+
+        emit server->command("_UPLOAD_ Images/" + imagePath);
     }
     if (videoPath != "")
     {
-        QFile::copy(videoPath, "Videos/" + videoPath.split("/").last());
-        videoPath = videoPath.split("/").last();
+        QFile::copy(videoPath, "Images/" + room_id + "-" + myUsername + "-" +
+                    QString::number(myMessageIndex) + "V." + videoPath.split(".").last());
+        videoPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + videoPath.split(".").last();
+
+        emit server->command("_UPLOAD_ Videos/" + videoPath);
     }
     if (audioPath != "")
     {
-        QFile::copy(audioPath, "Audios/" + audioPath.split("/").last());
-        audioPath = audioPath.split("/").last();
+        QFile::copy(audioPath, "Images/" + room_id + "-" + myUsername + "-" +
+                    QString::number(myMessageIndex) + "A." + audioPath.split(".").last());
+        audioPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + audioPath.split(".").last();
+
+        emit server->command("_UPLOAD_ Audios/" + audioPath);
     }
     if (filePath != "")
     {
-        QFile::copy(filePath, "Files/" + filePath.split("/").last());
-        filePath = filePath.split("/").last();
+        QFile::copy(filePath, "Images/" + room_id + "-" + myUsername + "-" +
+                    QString::number(myMessageIndex) + "F." + filePath.split(".").last());
+        filePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + filePath.split(".").last();
+
+        emit server->command("_UPLOAD_ Files/" + filePath);
     }
 
     sqlQuery.prepare("INSERT INTO messages (id, roomID, userID, key, DT, replyID, text, imageADDRESS,"
@@ -192,7 +204,25 @@ void ChatWindow::on_sendButton_clicked()
 
     ++myMessageIndex;
 
-    server->command(QString("ADD-MESSAGE ") + record);
+    emit server->command(QString("ADD-MESSAGE ") + record);
+
+    ui->text_le->clear();
+
+    ui->refoButton->setToolTip("<html>"
+                               "<head/>"
+                               "<body>"
+                               "<p><span style=\" font-weight:600;\">Reply:</span> &quot;&quot;</p>"
+                               "</body>"
+                               "</html>");
+    ui->attachmentButton->setToolTip("<html>"
+                                     "<head/>"
+                                     "<body>"
+                                     "<p><span style=\" font-weight:600;\">Image: </span>&quot;&quot;</p>"
+                                     "<p><span style=\" font-weight:600;\">Video: </span>&quot;&quot;</p>"
+                                     "<p><span style=\" font-weight:600;\">Audio: </span>&quot;&quot;</p>"
+                                     "<p><span style=\" font-weight:600;\">File: </span>&quot;&quot;</p>"
+                                     "</body>"
+                                     "</html>");
 }
 
 void ChatWindow::on_pinButton_clicked()
@@ -361,7 +391,7 @@ void ChatWindow::buttonsProc(QAction *action)
     }
     else if (action->text() == "Delete Account")
     {
-        server->command("REMOVE-USER " + myUsername);
+        emit server->command("REMOVE-USER " + myUsername);
 
         sqlQuery.prepare("DELETE FROM rooms");
         sqlQuery.exec();
