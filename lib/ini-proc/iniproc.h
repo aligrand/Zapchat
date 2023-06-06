@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QVector>
 
-typedef char uByte;
+typedef unsigned char uByte;
 
 class IniProc
 {

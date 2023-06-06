@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QDebug>
 
 enum NetworkState
 {
@@ -29,7 +30,7 @@ public:
     ServerMan();
     ~ServerMan();
 
-    inline NetworkState getNetworkState();
+    NetworkState getNetworkState();
 
 signals:
     void userNameExistResult(bool result, QString un);

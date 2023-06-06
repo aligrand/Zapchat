@@ -22,13 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = $$PWD/run
 
 SOURCES += \
-    dependency/messagesdisplayer.cpp \
+    lib/server-connection/serverman.cpp \
     lib/ini-proc/iniproc.cpp \
     lib/server-connection/sqlrecordqstring.cpp \
+    dependency/messagesdisplayer.cpp \
+    src/messageviewerwindow.cpp \
     src/accountsettingspanel.cpp \
     src/addroomwindow.cpp \
     src/appsettingspanel.cpp \
-    lib/server-connection/serverman.cpp \
     src/emojitable.cpp \
     src/enterroomwindow.cpp \
     src/messagewidget.cpp \
@@ -42,17 +43,17 @@ SOURCES += \
     src/signin_widget.cpp \
     src/signiu_page.cpp \
     src/signup_widget.cpp \
-    src/userinfowindow.cpp \
-    src/messageviewerwindow.cpp \
+    src/userinfowindow.cpp
 
 HEADERS += \
-    dependency/messagesdisplayer.h \
+    lib/server-connection/serverman.h \
     lib/ini-proc/iniproc.h \
     lib/server-connection/sqlrecordqstring.h \
+    dependency/messagesdisplayer.h \
+    src/messageviewerwindow.h \
     src/accountsettingspanel.h \
     src/addroomwindow.h \
     src/appsettingspanel.h \
-    lib/server-connection/serverman.h \
     src/emojitable.h \
     src/enterroomwindow.h \
     src/messagewidget.h \
@@ -66,10 +67,10 @@ HEADERS += \
     src/signiu_page.h \
     src/signup_widget.h \
     src/userinfowindow.h \
-    src/messageviewerwindow.h \
 
 FORMS += \
     dependency/messagesdisplayer.ui \
+    src/messageviewerwindow.ui \
     src/accountsettingspanel.ui \
     src/addroomwindow.ui \
     src/appsettingspanel.ui \
@@ -85,8 +86,7 @@ FORMS += \
     src/signin_widget.ui \
     src/signiu_page.ui \
     src/signup_widget.ui \
-    src/userinfowindow.ui \
-    src/messageviewerwindow.ui \
+    src/userinfowindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -78,7 +78,7 @@ void RoomWidget::newMessagesCame(QString additionalInfo)
     newMCount->show();
 }
 
-void RoomWidget::clickedProc()
+void RoomWidget::clickedProc(QString roomId)
 {
     QSqlQuery sqlQuery;
 
@@ -87,4 +87,9 @@ void RoomWidget::clickedProc()
     sqlQuery.exec();
 
     delete newMCount;
+}
+
+void RoomWidget::on_roomName_linkActivated(const QString &link)
+{
+    emit clicked(rID);
 }

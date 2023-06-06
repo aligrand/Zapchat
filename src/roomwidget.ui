@@ -85,7 +85,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Test</string>
+      <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none;color:black;&quot;&gt;Text&lt;/a&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

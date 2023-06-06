@@ -21,6 +21,8 @@
 
 extern ServerMan *server;
 
+class MessageViewerWindow;
+
 namespace Ui {
 class MessageWidget;
 }
@@ -71,7 +73,6 @@ private:
     QMenu *contextMenu = nullptr;
     char contextMenuParent;
     MessageViewerWindow *replyMes;
-
 };
 
 #endif // MESSAGEWIDGET_H

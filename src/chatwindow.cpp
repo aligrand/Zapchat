@@ -9,6 +9,10 @@ ChatWindow::ChatWindow(QWidget *parent) :
 
     connect(server, &ServerMan::databaseUpdated, this, &ChatWindow::updateRoomList);
 
+    QSizePolicy _size_policy = ui->chat_panel->sizePolicy();
+    _size_policy.setRetainSizeWhenHidden(true);
+    ui->chat_panel->setSizePolicy(_size_policy);
+
     ui->chat_panel->setVisible(false);
 
     ui->leftPanel->setDirection(QHBoxLayout::RightToLeft);

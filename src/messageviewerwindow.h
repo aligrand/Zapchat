@@ -5,6 +5,8 @@
 
 #include "../dependency/messagesdisplayer.h"
 
+class MessagesDisplayer;
+
 namespace Ui {
 class MessageViewerWindow;
 }

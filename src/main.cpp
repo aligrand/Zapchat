@@ -33,9 +33,9 @@ bool is_user_avalable()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    landing_page *lp_window = new landing_page();
-    signIU_page *sp_window = new signIU_page();
-    ChatWindow *cw = new ChatWindow();
+    landing_page *lp_window;
+    signIU_page *sp_window;
+    ChatWindow *cw;
 
     QString password = "";
 
@@ -47,7 +47,11 @@ int main(int argc, char *argv[])
     QFile userpassFile("userinfo.txt");
     userpassFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    server = new ServerMan();
+    server = new ServerMan;
+
+    lp_window = new landing_page;
+    sp_window = new signIU_page;
+    cw = new ChatWindow;
 
     if(!is_user_avalable())
     {

@@ -15,7 +15,22 @@ ServerMan::ServerMan()
     connect(socket, &QTcpSocket::channelBytesWritten, this, &ServerMan::dataArrivedProc);
     connect(this, &ServerMan::start_sendRun, this, &ServerMan::sendRun);
 
-    QString ip_port = QFile("server-config.conf").readLine();
+    QFile ip_port_file("server-config.conf");
+    ip_port_file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString ip_port = ip_port_file.readLine();
+    ip_port_file.close();
+
+    if (ip_port.split(":").first().isEmpty())
+    {
+        qDebug() << "no IP";
+        exit(0);
+    }
+
+    if (ip_port.split(":").last().isEmpty())
+    {
+        qDebug() << "no PORT";
+        exit(0);
+    }
 
     QFile _jFile("job-queue.txt");
     _jFile.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -123,7 +138,7 @@ void ServerMan::sendRun()
     emit sendData(header);
 }
 
-inline NetworkState ServerMan::getNetworkState()
+NetworkState ServerMan::getNetworkState()
 {
     return ns;
 }

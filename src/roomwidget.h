@@ -24,11 +24,13 @@ public:
     ~RoomWidget();
 
 signals:
-    void clicked();
+    void clicked(QString roomId);
 
 private slots:
     void newMessagesCame(QString additionalInfo);
-    void clickedProc();
+    void clickedProc(QString roomId);
+
+    void on_roomName_linkActivated(const QString &link);
 
 private:
     Ui::RoomWidget *ui;
