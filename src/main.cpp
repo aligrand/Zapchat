@@ -9,10 +9,20 @@
 #include <QFile>
 #include <QSqlDatabase>
 #include <QMessageBox>
+#include <QTime>
 
 ServerMan *server;
 QString myUsername;
 qint64 myMessageIndex;
+
+void delay(int sec)
+{
+    QTime dieTime= QTime::currentTime().addSecs(sec);
+    while (QTime::currentTime() < dieTime)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
 
 bool is_user_avalable()
 {
@@ -41,7 +51,7 @@ int main(int argc, char *argv[])
 
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("database.sqlite3");
+    db.setDatabaseName("clientDB.sqlite3");
     db.open();
 
     QFile userpassFile("userinfo.txt");
@@ -49,9 +59,7 @@ int main(int argc, char *argv[])
 
     server = new ServerMan;
 
-    lp_window = new landing_page;
-    sp_window = new signIU_page;
-    cw = new ChatWindow;
+    delay(2);
 
     if(!is_user_avalable())
     {
@@ -62,6 +70,7 @@ int main(int argc, char *argv[])
             exit(0);
         }
 
+        lp_window = new landing_page;
         lp_window->show();
 
         while (!lp_window->go_next_window)
@@ -71,6 +80,7 @@ int main(int argc, char *argv[])
 
         delete lp_window;
 
+        sp_window = new signIU_page;
         sp_window->show();
 
         while (!sp_window->go_next_window)
@@ -93,6 +103,7 @@ int main(int argc, char *argv[])
     mIndex.open(QIODevice::ReadWrite | QIODevice::Text);
     myMessageIndex = mIndex.readLine().toLongLong();
 
+    cw = new ChatWindow;
     cw->show();
 
     int exec_ret = a.exec();

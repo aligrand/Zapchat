@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "../lib/server-connection/serverman.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class landing_page; }
 QT_END_NAMESPACE
@@ -19,6 +21,7 @@ public:
 
 private slots:
     void on_goto_signiu_button_clicked();
+    void closeByServer();
 
 private:
     Ui::landing_page *ui;

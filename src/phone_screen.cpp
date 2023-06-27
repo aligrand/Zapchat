@@ -13,11 +13,6 @@ void phone_screen::set_sms(QString sms)
     ui->auth_code_lable->setText(sms);
 }
 
-void phone_screen::end_window()
-{
-    delete this;
-}
-
 phone_screen::~phone_screen()
 {
     delete ui;

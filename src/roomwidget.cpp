@@ -16,9 +16,10 @@ RoomWidget::RoomWidget(QString roomID, QWidget *parent) :
 
     QSqlQuery sqlQuery;
 
-    sqlQuery.prepare("SELECT * FROM rooms WHERE roomID=?");
+    sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
     sqlQuery.addBindValue(roomID);
     sqlQuery.exec();
+    sqlQuery.first();
 
     if (sqlQuery.value("type").toInt() == 0)
     {
@@ -26,6 +27,7 @@ RoomWidget::RoomWidget(QString roomID, QWidget *parent) :
         sqlQuery.addBindValue(roomID);
         sqlQuery.addBindValue(myUsername);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->roomPic->setPixmap(QPixmap("Chache/" + sqlQuery.value("photoADDRESS").toString()));
         ui->roomName->setText(sqlQuery.value("name").toString());
@@ -33,6 +35,7 @@ RoomWidget::RoomWidget(QString roomID, QWidget *parent) :
         sqlQuery.prepare("SELECT text FROM messages WHERE roomID=?");
         sqlQuery.addBindValue(roomID);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->lastMessage->setText(sqlQuery.value("text").toString());
     }
@@ -44,6 +47,7 @@ RoomWidget::RoomWidget(QString roomID, QWidget *parent) :
         sqlQuery.prepare("SELECT text FROM messages WHERE roomID=?");
         sqlQuery.addBindValue(roomID);
         sqlQuery.exec();
+        sqlQuery.first();
 
         ui->lastMessage->setText(sqlQuery.value("text").toString());
     }
@@ -66,6 +70,7 @@ void RoomWidget::newMessagesCame(QString additionalInfo)
     sqlQuery.prepare("SELECT count FROM new_messages WHERE roomID=?");
     sqlQuery.addBindValue(rID);
     sqlQuery.exec();
+    sqlQuery.first();
 
     delete newMCount;
 

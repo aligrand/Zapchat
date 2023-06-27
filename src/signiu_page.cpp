@@ -1,6 +1,8 @@
 #include "signiu_page.h"
 #include "ui_signiu_page.h"
 
+extern void delay(int);
+
 signIU_page::signIU_page(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::signIU_page),
@@ -26,14 +28,15 @@ signIU_page::signIU_page(QWidget *parent) :
     connect(su_w, &signup_widget::goto_si, this, &signIU_page::goto_signin);
     connect(ap_window, &auth_page::result_ready, this, &signIU_page::auth_result);
     connect(userinfo_w, &UserInfoWindow::lets_go, this, &signIU_page::uiw_result);
+    connect(server, &ServerMan::notConnected, this, &signIU_page::close);
 }
 
 signIU_page::~signIU_page()
 {         
     delete ui;
-    delete si_w;
-    delete su_w;
-    delete userinfo_w;
+    si_w->deleteLater();
+    su_w->deleteLater();
+    userinfo_w->deleteLater();
 }
 
 void signIU_page::goto_signin()
@@ -55,11 +58,18 @@ void signIU_page::signin(QString username, QString password)
     sign_info[0] = username;
     sign_info[1] = password;
 
+    sign_way = "SignIn";
+
     emit server->command("LOGIN " + username + " " + password);
 }
 
 void signIU_page::signin_result(int result)
 {
+    if (sign_way == "SignUp")
+    {
+        return;
+    }
+
     if (result == 0)
     {
         QMessageBox::critical(this, "Error", "User not found");
@@ -102,11 +112,15 @@ void signIU_page::auth_result(qint8 res)
     {
         SqlRecordQString record;
 
+        sign_way = "SignUp";
+
         record << sign_info[0] << sign_info[3] << sign_info[2] << "" << "" << "" << "1";
         record.end();
 
         emit server->command(QString("ADD-USER ") + record);
         emit server->command("SET-PASS " + sign_info[0] + " " + sign_info[1]);
+
+        delay(1);
 
         emit server->command("LOGIN " + sign_info[0] + " " + sign_info[1]);
 
@@ -133,6 +147,7 @@ void signIU_page::auth_result(qint8 res)
         sqlQuery.addBindValue(sign_info[2]);
         sqlQuery.exec();
 
+        ap_window->deleteLater();
         userinfo_w->show();
     }
     else
@@ -149,8 +164,25 @@ void signIU_page::uiw_result(QString name, QString info, QString image_path)
     record << sign_info[0] << sign_info[3] << sign_info[2] << name << image_path << info << "1";
     record.end();
 
-    emit server->command("_UPLOAD_ Cache/" + image_path);
+    if (!image_path.isEmpty())
+    {
+        emit server->command("_UPLOAD_ Profiles/" + image_path);
+    }
+
     emit server->command(QString("EDIT-USER ") + record);
 
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare("UPDATE users SET name=?, photoADDRESS=?, info=? WHERE username=?");
+    sqlQuery.addBindValue(name);
+    sqlQuery.addBindValue(image_path);
+    sqlQuery.addBindValue(info);
+    sqlQuery.addBindValue(sign_info[0]);
+    sqlQuery.exec();
+
     go_next_window = true;
+}
+
+void signIU_page::closeByServer()
+{
+    exit(0);
 }

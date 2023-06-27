@@ -2,24 +2,26 @@
 
 SqlRecordQString::SqlRecordQString()
 {
-    recordStatment = "#<$";
+    recordStatment = "ƒ";
 }
 
 void SqlRecordQString::clean()
 {
-    recordStatment = "#<$";
+    recordStatment = "ƒ";
 }
 
 void SqlRecordQString::end()
 {
-    recordStatment += "$>#";
+    recordStatment.remove(recordStatment.size() - 1, 1);
+    recordStatment += "ƒ";
 }
 
 SqlRecordQString &SqlRecordQString::operator<<(QString element)
 {
-    recordStatment += "&%&";
     recordStatment += element;
-    recordStatment += "&%&";
+    recordStatment += "‡";
+
+    return *this;
 }
 
 SqlRecordQString::operator QString()

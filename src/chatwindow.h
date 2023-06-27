@@ -27,6 +27,8 @@ extern ServerMan *server;
 extern QString myUsername;
 extern qint64 myMessageIndex;
 
+extern void delay(int);
+
 namespace Ui {
 class ChatWindow;
 }
@@ -70,6 +72,10 @@ private slots:
 
     void updatePreferences();
 
+    void connProc();
+
+    void nConnProc();
+
 private:
     void delRoomListItems();
     void printRoomsList(QString additionalInfo = "1=1");
@@ -97,7 +103,6 @@ private:
     QVBoxLayout roomPanelLayout;
     QMenu *menu = nullptr;
     QString replyID = "", text = "", imagePath = "", videoPath = "", audioPath = "", filePath = "";
-    QString menuParent = "";
     QString room_id = "";
     bool is_typeof_room_user;
 };

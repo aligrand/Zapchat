@@ -23,13 +23,13 @@ auth_page::auth_page(QWidget *parent) :
 auth_page::~auth_page()
 {
     delete ui;
-    delete timer;
-    delete ph;
+    timer->deleteLater();
+    ph->deleteLater();
 }
 
 void auth_page::closeEvent(QCloseEvent *event)
 {
-    delete ph;
+    ph->deleteLater();
 
     QWidget::closeEvent(event);
 }
@@ -61,7 +61,6 @@ void auth_page::auth_page_timer()
 
 void auth_page::on_reSend_sms_button_clicked()
 {
-    ph->end_window();
     ph = new phone_screen();
 
     ph->set_sms(code_gen());
@@ -98,7 +97,7 @@ void auth_page::on_verify_button_clicked()
 
 void auth_page::on_back2info_link_linkActivated(const QString &link)
 {
-    delete ph;
+    ph->deleteLater();
 
     emit result_ready(2);
 }

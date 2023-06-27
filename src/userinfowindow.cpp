@@ -25,20 +25,20 @@ void UserInfoWindow::on_profile_pic_button_clicked()
         return;
     }
 
-    QFile::copy(image_path, "Cache/" + myUsername + "P." + image_path.split(".").last());
+    QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
     image_path = myUsername + "P." + image_path.split(".").last();
 
-    ui->profile_pic->setPixmap(QPixmap("Cache/" + image_path));
+    ui->profile_pic->setPixmap(QPixmap("Profiles/" + image_path));
 }
 
 void UserInfoWindow::on_goto_chat_button_clicked()
 {
-    if (name == "")
+    if (ui->name_le->text() == "")
     {
         QMessageBox::critical(this, "Error", "You must enter Name");
 
         return;
     }
 
-    emit lets_go(name, info, image_path);
+    emit lets_go(ui->name_le->text(), ui->info_te->toPlainText(), image_path);
 }

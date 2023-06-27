@@ -39,22 +39,21 @@ void signup_widget::on_username_lineEdit_textChanged(const QString &text)
 
     if (username_regex_val.validate(text_tmp, pos) == QValidator::Acceptable){
         server_res_un = text;
+        css[3] = "border-left-color: #8bc34a;";
+        ui->username_lineEdit->setStyleSheet(css.join(""));
 
         emit server->command("UN-EXIST " + text);
     }
     else if (text_tmp.isEmpty()) {
         is_username_val = false;
-        ui->username_lineEdit->setStyleSheet("border-left-color: #fff;\
-                                             border-left-style: solid;\
-                border-left-width: 5px;\
-        padding-left:3px;");
+        css[3] = "border-left-color: #fff;";
+        css[4] = "background-color: #fff;";
+        ui->username_lineEdit->setStyleSheet(css.join(""));
     }
     else {
         is_username_val = false;
-        ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
-                                             border-left-style: solid;\
-                border-left-width: 5px;\
-        padding-left:3px;");
+        css[3] = "border-left-color: #f44336;";
+        ui->username_lineEdit->setStyleSheet(css.join(""));
     }
 }
 
@@ -64,19 +63,13 @@ void signup_widget::usernameExistRes(bool res, QString user_name)
     {
         if (!res) {
             is_username_val = true;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #8bc34a;\
-                                                 border-left-style: solid;\
-                    border-left-width: 5px;\
-            background-color: #c8e6c9;\
-            padding-left:3px;");
+            css[4] = "background-color: #c8e6c9;";
+            ui->username_lineEdit->setStyleSheet(css.join(""));
         }
         else {
             is_username_val = false;
-            ui->username_lineEdit->setStyleSheet("border-left-color: #f44336;\
-                                                 border-left-style: solid;\
-                    border-left-width: 5px;\
-            background-color: #ffcdd2;\
-            padding-left:3px;");
+            css[4] = "background-color: #ffcdd2;";
+            ui->username_lineEdit->setStyleSheet(css.join(""));
         }
     }
 }

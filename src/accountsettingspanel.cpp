@@ -21,7 +21,11 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
-        ui->profilePic->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+
+        if (!sqlQuery.value("photoADDRESS").toString().isEmpty())
+        {
+            ui->profilePic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
+        }
 
         ui->pnField->setText(sqlQuery.value("phoneNumber").toString());
         ui->emailField->setText(sqlQuery.value("emailAddress").toString());
@@ -38,7 +42,11 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
 
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
-        ui->profilePic->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+
+        if (!sqlQuery.value("photoADDRESS").toString().isEmpty())
+        {
+            ui->profilePic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
+        }
     }
 }
 
@@ -59,10 +67,10 @@ void AccountSettingsPanel::on_picSelectButton_clicked()
         return;
     }
 
-    QFile::copy(image_path, "Cache/" + myUsername + "P." + image_path.split(".").last());
+    QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
     image_path = myUsername + "P." + image_path.split(".").last();
 
-    ui->profilePic->setPixmap(QPixmap("Cache/" + image_path));
+    ui->profilePic->setPixmap(QPixmap("Profiles/" + image_path));
 }
 
 void AccountSettingsPanel::on_okButton_clicked()
@@ -77,6 +85,11 @@ void AccountSettingsPanel::on_okButton_clicked()
         return;
     }
 
+    if (!image_path.isEmpty())
+    {
+        emit server->command("_UPLOAD_ Profiles/" + image_path);
+    }
+
     if (is_user)
     {
         sqlQuery.prepare("SELECT * FROM users WHERE username=?");
@@ -89,7 +102,6 @@ void AccountSettingsPanel::on_okButton_clicked()
                << QString(server->getNetworkState());
         record.end();
 
-        emit server->command("_UPLOAD_ Cache/" + image_path);
         emit server->command(QString("EDIT-USER ") + record);
     }
     else
@@ -104,7 +116,6 @@ void AccountSettingsPanel::on_okButton_clicked()
                 << sqlQuery.value("pin").toString();
          record.end();
 
-         emit server->command("_UPLOAD_ Cache/" + image_path);
          emit server->command(QString("EDIT-ROOM ") + record);
     }
 }

@@ -11,6 +11,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <QMessageBox>
+#include <QStringList>
 
 #include "lib/server-connection/serverman.h"
 
@@ -66,8 +67,15 @@ private:
     QRegularExpressionValidator username_regex_val, password_regex_val, Cpassword_regex_val, pn_regex_val,
                                  email_regex_val;
     const QString captcha_name_arr[10] = {"12hello", "aA5Bb", "F50vs", "h23A",
-                                    "hP439", "Pa33p", "Q49mn", "sEv07", "wHy32", "yU168"};
+                                    "hP439", "Pa33p", "Q49mn", "sEv07", "wHy32", "yU16g"};
     QString server_res_un = "";
+    QStringList css = {
+        "border-left-style: solid;",
+        "border-left-width: 5px;",
+        "padding-left:3px;",
+        "border-left-color: #fff;",
+        "background-color: #fff;"
+    };
 
     void captcha_gen();
     inline int random(int min, int max);

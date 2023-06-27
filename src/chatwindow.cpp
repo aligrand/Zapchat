@@ -8,6 +8,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(server, &ServerMan::databaseUpdated, this, &ChatWindow::updateRoomList);
+    connect(server, &ServerMan::connected, this, &ChatWindow::connProc);
+    connect(server, &ServerMan::notConnected, this, &ChatWindow::nConnProc);
 
     QSizePolicy _size_policy = ui->chat_panel->sizePolicy();
     _size_policy.setRetainSizeWhenHidden(true);
@@ -20,6 +22,11 @@ ChatWindow::ChatWindow(QWidget *parent) :
 
     IniProc ini("settings.ini");
     ui->messagesPanel->setStyleSheet("background-image: url(" + ini["chat-bg-image"] + ");");
+
+    if (server->getNetworkState() == NetworkState::Offline)
+    {
+        this->setWindowTitle("Zapchat - OFFLINE");
+    }
 
     printRoomsList();
 }
@@ -42,12 +49,8 @@ void ChatWindow::updateRoomList(QString AdditionalInfo)
 void ChatWindow::on_settingsButton_clicked()
 {
     delete menu;
-    if (menuParent == "sb")
-    {
-        return;
-    }
-    menu = new QMenu;
-    menuParent = "sb";
+
+    menu = new QMenu(this);
     menu->addAction(QIcon("../res/icon/acc_settings_icon.png"), "Account Settings");
     menu->addAction(QIcon("../res/icon/app_settings_icon.png"), "App Settings");
     menu->addAction(QIcon("../res/icon/add_room_icon.png"), "Add Room");
@@ -55,7 +58,7 @@ void ChatWindow::on_settingsButton_clicked()
     menu->addAction(QIcon("../res/icon/remove_account_icon.png"), "Delete Account");
     menu->addAction(QIcon("../res/icon/leave_icon.png"), "Logout");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(QPoint(ui->settingsButton->pos().x(), ui->settingsButton->pos().y() + 70));
+    menu->popup(ui->settingsButton->mapToGlobal(QPoint(ui->settingsButton->pos().x(), ui->settingsButton->pos().y() + 70)));
 }
 
 void ChatWindow::on_search_le_textChanged(const QString &arg1)
@@ -106,12 +109,7 @@ void ChatWindow::on_refoButton_clicked()
 void ChatWindow::on_attachmentButton_clicked()
 {
     delete menu;
-    if (menuParent == "ab")
-    {
-        return;
-    }
-    menu = new QMenu;
-    menuParent = "ab";
+
     menu->addAction(QIcon("../res/icon/image_icon.png"), "Image");
     menu->addAction("Image-clear");
     menu->addAction(QIcon("../res/icon/video_icon.png"), "Video");
@@ -121,7 +119,7 @@ void ChatWindow::on_attachmentButton_clicked()
     menu->addAction(QIcon("../res/icon/file_icon.png"), "File");
     menu->addAction("File-clear");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(QPoint(ui->attachmentButton->pos().x(), ui->settingsButton->pos().y() - 70));
+    menu->popup(ui->attachmentButton->mapToGlobal(QPoint(ui->attachmentButton->pos().x(), ui->settingsButton->pos().y() - 70)));
 }
 
 void ChatWindow::on_emojiButton_clicked()
@@ -232,16 +230,12 @@ void ChatWindow::on_sendButton_clicked()
 void ChatWindow::on_pinButton_clicked()
 {
     delete menu;
-    if (menuParent == "pb")
-    {
-        return;
-    }
-    menu = new QMenu;
-    menuParent = "pb";
+
+    menu = new QMenu(this);
     menu->addAction("Open Pin");
     menu->addAction("Remove Pin");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70));
+    menu->popup(ui->pinButton->mapToGlobal(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70)));
 }
 
 void ChatWindow::openChat(QString roomId)
@@ -268,13 +262,13 @@ void ChatWindow::openChat(QString roomId)
 
         QString uid = sqlQuery.value("userID").toString();
 
-        sqlQuery.prepare("SELECT * FROM users WHERE id=?");
+        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
         sqlQuery.addBindValue(uid);
         sqlQuery.exec();
         sqlQuery.first();
 
         ui->profile_lable->setText(sqlQuery.value("name").toString());
-        ui->profile_pic_lable->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+        ui->profile_pic_lable->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
 
         is_typeof_room_user = true;
 
@@ -282,7 +276,7 @@ void ChatWindow::openChat(QString roomId)
     else
     {
         ui->profile_lable->setText(sqlQuery.value("name").toString());
-        ui->profile_pic_lable->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+        ui->profile_pic_lable->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
 
         is_typeof_room_user = false;
     }
@@ -311,35 +305,37 @@ void ChatWindow::printRoomsList(QString additionalInfo)
     sqlQuery.prepare("SELECT id FROM rooms WHERE ?");
     sqlQuery.addBindValue(additionalInfo);
     sqlQuery.exec();
+    sqlQuery.first();
 
     RoomWidget *rwTmp;
-    while (true)
+    do
     {
         rwTmp = new RoomWidget(sqlQuery.value("id").toString());
         connect(rwTmp, &RoomWidget::clicked, this, &ChatWindow::openChat);
 
         roomPanelLayout.addWidget(rwTmp);
-        if (sqlQuery.next() == false)
-        {
-            break;
-        }
-    }
+    } while (sqlQuery.next());
 }
 
 void ChatWindow::on_moreButton_clicked()
 {
     delete menu;
-    if (menuParent == "mb")
-    {
-        return;
-    }
-    menu = new QMenu;
-    menuParent = "mb";
+
+    menu = new QMenu(this);
     menu->addAction(QIcon("../res/icon/search_icon.png"), "Serch");
     menu->addAction(QIcon("../res/icon/leave_icon.png"), "Left");
-    menu->addAction(QIcon("../res/icon/edit_room_icon.png"), "Edit Room");
+
+    sqlQuery.prepare("SELECT role FROM partcipants WHERE roomID=? AND userID=?");
+    sqlQuery.addBindValue(room_id);
+    sqlQuery.addBindValue(myUsername);
+    sqlQuery.exec();
+    sqlQuery.first();
+    if (sqlQuery.value("role").toString() == "M")
+    {
+        menu->addAction(QIcon("../res/icon/edit_room_icon.png"), "Edit Room");
+    }
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70));
+    menu->popup(ui->moreButton->mapToGlobal(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70)));
 }
 
 void ChatWindow::buttonsProc(QAction *action)
@@ -397,12 +393,15 @@ void ChatWindow::buttonsProc(QAction *action)
     {
         emit server->command("REMOVE-USER " + myUsername);
 
+        delay(2);
+
         sqlQuery.prepare("DELETE FROM rooms");
         sqlQuery.exec();
         sqlQuery.prepare("DELETE FROM users");
         sqlQuery.exec();
 
         QFile::resize("job-queue.txt", 0);
+        QFile::resize("force-job-queue.txt", 0);
         QFile::resize("message-index.txt", 0);
         QFile::resize("userinfo.txt", 0);
 
@@ -414,8 +413,8 @@ void ChatWindow::buttonsProc(QAction *action)
         QDir().mkdir("Audios");
         QDir("Files").removeRecursively();
         QDir().mkdir("Files");
-        QDir("Cache").removeRecursively();
-        QDir().mkdir("Cache");
+        QDir("Profiles").removeRecursively();
+        QDir().mkdir("Profiles");
 
         exit(0);
     }
@@ -427,6 +426,7 @@ void ChatWindow::buttonsProc(QAction *action)
         sqlQuery.exec();
 
         QFile::resize("job-queue.txt", 0);
+        QFile::resize("force-job-queue.txt", 0);
         QFile::resize("message-index.txt", 0);
         QFile::resize("userinfo.txt", 0);
 
@@ -438,8 +438,8 @@ void ChatWindow::buttonsProc(QAction *action)
         QDir().mkdir("Audios");
         QDir("Files").removeRecursively();
         QDir().mkdir("Files");
-        QDir("Cache").removeRecursively();
-        QDir().mkdir("Cache");
+        QDir("Profiles").removeRecursively();
+        QDir().mkdir("Profiles");
 
         exit(0);
     }
@@ -613,7 +613,7 @@ void ChatWindow::buttonsProc(QAction *action)
     }
     else if (action->text() == "Open Pin")
     {
-        sqlQuery.prepare("SELECT pin FROM rooms WHERE roomID=?");
+        sqlQuery.prepare("SELECT pin FROM rooms WHERE id=?");
         sqlQuery.addBindValue(room_id);
         sqlQuery.exec();
         sqlQuery.first();
@@ -649,7 +649,7 @@ void ChatWindow::buttonsProc(QAction *action)
     {
         emit server->command("REMOVE-PARTICIPANT " + room_id + " " + myUsername);
 
-        sqlQuery.prepare("DELETE FROM rooms WHERE roomID=?");
+        sqlQuery.prepare("DELETE FROM rooms WHERE id=?");
         sqlQuery.addBindValue(room_id);
         sqlQuery.exec();
     }
@@ -681,4 +681,14 @@ void ChatWindow::updatePreferences()
 {
     IniProc ini("settings.ini");
     ui->messagesPanel->setStyleSheet("background-image: url(" + ini["chat-bg-image"] + ");");
+}
+
+void ChatWindow::connProc()
+{
+    this->setWindowTitle("Zapchat - ONLINE");
+}
+
+void ChatWindow::nConnProc()
+{
+    this->setWindowTitle("Zapchat - OFFLINE");
 }

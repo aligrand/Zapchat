@@ -28,10 +28,10 @@ void AddRoomWindow::on_profile_pic_button_clicked()
         return;
     }
 
-    QFile::copy(image_path, "Cache/" + myUsername + "P." + image_path.split(".").last());
+    QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
     image_path = myUsername + "P." + image_path.split(".").last();
 
-    ui->profile_pic->setPixmap(QPixmap("Cache/" + image_path));
+    ui->profile_pic->setPixmap(QPixmap("Profiles/" + image_path));
 }
 
 void AddRoomWindow::on_goto_chat_button_clicked()
@@ -48,7 +48,7 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
 
         if(id_exist == false)
         {
-            if (name == "")
+            if (ui->name_le->text() == "")
             {
                 QMessageBox::critical(this, "Error", "You must enter Name");
 
@@ -59,14 +59,14 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             name = ui->name_le->text();
             info = ui->info_te->toPlainText();
 
-            sqlQuery.prepare("INSER INTO rooms (id, name, photoADDRESS, info, type, pin) VALUES (:id, :name,"
-                             ":photoADDRESS, :info, :type, :pin)");
-            sqlQuery.bindValue(":id", id);
-            sqlQuery.bindValue(":name", name);
-            sqlQuery.bindValue(":photoADRESS", image_path);
-            sqlQuery.bindValue(":info", info);
-            sqlQuery.bindValue(":type", 1);
-            sqlQuery.bindValue(":pin", "");
+            sqlQuery.prepare("INSERT INTO rooms (id, name, photoADDRESS, info, type, pin) "
+                             "VALUES (?, ?, ?, ?, ?, ?)");
+            sqlQuery.addBindValue(id);
+            sqlQuery.addBindValue(name);
+            sqlQuery.addBindValue(image_path);
+            sqlQuery.addBindValue(info);
+            sqlQuery.addBindValue(1);
+            sqlQuery.addBindValue("");
             sqlQuery.exec();
 
             sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
@@ -78,7 +78,11 @@ void AddRoomWindow::addRoom(bool id_exist, QString id)
             sqlRecS << id << name << image_path << info << "1" << "";
             sqlRecS.end();
 
-            emit server->command("_UPLOAD_ Cache/" + image_path);
+            if (!image_path.isEmpty())
+            {
+                emit server->command("_UPLOAD_ Profiles/" + image_path);
+            }
+
             emit server->command(QString("ADD-ROOM ") + sqlRecS);
             emit server->databaseUpdated("rooms");
         }

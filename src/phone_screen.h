@@ -15,7 +15,6 @@ public:
     explicit phone_screen(QWidget *parent = nullptr);
     ~phone_screen();
     void set_sms(QString sms);
-    void end_window();
 
 private:
     Ui::phone_screen *ui;

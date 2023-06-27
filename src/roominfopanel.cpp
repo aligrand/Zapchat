@@ -10,7 +10,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
     if (isUser)
     {
         QSqlQuery sqlQuery;
-        sqlQuery.prepare("SELECT * FROM users WHERE id=?");
+        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
         sqlQuery.addBindValue(id);
         sqlQuery.exec();
         sqlQuery.first();
@@ -18,7 +18,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->IDField->setText(sqlQuery.value("username").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
-        ui->pofile_pic->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+        ui->pofile_pic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
         ui->emailField->setText(sqlQuery.value("emailADDRESS").toString());
         ui->pnField->setText(sqlQuery.value("phoneNumber").toString());
     }
@@ -33,7 +33,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         ui->nameField->setText(sqlQuery.value("name").toString());
         ui->IDField->setText(sqlQuery.value("id").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
-        ui->pofile_pic->setPixmap(QPixmap("Cache/" + sqlQuery.value("photoADDRESS").toString()));
+        ui->pofile_pic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
         delete ui->emailField;
         delete ui->pnField;
     }

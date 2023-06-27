@@ -19,18 +19,48 @@ EnterRoomWindow::~EnterRoomWindow()
 
 void EnterRoomWindow::on_goto_chat_button_clicked()
 {
+    QSqlQuery sqlQuery;
+
     if (ui->id_le->text() == "")
     {
         QMessageBox::critical(this, "Error", "You must enter ID");
     }
 
-    if (ui->comboBox->currentText() == "Group") {
+    if (ui->comboBox->currentText() == "Group") 
+    {
         isGroup = true;
+
+        sqlQuery.prepare("SELECT COUNT(*) FROM rooms WHERE id=?");
+        sqlQuery.addBindValue(ui->id_le->text());
+        sqlQuery.exec();
+        sqlQuery.first();
+        int sqlsize = sqlQuery.value("COUNT(*)").toInt();
+
+        if (sqlsize != 0)
+        {
+            QMessageBox::critical(this, "Error", "You had this group already");
+            return;
+        }
 
         emit server->command("ROOM-EXIST " + ui->id_le->text());
     }
-    else {
+    else 
+    {
         isGroup = false;
+
+        sqlQuery.prepare("SELECT COUNT(id) FROM rooms INNER JOIN participants ON "
+                         "participants.roomID=rooms.id"
+                         "WHERE rooms.type=0 AND participants.userID=?");
+        sqlQuery.addBindValue(ui->id_le->text());
+        sqlQuery.exec();
+        sqlQuery.first();
+        int sqlsize = sqlQuery.value("COUNT(id)").toInt();
+
+        if (sqlsize != 0)
+        {
+            QMessageBox::critical(this, "Error", "You had this contact already");
+            return;
+        }
 
         emit server->command("USER-EXIST " + ui->id_le->text());
     }

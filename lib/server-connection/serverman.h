@@ -38,6 +38,7 @@ signals:
     void loginResult(int result);
     void command(QString cmd);
     void notConnected();
+    void connected();
     void databaseUpdated(QString additionalInfo);
     void dirUpdated();
 
@@ -50,6 +51,8 @@ private slots:
     void sendRun();
     void notConnectedProc();
     void dataArrivedProc(int channel, qint64 bytes);
+    void connectedProc();
+    void reConnect();
 
 signals:
     void sendData(QByteArray sData);
@@ -66,6 +69,7 @@ private:
     QVector<QString> forceJob_delPending;
     NetworkState ns = NetworkState::Offline;
     QTimer readyReadTimer;
+    QTimer hostConn;
     bool is_login = false;
     int dataSize = INT_MAX;
     char job_order; // f->force , j->not force

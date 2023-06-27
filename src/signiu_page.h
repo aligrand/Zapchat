@@ -40,6 +40,7 @@ private slots:
     void signup(QString username, QString password, QString pn, QString email);
     void auth_result(qint8 res);
     void uiw_result(QString name, QString info, QString image_path);
+    void closeByServer();
 
 private:
     Ui::signIU_page *ui;
@@ -48,6 +49,7 @@ private:
     signup_widget *su_w;
     UserInfoWindow *userinfo_w;
     QString sign_info[4];
+    QString sign_way = "";
 
     void signup_server(QString username, QString password, QString pn, QString email);
 };

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Zapchat</string>
+   <string>Zapchat - ONLINE</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -639,6 +639,18 @@ border-color: rgb(134, 134, 134);</string>
       </property>
       <item>
        <widget class="QScrollArea" name="room_panel">
+        <property name="styleSheet">
+         <string notr="true">border-color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="lineWidth">
+         <number>1</number>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>

@@ -19,9 +19,10 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
     sqlQuery.prepare("SELECT * FROM messages WHERE ?");
     sqlQuery.addBindValue(qc);
     sqlQuery.exec();
-    sqlQuery.first();
-
-    sqlQuery.last();
+    if (!sqlQuery.last())
+    {
+        this->deleteLater();
+    }
 
     for (int i = 0; i < 50; ++i)
     {

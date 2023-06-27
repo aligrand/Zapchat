@@ -31,7 +31,7 @@ private slots:
 
 private:
     Ui::UserInfoWindow *ui;
-    QString name = "", info = "", image_path = "../res/img/temp_profile_pic.jpg";
+    QString image_path = "";
 
     void set_profile_img();
 };

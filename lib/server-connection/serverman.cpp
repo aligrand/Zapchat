@@ -11,9 +11,11 @@ ServerMan::ServerMan()
     connect(this, &ServerMan::messageAsData, this, &ServerMan::messageAsDataProc);
     connect(this, &ServerMan::messageAsCommand, this, &ServerMan::messageAsCommandProc);
     connect(socket, &QTcpSocket::connected, this, &ServerMan::sendRun);
+    connect(socket, &QTcpSocket::connected, this, &ServerMan::connectedProc);
     connect(this, &ServerMan::dataArrived, this, &ServerMan::sendRun);
     connect(socket, &QTcpSocket::channelBytesWritten, this, &ServerMan::dataArrivedProc);
     connect(this, &ServerMan::start_sendRun, this, &ServerMan::sendRun);
+    connect(&hostConn, &QTimer::timeout, this, &ServerMan::reConnect);
 
     QFile ip_port_file("server-config.conf");
     ip_port_file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -48,7 +50,10 @@ ServerMan::ServerMan()
     }
     _fjFile.close();
 
+    hostConn.setInterval(10000);
+
     readyReadTimer.start(50);
+
     socket->connectToHost(ip_port.split(":").first(), ip_port.split(":").last().toUShort());
 }
 
@@ -58,6 +63,7 @@ ServerMan::~ServerMan()
 
     QFile _jFile("job-queue.txt");
     _jFile.open(QIODevice::WriteOnly | QIODevice::Text);
+    _jFile.resize(0);
     while (job_delPending.size() > 0)
     {
         _jFile.write((job_delPending.last() + "\n").toStdString().c_str());
@@ -72,6 +78,7 @@ ServerMan::~ServerMan()
 
     QFile _fjFile("force-job-queue.txt");
     _fjFile.open(QIODevice::WriteOnly | QIODevice::Text);
+    _fjFile.resize(0);
     while (forceJob_delPending.size() > 0)
     {
         _fjFile.write((forceJob_delPending.last() + "\n").toStdString().c_str());
@@ -99,13 +106,17 @@ void ServerMan::sendRun()
         forceJob.pop_back();
         forceJob_delPending.push_front(final_cmd);
     }
-    else
+    else if (job.size() > 0)
     {
         job_order = 'j';
 
         final_cmd = job.last();
         job.pop_back();
         job_delPending.push_front(final_cmd);
+    }
+    else
+    {
+        return;
     }
 
     if (final_cmd.split(" ").first() == "_UPLOAD_")
@@ -117,9 +128,9 @@ void ServerMan::sendRun()
         _file.close();
 
         header.append(char(1));
-        header.append(QByteArray((filePath.split("/").last().split(".").first()).toStdString().c_str()));
+        header.append(filePath.split("/").last().split(".").first().toUtf8());
         header.resize(61);
-        header.append(QByteArray((filePath.split("/").last().split(".").last()).toStdString().c_str()));
+        header.append(filePath.split("/").last().split(".").last().toUtf8());
         header.resize(71);
     }
     else
@@ -150,6 +161,8 @@ void ServerMan::notConnectedProc()
     QMessageBox::warning(nullptr, "Zapchat", "Connection to server disconnected");
 
     emit notConnected();
+
+    hostConn.start();
 }
 
 void ServerMan::dataArrivedProc(int channel, qint64 bytes)
@@ -176,6 +189,25 @@ void ServerMan::dataArrivedProc(int channel, qint64 bytes)
     }
 }
 
+void ServerMan::connectedProc()
+{
+    ns = NetworkState::Online;
+
+    emit connected();
+
+    hostConn.stop();
+}
+
+void ServerMan::reConnect()
+{
+    QFile ip_port_file("server-config.conf");
+    ip_port_file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString ip_port = ip_port_file.readLine();
+    ip_port_file.close();
+
+    socket->connectToHost(ip_port.split(":").first(), ip_port.split(":").last().toUShort());
+}
+
 void ServerMan::sendDataProc(QByteArray sData)
 {
     QDataStream socketStream(socket);
@@ -189,7 +221,8 @@ void ServerMan::commandProc(QString cmd)
     QString cmdName = cmd.split(" ").first();
 
     if (cmdName == "UPDATE-DB" || cmdName == "SET-PASS" || cmdName == "UN-EXIST" ||
-            cmdName == "ROOM-EXIST" || cmdName == "LOGIN" || cmdName == "MESSAGE-INDEX")
+            cmdName == "ROOM-EXIST" || cmdName == "LOGIN" || cmdName == "MESSAGE-INDEX" ||
+            cmdName == "REMOVE-USER" || cmdName == "REMOVE-ROOM")
     {
         if (forceJob.size() == 0)
         {
@@ -251,8 +284,8 @@ void ServerMan::messageAsDataProc(QByteArray rData)
 {
     QString fileName, fileFormat, dir;
 
-    fileName = QString::fromStdString(rData.mid(1, 60).toStdString());
-    fileFormat = QString::fromStdString(rData.mid(61, 10).toStdString());
+    fileName = rData.mid(1, 60);
+    fileFormat = rData.mid(61, 10);
 
     if (fileName[fileName.size() - 1] == "I")
     {
@@ -272,43 +305,45 @@ void ServerMan::messageAsDataProc(QByteArray rData)
     }
     else
     {
-        dir = "Cache/";
+        dir = "Profiles/";
     }
 
     QFile file(dir + fileName + "." + fileFormat);
     file.open(QIODevice::WriteOnly);
-
     file.write(rData.mid(71));
+    file.close();
 
     emit dirUpdated();
 }
 
 void ServerMan::messageAsCommandProc(QByteArray rData)
 {
-    QString cmd = QString::fromStdString(rData.mid(71).toStdString());
+    QString cmd = rData.mid(71);
     QString cmdName = cmd.split(" ").first();
     QString cmdArgs = QString::fromStdString(cmd.toStdString().substr(static_cast<size_t>(cmd.indexOf(" ")) + 1));
 
-    QRegularExpression dbRegex("&%&[\\s\\S]*&%&");
+    QRegularExpression dbRegex("(?<=ƒ)[^ƒ]*(?=ƒ)");
     QRegularExpressionMatch dbMatch;
+    QStringList dbList;
     QSqlQuery sqlQuery;
 
     if (cmdName == "ADD-ROOM")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
         sqlQuery.prepare("INSERT INTO rooms (id, name, photoADDRESS, info, type, pin) "
                          "VALUES (?, ?, ?, ?, ?, ?)");
-        sqlQuery.addBindValue(dbMatch.captured(0));
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
-        sqlQuery.addBindValue(dbMatch.captured(3));
-        sqlQuery.addBindValue(dbMatch.captured(4));
-        sqlQuery.addBindValue(dbMatch.captured(5));
+        sqlQuery.addBindValue(dbList[0]);
+        sqlQuery.addBindValue(dbList[1]);
+        sqlQuery.addBindValue(dbList[2]);
+        sqlQuery.addBindValue(dbList[3]);
+        sqlQuery.addBindValue(dbList[4]);
+        sqlQuery.addBindValue(dbList[5]);
         sqlQuery.exec();
 
         sqlQuery.prepare("INSERT INTO new_messages (roomID) VALUES (?)");
-        sqlQuery.addBindValue(dbMatch.captured(0));
+        sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
 
         emit databaseUpdated("rooms");
@@ -316,17 +351,40 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     else if (cmdName == "ADD-USER")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
-        sqlQuery.prepare("INSERT INTO users (username, emailAddress, phoneNumber, name, photoADDRESS,"
-                         " info, isOnline) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        sqlQuery.addBindValue(dbMatch.captured(0));
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
-        sqlQuery.addBindValue(dbMatch.captured(3));
-        sqlQuery.addBindValue(dbMatch.captured(4));
-        sqlQuery.addBindValue(dbMatch.captured(5));
-        sqlQuery.addBindValue(dbMatch.captured(6));
+        sqlQuery.prepare("SELECT COUNT(*) FROM users WHERE username=?");
+        sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
+        sqlQuery.first();
+        int sqlsize = sqlQuery.value("COUNT(*)").toInt();
+
+        if (sqlsize != 0)
+        {
+            sqlQuery.prepare("UPDATE rooms SET emailAddress=?, phoneNumber=?, name=?, "
+                             "photoADDRESS=?, info=?, isOnline=? WHERE id=?");
+            sqlQuery.addBindValue(dbList[1]);
+            sqlQuery.addBindValue(dbList[2]);
+            sqlQuery.addBindValue(dbList[3]);
+            sqlQuery.addBindValue(dbList[4]);
+            sqlQuery.addBindValue(dbList[5]);
+            sqlQuery.addBindValue(dbList[6]);
+            sqlQuery.addBindValue(dbList[0]);
+            sqlQuery.exec();
+        }
+        else
+        {
+            sqlQuery.prepare("INSERT INTO users (username, emailAddress, phoneNumber, name, photoADDRESS,"
+                             " info, isOnline) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            sqlQuery.addBindValue(dbList[0]);
+            sqlQuery.addBindValue(dbList[1]);
+            sqlQuery.addBindValue(dbList[2]);
+            sqlQuery.addBindValue(dbList[3]);
+            sqlQuery.addBindValue(dbList[4]);
+            sqlQuery.addBindValue(dbList[5]);
+            sqlQuery.addBindValue(dbList[6]);
+            sqlQuery.exec();
+        }
 
         emit databaseUpdated("users");
 
@@ -335,11 +393,12 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     else if (cmdName == "ADD-PARTICIPANT")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
         sqlQuery.prepare("INSERT INTO rooms (userID, roomID, role) VALUES (?, ?, ?)");
-        sqlQuery.addBindValue(dbMatch.captured(0));
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
+        sqlQuery.addBindValue(dbList[0]);
+        sqlQuery.addBindValue(dbList[1]);
+        sqlQuery.addBindValue(dbList[2]);
         sqlQuery.exec();
 
         emit databaseUpdated("particpants");
@@ -347,25 +406,26 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     else if (cmdName == "ADD-MESSAGE")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
         sqlQuery.prepare("INSERT INTO messages (id, roomID, userID, key, DT, replyID, text, "
                          "imageADDRESS, videoADDRESS, audioADDRESS, fileADDRESS) "
                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        sqlQuery.addBindValue(dbMatch.captured(0));
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
-        sqlQuery.addBindValue(dbMatch.captured(3));
-        sqlQuery.addBindValue(dbMatch.captured(4));
-        sqlQuery.addBindValue(dbMatch.captured(5));
-        sqlQuery.addBindValue(dbMatch.captured(6));
-        sqlQuery.addBindValue(dbMatch.captured(7));
-        sqlQuery.addBindValue(dbMatch.captured(8));
-        sqlQuery.addBindValue(dbMatch.captured(9));
-        sqlQuery.addBindValue(dbMatch.captured(10));
+        sqlQuery.addBindValue(dbList[0]);
+        sqlQuery.addBindValue(dbList[1]);
+        sqlQuery.addBindValue(dbList[2]);
+        sqlQuery.addBindValue(dbList[3]);
+        sqlQuery.addBindValue(dbList[4]);
+        sqlQuery.addBindValue(dbList[5]);
+        sqlQuery.addBindValue(dbList[6]);
+        sqlQuery.addBindValue(dbList[7]);
+        sqlQuery.addBindValue(dbList[8]);
+        sqlQuery.addBindValue(dbList[9]);
+        sqlQuery.addBindValue(dbList[10]);
         sqlQuery.exec();
 
         sqlQuery.prepare("UPDATE new_messages SET count=count+1 WHERE roomID=?");
-        sqlQuery.addBindValue(dbMatch.captured(1));
+        sqlQuery.addBindValue(dbList[1]);
         sqlQuery.exec();
 
         emit databaseUpdated("messages");
@@ -416,13 +476,14 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     else if (cmdName == "EDIT-ROOM")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
         sqlQuery.prepare("UPDATE rooms SET name=?, photoADDRESS=?, info=?, pin=? WHERE id=?");
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
-        sqlQuery.addBindValue(dbMatch.captured(3));
-        sqlQuery.addBindValue(dbMatch.captured(5));
-        sqlQuery.addBindValue(dbMatch.captured(0));
+        sqlQuery.addBindValue(dbList[1]);
+        sqlQuery.addBindValue(dbList[2]);
+        sqlQuery.addBindValue(dbList[3]);
+        sqlQuery.addBindValue(dbList[5]);
+        sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
 
         emit databaseUpdated("rooms");
@@ -430,16 +491,17 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     else if (cmdName == "EDIT-USER")
     {
         dbMatch = dbRegex.match(cmdArgs);
+        dbList = dbMatch.captured(0).split("‡");
 
         sqlQuery.prepare("UPDATE rooms SET emailAddress=?, phoneNumber=?, name=?, "
                          "photoADDRESS=?, info=?, isOnline=? WHERE id=?");
-        sqlQuery.addBindValue(dbMatch.captured(1));
-        sqlQuery.addBindValue(dbMatch.captured(2));
-        sqlQuery.addBindValue(dbMatch.captured(3));
-        sqlQuery.addBindValue(dbMatch.captured(4));
-        sqlQuery.addBindValue(dbMatch.captured(5));
-        sqlQuery.addBindValue(dbMatch.captured(6));
-        sqlQuery.addBindValue(dbMatch.captured(0));
+        sqlQuery.addBindValue(dbList[1]);
+        sqlQuery.addBindValue(dbList[2]);
+        sqlQuery.addBindValue(dbList[3]);
+        sqlQuery.addBindValue(dbList[4]);
+        sqlQuery.addBindValue(dbList[5]);
+        sqlQuery.addBindValue(dbList[6]);
+        sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
 
         emit databaseUpdated("rooms");
@@ -460,7 +522,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     {
         bool res = cmdArgs.split(" ").last() == "1" ? true : false;
 
-        emit userNameExistResult(res, cmdArgs.split(" ").first());
+        emit idExistResult(res, cmdArgs.split(" ").first());
     }
     else if (cmdName == "MESSAGE-INDEX-RESULT")
     {

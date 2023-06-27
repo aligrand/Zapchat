@@ -120,8 +120,9 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
     sqlQuery.prepare("SELECT photoADDRESS, name FROM users WHERE username=?");
     sqlQuery.addBindValue(userID);
     sqlQuery.exec();
+    sqlQuery.first();
 
-    ui->profilePicLable->setPixmap(QPixmap(QString("Cache/") + sqlQuery.value("photoADDRESS").toString()));
+    ui->profilePicLable->setPixmap(QPixmap(QString("Profiles/") + sqlQuery.value("photoADDRESS").toString()));
     ui->senderNameLable->setText(sqlQuery.value("name").toString());
 }
 
@@ -256,8 +257,25 @@ void MessageWidget::on_MessageWidget_customContextMenuRequested(const QPoint &po
     delete contextMenu;
     contextMenu = new QMenu();
 
-    contextMenu->addAction("Delete");
-    contextMenu->addAction("Pin it");
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare("SELECT role FROM participants WHERE roomID=? AND userID=?");
+    sqlQuery.addBindValue(rID);
+    sqlQuery.addBindValue(myUsername);
+    sqlQuery.exec();
+    sqlQuery.first();
+
+    if (sqlQuery.value("role").toString() == "M")
+    {
+        contextMenu->addAction("Delete");
+        contextMenu->addAction("Pin it");
+    }
+    else
+    {
+        if (userID == myUsername)
+        {
+            contextMenu->addAction("Delete");
+        }
+    }
 
     connect(contextMenu, &QMenu::triggered, this, &MessageWidget::contextMenuProc);
 
