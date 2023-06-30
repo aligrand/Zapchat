@@ -18,7 +18,9 @@
     <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);</string>
+   <string notr="true">#ChatWindow{
+background-color: rgb(255, 255, 255);
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -194,14 +196,14 @@ font: 700 9pt &quot;Exo 2&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#pinButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
 	height: 50px;
 }
 
-QPushButton:hover {
+QPushButton#pinButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -227,14 +229,14 @@ QPushButton:hover {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#moreButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
 	height: 50px;
 }
 
-QPushButton:hover {
+QPushButton#moreButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -338,7 +340,7 @@ QPushButton:hover {
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Reply:&lt;/span&gt; &amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#refoButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
@@ -347,7 +349,7 @@ QPushButton:hover {
 	background-color: rgb(255, 255, 255);
 }
 
-QPushButton:hover {
+QPushButton#refoButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -370,7 +372,7 @@ QPushButton:hover {
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Image: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Video: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Audio: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;File: &lt;/span&gt;&amp;quot;&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#attachmentButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
@@ -379,7 +381,7 @@ QPushButton:hover {
 	background-color: rgb(255, 255, 255);
 }
 
-QPushButton:hover {
+QPushButton#attachmentButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -431,7 +433,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#emojiButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
@@ -439,7 +441,7 @@ p, li { white-space: pre-wrap; }
 	background-color: rgb(255, 255, 255);
 }
 
-QPushButton:hover {
+QPushButton#emojiButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -459,7 +461,7 @@ QPushButton:hover {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
+            <string notr="true">QPushButton#sendButton {
 	border-style: solid;
 	border-width: 0px;
 	width: 50px;
@@ -467,7 +469,7 @@ QPushButton:hover {
 background-color: rgb(255, 255, 255);
 }
 
-QPushButton:hover {
+QPushButton#sendButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -534,7 +536,7 @@ border-color: rgb(134, 134, 134);</string>
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton {
+         <string notr="true">QPushButton#settingsButton {
 	border-style: solid;
 	border-width: 0px;
 	border-radius:20px;
@@ -542,7 +544,7 @@ border-color: rgb(134, 134, 134);</string>
 	height: 50px;
 }
 
-QPushButton:hover {
+QPushButton#settingsButton:hover {
 	
 	background-color: rgb(190, 190, 190);
 }</string>
@@ -562,9 +564,11 @@ QPushButton:hover {
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">padding-left:5px;
+         <string notr="true">#search_le{
+padding-left:5px;
 background-color: rgb(241, 241, 241);
-vorder-width:0px;</string>
+vorder-width:0px;
+}</string>
         </property>
         <property name="frame">
          <bool>true</bool>
@@ -620,28 +624,32 @@ vorder-width:0px;</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-style: solid;
+      <string notr="true">#widget_4{
+border-style: solid;
 border-width: 1px;
-border-color: rgb(134, 134, 134);</string>
+border-color: rgb(134, 134, 134);
+	background-color: rgb(255, 255, 255);
+}
+</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
-       <number>5</number>
+       <number>10</number>
       </property>
       <property name="topMargin">
-       <number>5</number>
+       <number>10</number>
       </property>
       <property name="rightMargin">
-       <number>5</number>
+       <number>10</number>
       </property>
       <property name="bottomMargin">
-       <number>5</number>
+       <number>10</number>
       </property>
       <item>
        <widget class="QScrollArea" name="room_panel">
-        <property name="styleSheet">
-         <string notr="true">border-color: rgb(255, 255, 255);</string>
-        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -659,13 +667,19 @@ border-color: rgb(134, 134, 134);</string>
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>238</width>
-           <height>591</height>
+           <width>230</width>
+           <height>583</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#roomPanelContents
+{
+	background-color: rgb(255, 255, 255);
+}</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="spacing">
-           <number>5</number>
+           <number>6</number>
           </property>
           <property name="leftMargin">
            <number>0</number>

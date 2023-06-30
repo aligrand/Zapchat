@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QMenu>
 #include <QFileDialog>
+#include <QClipboard>
 #include <QString>
 #include <QStringList>
 
@@ -40,13 +41,11 @@ private slots:
 
     void on_horizontalSlider_sliderMoved(int position);
 
-    void on_profilePicLable_linkActivated(const QString &link);
+    void on_profilePicLable_clicked();
 
     void on_audioPlayPushButton_clicked();
 
     void on_fileDownloadPushButton_clicked();
-
-    void on_imageLable_linkActivated(const QString &link);
 
     void on_imageLable_customContextMenuRequested(const QPoint &pos);
 
@@ -66,13 +65,14 @@ private:
     QString userID = "", iPath = "", vPath = "", aPath = "", fPath = "", mID = "", rID = "";
     bool iPathExist = false, vPathExist = false, aPathExist = false, fPathExist = false;
     Ui::MessageWidget *ui;
-    QMediaPlayer *audioPlayer;
+    QMediaPlayer *audioPlayer = nullptr;
     bool audio_played = false;
-    QMediaPlayer *videoPlayer;
-    RoomInfoPanel *senderProfile;
+    QMediaPlayer *videoPlayer = nullptr;
+    bool video_played = false;
+    RoomInfoPanel *senderProfile = nullptr;
     QMenu *contextMenu = nullptr;
     char contextMenuParent;
-    MessageViewerWindow *replyMes;
+    MessageViewerWindow *replyMes = nullptr;
 };
 
 #endif // MESSAGEWIDGET_H

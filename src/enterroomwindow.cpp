@@ -17,7 +17,7 @@ EnterRoomWindow::~EnterRoomWindow()
     delete ui;
 }
 
-void EnterRoomWindow::on_goto_chat_button_clicked()
+void EnterRoomWindow::on_enterButton_clicked()
 {
     QSqlQuery sqlQuery;
 
@@ -26,7 +26,7 @@ void EnterRoomWindow::on_goto_chat_button_clicked()
         QMessageBox::critical(this, "Error", "You must enter ID");
     }
 
-    if (ui->comboBox->currentText() == "Group") 
+    if (ui->comboBox->currentText() == "Group")
     {
         isGroup = true;
 
@@ -44,7 +44,7 @@ void EnterRoomWindow::on_goto_chat_button_clicked()
 
         emit server->command("ROOM-EXIST " + ui->id_le->text());
     }
-    else 
+    else
     {
         isGroup = false;
 
@@ -62,7 +62,7 @@ void EnterRoomWindow::on_goto_chat_button_clicked()
             return;
         }
 
-        emit server->command("USER-EXIST " + ui->id_le->text());
+        emit server->command("UN-EXIST " + ui->id_le->text());
     }
 }
 
@@ -89,3 +89,4 @@ void EnterRoomWindow::enterRoom(bool result, QString un_id)
         this->deleteLater();
     }
 }
+

@@ -25,6 +25,10 @@ void UserInfoWindow::on_profile_pic_button_clicked()
         return;
     }
 
+    if (QFile::exists("Profiles/" + myUsername + "P." + image_path.split(".").last()))
+    {
+        QFile::remove("Profiles/" + myUsername + "P." + image_path.split(".").last());
+    }
     QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
     image_path = myUsername + "P." + image_path.split(".").last();
 

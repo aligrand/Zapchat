@@ -12,7 +12,6 @@
 #include "lib/server-connection/sqlrecordqstring.h"
 
 extern ServerMan *server;
-extern QString myUsername;
 
 namespace Ui {
 class AccountSettingsPanel;

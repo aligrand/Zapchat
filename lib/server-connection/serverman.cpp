@@ -10,12 +10,9 @@ ServerMan::ServerMan()
     connect(this, &ServerMan::sendData, this, &ServerMan::sendDataProc);
     connect(this, &ServerMan::messageAsData, this, &ServerMan::messageAsDataProc);
     connect(this, &ServerMan::messageAsCommand, this, &ServerMan::messageAsCommandProc);
-    connect(socket, &QTcpSocket::connected, this, &ServerMan::sendRun);
     connect(socket, &QTcpSocket::connected, this, &ServerMan::connectedProc);
-    connect(this, &ServerMan::dataArrived, this, &ServerMan::sendRun);
-    connect(socket, &QTcpSocket::channelBytesWritten, this, &ServerMan::dataArrivedProc);
-    connect(this, &ServerMan::start_sendRun, this, &ServerMan::sendRun);
     connect(&hostConn, &QTimer::timeout, this, &ServerMan::reConnect);
+    connect(&sendTimer, &QTimer::timeout, this, &ServerMan::sendRun);
 
     QFile ip_port_file("server-config.conf");
     ip_port_file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -46,11 +43,28 @@ ServerMan::ServerMan()
     _fjFile.open(QIODevice::ReadOnly | QIODevice::Text);
     while (!_fjFile.atEnd())
     {
-        forceJob.push_front(_fjFile.readLine());
+        fJob.push_front(_fjFile.readLine());
     }
     _fjFile.close();
 
-    hostConn.setInterval(10000);
+    QString cmd;
+    for (int i = 0; i < job.size() ; --i)
+    {
+        cmd = job[i];
+
+        if (cmd == "UPDATE-DB" || cmd == "SET-PASS" || cmd == "UN-EXIST" ||
+                cmd == "ROOM-EXIST" || cmd == "LOGIN" || cmd == "MESSAGE-INDEX" ||
+                cmd == "REMOVE-USER" || cmd == "REMOVE-ROOM" || cmd == "ARRIVE")
+        {
+            fJob.push_back(cmd);
+            job.removeAt(i);
+        }
+    }
+
+    hostConn.setInterval(5000);
+    sendTimer.setInterval(50);
+
+    hostConn.start();
 
     readyReadTimer.start(50);
 
@@ -64,10 +78,10 @@ ServerMan::~ServerMan()
     QFile _jFile("job-queue.txt");
     _jFile.open(QIODevice::WriteOnly | QIODevice::Text);
     _jFile.resize(0);
-    while (job_delPending.size() > 0)
+    while (j_delPending.size() > 0)
     {
-        _jFile.write((job_delPending.last() + "\n").toStdString().c_str());
-        job_delPending.pop_back();
+        _jFile.write((j_delPending.last() + "\n").toStdString().c_str());
+        j_delPending.pop_back();
     }
     while (job.size() > 0)
     {
@@ -79,15 +93,10 @@ ServerMan::~ServerMan()
     QFile _fjFile("force-job-queue.txt");
     _fjFile.open(QIODevice::WriteOnly | QIODevice::Text);
     _fjFile.resize(0);
-    while (forceJob_delPending.size() > 0)
+    while (fJob.size() > 0)
     {
-        _fjFile.write((forceJob_delPending.last() + "\n").toStdString().c_str());
-        forceJob_delPending.pop_back();
-    }
-    while (forceJob.size() > 0)
-    {
-        _fjFile.write((forceJob.last() + "\n").toStdString().c_str());
-        forceJob.pop_back();
+        _fjFile.write((fJob.last() + "\n").toStdString().c_str());
+        fJob.pop_back();
     }
     _fjFile.close();
 }
@@ -98,29 +107,32 @@ void ServerMan::sendRun()
     QByteArray header;
     QByteArray data;
 
-    if (forceJob.size() > 0)
+    if (fJob.size() > 0)
     {
-        job_order = 'f';
-
-        final_cmd = forceJob.last();
-        forceJob.pop_back();
-        forceJob_delPending.push_front(final_cmd);
+        final_cmd = fJob.last();
+        fJob.pop_back();
     }
     else if (job.size() > 0)
     {
-        job_order = 'j';
-
         final_cmd = job.last();
         job.pop_back();
-        job_delPending.push_front(final_cmd);
     }
     else
     {
         return;
     }
 
+    j_delPending.push_front(final_cmd);
+
+    qDebug() << "<SEND>" << final_cmd;
+
     if (final_cmd.split(" ").first() == "_UPLOAD_")
     {
+        if (final_cmd.split(" ").last().isEmpty())
+        {
+            return;
+        }
+
         QString filePath = QString::fromStdString(final_cmd.toStdString().substr(static_cast<size_t>(final_cmd.indexOf(" ")) + 1));
         QFile _file(filePath);
         _file.open(QIODevice::ReadOnly);
@@ -156,6 +168,8 @@ NetworkState ServerMan::getNetworkState()
 
 void ServerMan::notConnectedProc()
 {
+    sendTimer.stop();
+
     ns = NetworkState::Offline;
 
     QMessageBox::warning(nullptr, "Zapchat", "Connection to server disconnected");
@@ -165,32 +179,10 @@ void ServerMan::notConnectedProc()
     hostConn.start();
 }
 
-void ServerMan::dataArrivedProc(int channel, qint64 bytes)
-{
-    static qint64 bytesSum = 0;
-
-    bytesSum += bytes;
-
-    if (bytesSum == dataSize)
-    {
-        dataSize = INT_MAX;
-        bytesSum = 0;
-
-        if (job_order == 'f')
-        {
-            forceJob_delPending.pop_back();
-        }
-        else if(job_order == 'j')
-        {
-            job_delPending.pop_back();
-        }
-
-        emit dataArrived();
-    }
-}
-
 void ServerMan::connectedProc()
 {
+    sendTimer.start();
+
     ns = NetworkState::Online;
 
     emit connected();
@@ -213,7 +205,6 @@ void ServerMan::sendDataProc(QByteArray sData)
     QDataStream socketStream(socket);
 
     socketStream << sData;
-    dataSize = static_cast<int>(socket->bytesToWrite());
 }
 
 void ServerMan::commandProc(QString cmd)
@@ -222,31 +213,13 @@ void ServerMan::commandProc(QString cmd)
 
     if (cmdName == "UPDATE-DB" || cmdName == "SET-PASS" || cmdName == "UN-EXIST" ||
             cmdName == "ROOM-EXIST" || cmdName == "LOGIN" || cmdName == "MESSAGE-INDEX" ||
-            cmdName == "REMOVE-USER" || cmdName == "REMOVE-ROOM")
+            cmdName == "REMOVE-USER" || cmdName == "REMOVE-ROOM" || cmdName == "ARRIVE")
     {
-        if (forceJob.size() == 0)
-        {
-            forceJob.push_front(cmd);
-
-            emit start_sendRun();
-        }
-        else
-        {
-            forceJob.push_front(cmd);
-        }
+        fJob.push_front(cmd);
     }
     else
     {
-        if (job.size() == 0)
-        {
-            job.push_front(cmd);
-
-            emit start_sendRun();
-        }
-        else
-        {
-            job.push_front(cmd);
-        }
+        job.push_front(cmd);
     }
 }
 
@@ -287,6 +260,8 @@ void ServerMan::messageAsDataProc(QByteArray rData)
     fileName = rData.mid(1, 60);
     fileFormat = rData.mid(61, 10);
 
+    qDebug() << "<RECIVE>" << fileName << "." << fileFormat;
+
     if (fileName[fileName.size() - 1] == "I")
     {
         dir = "Images/";
@@ -308,6 +283,8 @@ void ServerMan::messageAsDataProc(QByteArray rData)
         dir = "Profiles/";
     }
 
+    emit command("ARRIVE");
+
     QFile file(dir + fileName + "." + fileFormat);
     file.open(QIODevice::WriteOnly);
     file.write(rData.mid(71));
@@ -321,6 +298,8 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     QString cmd = rData.mid(71);
     QString cmdName = cmd.split(" ").first();
     QString cmdArgs = QString::fromStdString(cmd.toStdString().substr(static_cast<size_t>(cmd.indexOf(" ")) + 1));
+
+    qDebug() << "<RECIVE>" << cmd;
 
     QRegularExpression dbRegex("(?<=ƒ)[^ƒ]*(?=ƒ)");
     QRegularExpressionMatch dbMatch;
@@ -361,8 +340,8 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
 
         if (sqlsize != 0)
         {
-            sqlQuery.prepare("UPDATE rooms SET emailAddress=?, phoneNumber=?, name=?, "
-                             "photoADDRESS=?, info=?, isOnline=? WHERE id=?");
+            sqlQuery.prepare("UPDATE users SET emailAddress=?, phoneNumber=?, name=?, "
+                             "photoADDRESS=?, info=?, isOnline=? WHERE username=?");
             sqlQuery.addBindValue(dbList[1]);
             sqlQuery.addBindValue(dbList[2]);
             sqlQuery.addBindValue(dbList[3]);
@@ -395,7 +374,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         dbMatch = dbRegex.match(cmdArgs);
         dbList = dbMatch.captured(0).split("‡");
 
-        sqlQuery.prepare("INSERT INTO rooms (userID, roomID, role) VALUES (?, ?, ?)");
+        sqlQuery.prepare("INSERT INTO participants (userID, roomID, role) VALUES (?, ?, ?)");
         sqlQuery.addBindValue(dbList[0]);
         sqlQuery.addBindValue(dbList[1]);
         sqlQuery.addBindValue(dbList[2]);
@@ -493,7 +472,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         dbMatch = dbRegex.match(cmdArgs);
         dbList = dbMatch.captured(0).split("‡");
 
-        sqlQuery.prepare("UPDATE rooms SET emailAddress=?, phoneNumber=?, name=?, "
+        sqlQuery.prepare("UPDATE users SET emailAddress=?, phoneNumber=?, name=?, "
                          "photoADDRESS=?, info=?, isOnline=? WHERE id=?");
         sqlQuery.addBindValue(dbList[1]);
         sqlQuery.addBindValue(dbList[2]);
@@ -504,9 +483,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
 
-        emit databaseUpdated("rooms");
-
-        emit command("DOWNLOAD " + dbMatch.captured(4));
+        emit databaseUpdated("users");
     }
     else if (cmdName == "LOGIN-RESULT")
     {
@@ -531,6 +508,15 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
 
         _file.write(cmdArgs.toStdString().c_str());
         _file.close();
+    }
+    else if (cmdName == "ARRIVE")
+    {
+        j_delPending.pop_back();
+    }
+
+    if (cmdName != "ARRIVE")
+    {
+        emit command("ARRIVE");
     }
 }
 

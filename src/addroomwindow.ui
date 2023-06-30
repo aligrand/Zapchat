@@ -67,8 +67,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QPushButton
-{
+     <string notr="true">
 	background-color: #003bbd;
 	color: rgb(255, 255, 255);
 	font-weight: bold;
@@ -78,8 +77,6 @@
 	padding: 10px;
 	font: 700 9pt &quot;Exo 2&quot;;
 
-
-}
 </string>
     </property>
     <property name="text">
@@ -170,11 +167,10 @@ border-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QWidget
-{
+     <string notr="true">
 	color: #263238;
   	font: 900 14pt &quot;Exo 2&quot;;
-}</string>
+</string>
     </property>
     <property name="text">
      <string>Room Info</string>

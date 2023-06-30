@@ -38,6 +38,16 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
     else
     {
         ui->text->setText(sqlQuery.value("text").toString());
+
+        int number_of_lines = ui->text->document()->blockCount();
+
+        QFontMetrics font_metrics(ui->text->font());
+        int font_height = font_metrics.height();
+
+        int height = font_height * number_of_lines;
+
+        ui->text->setMinimumHeight(height + 20);
+        ui->text->setMaximumHeight(height + 20);
     }
 
     if (sqlQuery.value("imageADDRESS").toString().isEmpty())
@@ -54,6 +64,8 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         }
 
         iPath = sqlQuery.value("imageADDRESS").toString();
+
+        ui->imageLable->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
     if (sqlQuery.value("videoADDRESS").toString().isEmpty())
@@ -68,12 +80,20 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             videoPlayer->setMedia(QUrl::fromLocalFile("Videos/" + sqlQuery.value("videoADDRESS").toString()));
             videoPlayer->setVideoOutput(ui->video);
             videoPlayer->setVolume(100);
-            videoPlayer->play();
 
             vPathExist = true;
         }
+        else
+        {
+            videoPlayer = new QMediaPlayer();
+            videoPlayer->setMedia(QUrl::fromLocalFile("../res/vid/novideo.gif"));
+            videoPlayer->setVideoOutput(ui->video);
+            videoPlayer->setVolume(100);
+        }
 
         vPath = sqlQuery.value("videoADDRESS").toString();
+
+        ui->video->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
     if (sqlQuery.value("audioADDRESS").toString().isEmpty())
@@ -93,6 +113,8 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
         }
 
         aPath = sqlQuery.value("audioADDRESS").toString();
+
+        ui->audio->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
     if (sqlQuery.value("fileADDRESS").toString().isEmpty())
@@ -122,13 +144,36 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
     sqlQuery.exec();
     sqlQuery.first();
 
-    ui->profilePicLable->setPixmap(QPixmap(QString("Profiles/") + sqlQuery.value("photoADDRESS").toString()));
+    ui->profilePicLable->setIcon(QIcon(QString("Profiles/") + sqlQuery.value("photoADDRESS").toString()));
     ui->senderNameLable->setText(sqlQuery.value("name").toString());
+
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 MessageWidget::~MessageWidget()
 {
     delete ui;
+
+    if (audioPlayer != nullptr)
+    {
+        audioPlayer->deleteLater();
+    }
+    if (videoPlayer != nullptr)
+    {
+        videoPlayer->deleteLater();
+    }
+    if (senderProfile != nullptr)
+    {
+        senderProfile->deleteLater();
+    }
+    if (contextMenu != nullptr)
+    {
+        contextMenu->deleteLater();
+    }
+    if (replyMes != nullptr)
+    {
+        replyMes->deleteLater();
+    }
 }
 
 void MessageWidget::on_replyButton_clicked()
@@ -144,9 +189,11 @@ void MessageWidget::on_horizontalSlider_sliderMoved(int position)
     audioPlayer->setPosition(seekTime);
 }
 
-void MessageWidget::on_profilePicLable_linkActivated(const QString &link)
+void MessageWidget::on_profilePicLable_clicked()
 {
     senderProfile = new RoomInfoPanel(true, userID);
+    senderProfile->setWindowIcon(QIcon("../res/icon/Zapchat-icon.png"));
+    senderProfile->setWindowTitle("Zapchat");
     senderProfile->show();
 }
 
@@ -185,16 +232,6 @@ void MessageWidget::on_fileDownloadPushButton_clicked()
     QDesktopServices::openUrl(QUrl("Files/" + fPath));
 }
 
-void MessageWidget::on_imageLable_linkActivated(const QString &link)
-{
-    if (!iPathExist)
-    {
-        emit server->command("DOWNLOAD " + iPath);
-
-        return;
-    }
-}
-
 void MessageWidget::on_imageLable_customContextMenuRequested(const QPoint &pos)
 {
     delete contextMenu;
@@ -206,12 +243,16 @@ void MessageWidget::on_imageLable_customContextMenuRequested(const QPoint &pos)
     {
         contextMenu->addAction("Save");
     }
+    else
+    {
+        contextMenu->addAction("Download");
+    }
 
     connect(contextMenu, &QMenu::triggered, this, &MessageWidget::contextMenuProc);
 
     contextMenuParent = 'I';
 
-    contextMenu->popup(pos);
+    contextMenu->popup(ui->imageLable->mapToGlobal(pos));
 }
 
 void MessageWidget::on_video_customContextMenuRequested(const QPoint &pos)
@@ -225,12 +266,25 @@ void MessageWidget::on_video_customContextMenuRequested(const QPoint &pos)
     {
         contextMenu->addAction("Save");
     }
+    else
+    {
+        contextMenu->addAction("Download");
+    }
+
+    if (video_played)
+    {
+        contextMenu->addAction("Pause");
+    }
+    else
+    {
+        contextMenu->addAction("Play");
+    }
 
     connect(contextMenu, &QMenu::triggered, this, &MessageWidget::contextMenuProc);
 
     contextMenuParent = 'V';
 
-    contextMenu->popup(pos);
+    contextMenu->popup(ui->video->mapToGlobal(pos));
 }
 
 void MessageWidget::on_audio_customContextMenuRequested(const QPoint &pos)
@@ -249,7 +303,7 @@ void MessageWidget::on_audio_customContextMenuRequested(const QPoint &pos)
 
     contextMenuParent = 'A';
 
-    contextMenu->popup(pos);
+    contextMenu->popup(ui->audio->mapToGlobal(pos));
 }
 
 void MessageWidget::on_MessageWidget_customContextMenuRequested(const QPoint &pos)
@@ -263,6 +317,8 @@ void MessageWidget::on_MessageWidget_customContextMenuRequested(const QPoint &po
     sqlQuery.addBindValue(myUsername);
     sqlQuery.exec();
     sqlQuery.first();
+
+    contextMenu->addAction("ID");
 
     if (sqlQuery.value("role").toString() == "M")
     {
@@ -279,7 +335,7 @@ void MessageWidget::on_MessageWidget_customContextMenuRequested(const QPoint &po
 
     connect(contextMenu, &QMenu::triggered, this, &MessageWidget::contextMenuProc);
 
-    contextMenu->popup(pos);
+    contextMenu->popup(this->mapToGlobal(pos));
 }
 
 void MessageWidget::on_file_customContextMenuRequested(const QPoint &pos)
@@ -305,15 +361,15 @@ void MessageWidget::contextMenuProc(QAction *action)
     {
         if (contextMenuParent == 'I')
         {
-            QDesktopServices::openUrl(QUrl("Images/" + iPath));
+            QDesktopServices::openUrl(QUrl::fromLocalFile("Images/" + iPath));
         }
         else if (contextMenuParent == 'V')
         {
-            QDesktopServices::openUrl(QUrl("Videos/" + vPath));
+            QDesktopServices::openUrl(QUrl::fromLocalFile("Videos/" + vPath));
         }
         else // audio
         {
-            QDesktopServices::openUrl(QUrl("Audios/" + aPath));
+            QDesktopServices::openUrl(QUrl::fromLocalFile("Audios/" + aPath));
         }
     }
     else if (action->text() == "Save")
@@ -322,25 +378,52 @@ void MessageWidget::contextMenuProc(QAction *action)
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
+            if (QFile::exists(outputFolder + "/" + iPath))
+            {
+                QFile::remove(outputFolder + "/" + iPath);
+            }
             QFile::copy(iPath, outputFolder + "/" + iPath);
         }
         else if (contextMenuParent == 'V')
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
+            if (QFile::exists(outputFolder + "/" + vPath))
+            {
+                QFile::remove(outputFolder + "/" + vPath);
+            }
             QFile::copy(vPath, outputFolder + "/" + vPath);
         }
         else if (contextMenuParent == 'A')
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
+            if (QFile::exists(outputFolder + "/" + aPath))
+            {
+                QFile::remove(outputFolder + "/" + aPath);
+            }
             QFile::copy(aPath, outputFolder + "/" + aPath);
         }
         else
         {
             QString outputFolder = QFileDialog::getExistingDirectory(nullptr, ("Select Output Folder"), QDir::currentPath());
 
+            if (QFile::exists(outputFolder + "/" + fPath))
+            {
+                QFile::remove(outputFolder + "/" + fPath);
+            }
             QFile::copy(fPath, outputFolder + "/" + fPath);
+        }
+    }
+    else if (action->text() == "Download")
+    {
+        if (contextMenuParent == 'I')
+        {
+            emit server->command("DOWNLOAD " + iPath);
+        }
+        else
+        {
+            emit server->command("DOWNLOAD " + vPath);
         }
     }
     else if (action->text() == "Pin it")
@@ -351,6 +434,22 @@ void MessageWidget::contextMenuProc(QAction *action)
         sqlQuery.addBindValue(mID);
         sqlQuery.addBindValue(rID);
         sqlQuery.exec();
+    }
+    else if (action->text() == "ID")
+    {
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText(mID);
+        QMessageBox::information(nullptr, "Zapchat", "MessageID copied into clipboard");
+    }
+    else if (action->text() == "Pause")
+    {
+        videoPlayer->pause();
+        video_played = false;
+    }
+    else if (action->text() == "Play")
+    {
+        videoPlayer->play();
+        video_played = true;
     }
     else
     {
@@ -370,7 +469,6 @@ void MessageWidget::checkResUpdated()
         videoPlayer->setMedia(QUrl::fromLocalFile("Videos/" + vPath));
         videoPlayer->setVideoOutput(ui->video);
         videoPlayer->setVolume(100);
-        videoPlayer->play();
 
         vPathExist = true;
     }

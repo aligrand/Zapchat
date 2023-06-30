@@ -16,39 +16,51 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
 
     ui->scrollArea->verticalScrollBar()->setSingleStep(1);
 
-    sqlQuery.prepare("SELECT * FROM messages WHERE ?");
-    sqlQuery.addBindValue(qc);
+    sqlQuery.prepare("SELECT * FROM messages WHERE " + qc);
     sqlQuery.exec();
-    if (!sqlQuery.last())
+    if (sqlQuery.last())
     {
-        this->deleteLater();
-    }
-
-    for (int i = 0; i < 50; ++i)
-    {
-        QHBoxLayout *tmpLayout = new QHBoxLayout;
-
-        QBoxLayout::Direction direction = (sqlQuery.value("userID").toString() == myUsername)
-                ? QBoxLayout::Direction::RightToLeft : QBoxLayout::Direction::LeftToRight;
-
-        tmpLayout->addWidget(new MessageWidget(sqlQuery.value("id").toString()));
-        tmpLayout->setDirection(direction);
-
-        messagesList.push_back(tmpLayout);
-
-        int tmpValue = ui->scrollArea->verticalScrollBar()->value();
-
-        contentLayout->insertLayout(0, tmpLayout);
-        ui->scrollArea->verticalScrollBar()->setValue(tmpValue + 1);
-
-        if (sqlQuery.previous() == false)
+        for (int i = 0; i < 50; ++i)
         {
-            break;
-        }
-    }
+            QHBoxLayout *tmpLayout = new QHBoxLayout;
+            QBoxLayout::Direction direction;
+            MessageWidget *mw;
+            QString css;
 
-    connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
-            this, &MessagesDisplayer::loadMessage);
+            if (sqlQuery.value("userID").toString() == myUsername)
+            {
+                direction = QBoxLayout::Direction::RightToLeft;
+                css = "background: #9fcd6e;";
+            }
+            else
+            {
+                direction = QBoxLayout::Direction::LeftToRight;
+                css = "background: #fff;";
+            }
+
+            mw = new MessageWidget(sqlQuery.value("id").toString());
+            mw->setStyleSheet(css);
+
+            tmpLayout->insertWidget(0, mw);
+            tmpLayout->setDirection(direction);
+            tmpLayout->addStretch();
+
+            messagesList.push_back(tmpLayout);
+
+            int tmpValue = ui->scrollArea->verticalScrollBar()->value();
+
+            contentLayout->insertLayout(0, tmpLayout);
+            ui->scrollArea->verticalScrollBar()->setValue(tmpValue + 1);
+
+            if (sqlQuery.previous() == false)
+            {
+                break;
+            }
+        }
+
+        connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
+                this, &MessagesDisplayer::loadMessage);
+    }
 }
 
 MessagesDisplayer::~MessagesDisplayer()
@@ -70,8 +82,7 @@ void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
     }
     else if (additionalInfo == ("messages-" + rid))
     {
-        sqlQuery.prepare("SELECT * FROM messages WHERE ?");
-        sqlQuery.addBindValue(qc);
+        sqlQuery.prepare("SELECT * FROM messages WHERE " + qc);
         sqlQuery.exec();
 
         sqlQuery.seek(sqlQuery.at());

@@ -25,6 +25,7 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
         if (!sqlQuery.value("photoADDRESS").toString().isEmpty())
         {
             ui->profilePic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
+            image_path = sqlQuery.value("photoADDRESS").toString();
         }
 
         ui->pnField->setText(sqlQuery.value("phoneNumber").toString());
@@ -32,8 +33,8 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
     }
     else
     {
-        delete ui->pnField;
-        delete ui->emailField;
+        delete ui->groupBox_3;
+        delete ui->groupBox_4;
 
         sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
         sqlQuery.addBindValue(ID);
@@ -46,6 +47,7 @@ AccountSettingsPanel::AccountSettingsPanel(bool isUser, QString ID, QWidget *par
         if (!sqlQuery.value("photoADDRESS").toString().isEmpty())
         {
             ui->profilePic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
+            image_path = sqlQuery.value("photoADDRESS").toString();
         }
     }
 }
@@ -67,8 +69,12 @@ void AccountSettingsPanel::on_picSelectButton_clicked()
         return;
     }
 
-    QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
-    image_path = myUsername + "P." + image_path.split(".").last();
+    if (QFile::exists("Profiles/" + id + "P." + image_path.split(".").last()))
+    {
+        QFile::remove("Profiles/" + id + "P." + image_path.split(".").last());
+    }
+    QFile::copy(image_path, "Profiles/" + id + "P." + image_path.split(".").last());
+    image_path = id + "P." + image_path.split(".").last();
 
     ui->profilePic->setPixmap(QPixmap("Profiles/" + image_path));
 }
@@ -92,17 +98,23 @@ void AccountSettingsPanel::on_okButton_clicked()
 
     if (is_user)
     {
-        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
-        sqlQuery.addBindValue(id);
-        sqlQuery.exec();
-        sqlQuery.first();
-
-        record << sqlQuery.value("username").toString() << ui->emailField->text() << ui->pnField->text()
+        record << id << ui->emailField->text() << ui->pnField->text()
                << ui->nameField->text() << image_path << ui->infoField->toPlainText()
-               << QString(server->getNetworkState());
+               << "1";
         record.end();
 
         emit server->command(QString("EDIT-USER ") + record);
+
+        sqlQuery.prepare("UPDATE users SET emailAddress=?, phoneNumber=?, name=?, "
+                         "photoADDRESS=?, info=?, isOnline=? WHERE username=?");
+        sqlQuery.addBindValue(ui->emailField->text());
+        sqlQuery.addBindValue(ui->pnField->text());
+        sqlQuery.addBindValue(ui->nameField->text());
+        sqlQuery.addBindValue(image_path);
+        sqlQuery.addBindValue(ui->infoField->toPlainText());
+        sqlQuery.addBindValue(1);
+        sqlQuery.addBindValue(id);
+        sqlQuery.exec();
     }
     else
     {

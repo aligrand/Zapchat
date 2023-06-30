@@ -11,6 +11,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
     connect(server, &ServerMan::connected, this, &ChatWindow::connProc);
     connect(server, &ServerMan::notConnected, this, &ChatWindow::nConnProc);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     QSizePolicy _size_policy = ui->chat_panel->sizePolicy();
     _size_policy.setRetainSizeWhenHidden(true);
     ui->chat_panel->setSizePolicy(_size_policy);
@@ -21,12 +23,17 @@ ChatWindow::ChatWindow(QWidget *parent) :
     ui->rightPanel->setDirection(QHBoxLayout::LeftToRight);
 
     IniProc ini("settings.ini");
-    ui->messagesPanel->setStyleSheet("background-image: url(" + ini["chat-bg-image"] + ");");
+    ui->messagesPanel->setStyleSheet("#messagesPanel{"
+                                     "border-width:0px;"
+                                     "background-image: url('" + ini["chat-bg-image"] + "');"
+                                     "}");
 
     if (server->getNetworkState() == NetworkState::Offline)
     {
         this->setWindowTitle("Zapchat - OFFLINE");
     }
+
+    roomPanelLayout = qobject_cast<QVBoxLayout *>(ui->roomPanelContents->layout());
 
     printRoomsList();
 }
@@ -34,6 +41,33 @@ ChatWindow::ChatWindow(QWidget *parent) :
 ChatWindow::~ChatWindow()
 {
     delete ui;
+
+    delRoomListItems();
+    md->deleteLater();
+    if (pinMessageViewerWindow != nullptr)
+    {
+        pinMessageViewerWindow->deleteLater();
+    }
+    if (searchMessageViewerWindow != nullptr)
+    {
+        searchMessageViewerWindow->deleteLater();
+    }
+    if (menu != nullptr)
+    {
+        menu->deleteLater();
+    }
+    if (arw != nullptr)
+    {
+        arw->deleteLater();
+    }
+    if (erw != nullptr)
+    {
+        erw->deleteLater();
+    }
+    if (roomPanelLayout != nullptr)
+    {
+        roomPanelLayout->deleteLater();
+    }
 }
 
 void ChatWindow::updateRoomList(QString AdditionalInfo)
@@ -58,20 +92,7 @@ void ChatWindow::on_settingsButton_clicked()
     menu->addAction(QIcon("../res/icon/remove_account_icon.png"), "Delete Account");
     menu->addAction(QIcon("../res/icon/leave_icon.png"), "Logout");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(ui->settingsButton->mapToGlobal(QPoint(ui->settingsButton->pos().x(), ui->settingsButton->pos().y() + 70)));
-}
-
-void ChatWindow::on_search_le_textChanged(const QString &arg1)
-{
-    if (arg1 == "")
-    {
-        delRoomListItems();
-        printRoomsList();
-    }
-
-    delRoomListItems();
-
-    printRoomsList("roomID LIKE %" + arg1 + "% OR name LIKE %" + arg1 + "%");
+    menu->popup(ui->widget->mapToGlobal(QPoint(ui->settingsButton->pos().x(), ui->settingsButton->pos().y() + 70)));
 }
 
 void ChatWindow::on_profile_lable_linkActivated(const QString &link)
@@ -98,7 +119,7 @@ void ChatWindow::on_refoButton_clicked()
     QString tmp = "<html>"
                   "<head/>"
                   "<body>"
-                  "<p><span style=\" font-weight:600;\">Reply:</span> &quot%1&quot;</p>"
+                  "<p><span style=\" font-weight:600;\">Reply:</span> &quot;%1&quot;</p>"
                   "</body>"
                   "</html>";
     tmp = tmp.arg(replyID);
@@ -110,6 +131,7 @@ void ChatWindow::on_attachmentButton_clicked()
 {
     delete menu;
 
+    menu = new QMenu(this);
     menu->addAction(QIcon("../res/icon/image_icon.png"), "Image");
     menu->addAction("Image-clear");
     menu->addAction(QIcon("../res/icon/video_icon.png"), "Video");
@@ -119,7 +141,7 @@ void ChatWindow::on_attachmentButton_clicked()
     menu->addAction(QIcon("../res/icon/file_icon.png"), "File");
     menu->addAction("File-clear");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(ui->attachmentButton->mapToGlobal(QPoint(ui->attachmentButton->pos().x(), ui->settingsButton->pos().y() - 70)));
+    menu->popup(ui->widget_3->mapToGlobal(QPoint(ui->attachmentButton->pos().x(), ui->attachmentButton->pos().y() - 230)));
 }
 
 void ChatWindow::on_emojiButton_clicked()
@@ -131,7 +153,7 @@ void ChatWindow::on_emojiButton_clicked()
         is_emoTable_open = false;
     }
 
-    emoTable = new EmojiTable();
+    emoTable = new EmojiTable(ui->widget_3);
 
     emoTable->setGeometry(ui->emojiButton->pos().x(), ui->emojiButton->pos().y() - 250,
                           100, 200);
@@ -148,6 +170,12 @@ void ChatWindow::on_sendButton_clicked()
 
     if (imagePath != "")
     {
+        if (QFile::exists( "Images/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "I." + imagePath.split(".").last()))
+        {
+            QFile::remove( "Images/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "I." + imagePath.split(".").last());
+        }
         QFile::copy(imagePath, "Images/" + room_id + "-" + myUsername + "-" +
                     QString::number(myMessageIndex) + "I." + imagePath.split(".").last());
         imagePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + imagePath.split(".").last();
@@ -156,37 +184,55 @@ void ChatWindow::on_sendButton_clicked()
     }
     if (videoPath != "")
     {
-        QFile::copy(videoPath, "Images/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists( "Videos/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "V." + imagePath.split(".").last()))
+        {
+            QFile::remove( "Videos/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "V." + imagePath.split(".").last());
+        }
+        QFile::copy(videoPath, "Videos/" + room_id + "-" + myUsername + "-" +
                     QString::number(myMessageIndex) + "V." + videoPath.split(".").last());
-        videoPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + videoPath.split(".").last();
+        videoPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "V." + videoPath.split(".").last();
 
         emit server->command("_UPLOAD_ Videos/" + videoPath);
     }
     if (audioPath != "")
     {
-        QFile::copy(audioPath, "Images/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists( "Audios/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "A." + imagePath.split(".").last()))
+        {
+            QFile::remove( "Audios/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "A." + imagePath.split(".").last());
+        }
+        QFile::copy(audioPath, "Audios/" + room_id + "-" + myUsername + "-" +
                     QString::number(myMessageIndex) + "A." + audioPath.split(".").last());
-        audioPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + audioPath.split(".").last();
+        audioPath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "A." + audioPath.split(".").last();
 
         emit server->command("_UPLOAD_ Audios/" + audioPath);
     }
     if (filePath != "")
     {
-        QFile::copy(filePath, "Images/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists( "Files/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "F." + imagePath.split(".").last()))
+        {
+            QFile::remove( "Files/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "F." + imagePath.split(".").last());
+        }
+        QFile::copy(filePath, "Files/" + room_id + "-" + myUsername + "-" +
                     QString::number(myMessageIndex) + "F." + filePath.split(".").last());
-        filePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "I." + filePath.split(".").last();
+        filePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "F." + filePath.split(".").last();
 
         emit server->command("_UPLOAD_ Files/" + filePath);
     }
 
-    sqlQuery.prepare("INSERT INTO messages (id, roomID, userID, key, DT, replyID, text, imageADDRESS,"
-                     "videoADDRESS, audioADDRESS, fileADDRESSS) VALUES (?, ?, ?, ?, date(), ?, ?, ?, ?, ?, ?)");
+    sqlQuery.prepare("INSERT INTO messages (id, roomID, userID, key, DT, replyID, text, imageADDRESS, "
+                     "videoADDRESS, audioADDRESS, fileADDRESS) VALUES (?, ?, ?, ?, date(), ?, ?, ?, ?, ?, ?)");
     sqlQuery.addBindValue(room_id + "-" + myUsername + "-" + QString::number(myMessageIndex));
     sqlQuery.addBindValue(room_id);
     sqlQuery.addBindValue(myUsername);
     sqlQuery.addBindValue(myMessageIndex);
     sqlQuery.addBindValue(replyID);
-    sqlQuery.addBindValue(text);
+    sqlQuery.addBindValue(ui->text_le->toPlainText());
     sqlQuery.addBindValue(imagePath);
     sqlQuery.addBindValue(videoPath);
     sqlQuery.addBindValue(audioPath);
@@ -210,12 +256,19 @@ void ChatWindow::on_sendButton_clicked()
 
     ui->text_le->clear();
 
+    imagePath = "";
+    videoPath = "";
+    audioPath = "";
+    filePath = "";
+    replyID = "";
+
     ui->refoButton->setToolTip("<html>"
                                "<head/>"
                                "<body>"
                                "<p><span style=\" font-weight:600;\">Reply:</span> &quot;&quot;</p>"
                                "</body>"
                                "</html>");
+
     ui->attachmentButton->setToolTip("<html>"
                                      "<head/>"
                                      "<body>"
@@ -235,7 +288,7 @@ void ChatWindow::on_pinButton_clicked()
     menu->addAction("Open Pin");
     menu->addAction("Remove Pin");
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(ui->pinButton->mapToGlobal(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70)));
+    menu->popup(ui->widget_2->mapToGlobal(QPoint(ui->pinButton->pos().x(), ui->pinButton->pos().y() + 50)));
 }
 
 void ChatWindow::openChat(QString roomId)
@@ -244,7 +297,9 @@ void ChatWindow::openChat(QString roomId)
 
     ui->chat_panel->setVisible(true);
 
-    md = new MessagesDisplayer("roomID=" + room_id, room_id, ui->messagesPanel);
+    md->deleteLater();
+    md = new MessagesDisplayer("roomID='" + room_id + "'", room_id);
+    ui->messagesPanel->layout()->addWidget(md);
     md->show();
 
     sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
@@ -267,7 +322,8 @@ void ChatWindow::openChat(QString roomId)
         sqlQuery.exec();
         sqlQuery.first();
 
-        ui->profile_lable->setText(sqlQuery.value("name").toString());
+        ui->profile_lable->setText("<a style=\"text-decoration:none;color:black;\" href=\"#\">" +
+                              sqlQuery.value("name").toString() + "</a>");
         ui->profile_pic_lable->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
 
         is_typeof_room_user = true;
@@ -275,7 +331,8 @@ void ChatWindow::openChat(QString roomId)
     }
     else
     {
-        ui->profile_lable->setText(sqlQuery.value("name").toString());
+        ui->profile_lable->setText("<a style=\"text-decoration:none;color:black;\" href=\"#\">" +
+                              sqlQuery.value("name").toString() + "</a>");
         ui->profile_pic_lable->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
 
         is_typeof_room_user = false;
@@ -290,30 +347,32 @@ void ChatWindow::aeRoomWindow_closeProc()
 void ChatWindow::delRoomListItems()
 {
     QLayoutItem *item;
-    while ((item = roomPanelLayout.takeAt(0)) != nullptr)
+    while ((item = roomPanelLayout->takeAt(0))->widget() != nullptr)
     {
         item->widget()->deleteLater();
         delete item;
     }
+    delete item;
 }
 
 void ChatWindow::printRoomsList(QString additionalInfo)
 {
-    roomPanelLayout.addStretch();
-    ui->roomPanelContents->setLayout(&roomPanelLayout);
+    roomPanelLayout->addStretch();
 
-    sqlQuery.prepare("SELECT id FROM rooms WHERE ?");
-    sqlQuery.addBindValue(additionalInfo);
+    sqlQuery.prepare("SELECT id FROM rooms WHERE " + additionalInfo);
     sqlQuery.exec();
-    sqlQuery.first();
+    if (!sqlQuery.first())
+    {
+        return;
+    }
 
     RoomWidget *rwTmp;
     do
     {
-        rwTmp = new RoomWidget(sqlQuery.value("id").toString());
+        rwTmp = new RoomWidget(sqlQuery.value("id").toString(), this);
         connect(rwTmp, &RoomWidget::clicked, this, &ChatWindow::openChat);
 
-        roomPanelLayout.addWidget(rwTmp);
+        roomPanelLayout->insertWidget(0, rwTmp);
     } while (sqlQuery.next());
 }
 
@@ -325,7 +384,7 @@ void ChatWindow::on_moreButton_clicked()
     menu->addAction(QIcon("../res/icon/search_icon.png"), "Serch");
     menu->addAction(QIcon("../res/icon/leave_icon.png"), "Left");
 
-    sqlQuery.prepare("SELECT role FROM partcipants WHERE roomID=? AND userID=?");
+    sqlQuery.prepare("SELECT role FROM participants WHERE roomID=? AND userID=?");
     sqlQuery.addBindValue(room_id);
     sqlQuery.addBindValue(myUsername);
     sqlQuery.exec();
@@ -335,7 +394,7 @@ void ChatWindow::on_moreButton_clicked()
         menu->addAction(QIcon("../res/icon/edit_room_icon.png"), "Edit Room");
     }
     connect(menu, &QMenu::triggered, this, &ChatWindow::buttonsProc);
-    menu->popup(ui->moreButton->mapToGlobal(QPoint(ui->pinButton->pos().x(), ui->settingsButton->pos().y() + 70)));
+    menu->popup(ui->widget_2->mapToGlobal(QPoint(ui->moreButton->pos().x(), ui->moreButton->pos().y() + 50)));
 }
 
 void ChatWindow::buttonsProc(QAction *action)
@@ -446,7 +505,7 @@ void ChatWindow::buttonsProc(QAction *action)
     else if (action->text() == "Image")
     {
         imagePath = QFileDialog::getOpenFileName(this,
-            tr("Open Image"), tr("Image Files (*.png *.jpg)"));
+            tr("Open Image"), "./", tr("Image Files (*.png *.jpg)"));
 
         if (imagePath == "")
         {
@@ -488,7 +547,7 @@ void ChatWindow::buttonsProc(QAction *action)
     else if (action->text() == "Video")
     {
         videoPath = QFileDialog::getOpenFileName(this,
-            tr("Open Video"), tr("Video Files (*.mp4 *.m4v)"));
+            tr("Open Video"), "./", tr("Video Files (*.mp4 *.m4v)"));
 
         if (videoPath == "")
         {
@@ -530,7 +589,7 @@ void ChatWindow::buttonsProc(QAction *action)
     else if (action->text() == "Audio")
     {
         audioPath = QFileDialog::getOpenFileName(this,
-            tr("Open Audio"), tr("Audio Files (*.mp3 *.wav)"));
+            tr("Open Audio"), "./", tr("Audio Files (*.mp3 *.wav)"));
 
         if (audioPath == "")
         {
@@ -572,7 +631,7 @@ void ChatWindow::buttonsProc(QAction *action)
     else if (action->text() == "File")
     {
         filePath = QFileDialog::getOpenFileName(this,
-            tr("Open File"), tr("All Files (*.*)"));
+            tr("Open File"), "./", tr("All Files (*.*)"));
 
         if (filePath == "")
         {
@@ -618,7 +677,8 @@ void ChatWindow::buttonsProc(QAction *action)
         sqlQuery.exec();
         sqlQuery.first();
 
-        pinMessageViewerWindow = new MessageViewerWindow("id=" + sqlQuery.value("pin").toString());
+        pinMessageViewerWindow->deleteLater();
+        pinMessageViewerWindow = new MessageViewerWindow("id='" + sqlQuery.value("pin").toString() + "'");
     }
     else if (action->text() == "Remove Pin")
     {
@@ -643,7 +703,8 @@ void ChatWindow::buttonsProc(QAction *action)
     {
         QString pattern = QInputDialog::getText(this, "Zapchat", "Enter your keyword");
 
-        searchMessageViewerWindow = new MessageViewerWindow("text LIKE %" + pattern + "%");
+        searchMessageViewerWindow->deleteLater();
+        searchMessageViewerWindow = new MessageViewerWindow("text LIKE '%" + pattern + "%'");
     }
     else if (action->text() == "Left")
     {
@@ -662,7 +723,7 @@ void ChatWindow::buttonsProc(QAction *action)
         }
         else
         {
-            roomsp = new AccountSettingsPanel(false, myUsername);
+            roomsp = new AccountSettingsPanel(false, room_id);
 
             ui->leftPanel->addWidget(roomsp);
             is_roomsp_open = true;
@@ -686,9 +747,32 @@ void ChatWindow::updatePreferences()
 void ChatWindow::connProc()
 {
     this->setWindowTitle("Zapchat - ONLINE");
+
+    QFile userpassFile("./userinfo.txt");
+    userpassFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    userpassFile.readLine();
+    QString password = userpassFile.readLine().trimmed();
+    userpassFile.close();
+
+    emit server->command("LOGIN " + myUsername + " " + password);
 }
 
 void ChatWindow::nConnProc()
 {
     this->setWindowTitle("Zapchat - OFFLINE");
+}
+
+void ChatWindow::on_search_le_textChanged(const QString &arg1)
+{
+    if (arg1 == "")
+    {
+        delRoomListItems();
+        printRoomsList();
+
+        return;
+    }
+
+    delRoomListItems();
+
+    printRoomsList("id LIKE '%" + arg1 + "%' OR name LIKE '%" + arg1 + "%'");
 }

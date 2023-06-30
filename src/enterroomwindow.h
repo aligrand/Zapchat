@@ -27,9 +27,9 @@ signals:
     void windowClosed();
 
 private slots:
-    void on_goto_chat_button_clicked();
-
     void enterRoom(bool result, QString un_id);
+
+    void on_enterButton_clicked();
 
 private:
     Ui::EnterRoomWindow *ui;

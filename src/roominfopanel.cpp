@@ -34,8 +34,8 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         ui->IDField->setText(sqlQuery.value("id").toString());
         ui->infoField->setText(sqlQuery.value("info").toString());
         ui->pofile_pic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
-        delete ui->emailField;
-        delete ui->pnField;
+        delete ui->groupBox_3;
+        delete ui->groupBox_4;
     }
 }
 

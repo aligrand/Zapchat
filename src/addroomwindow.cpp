@@ -28,8 +28,12 @@ void AddRoomWindow::on_profile_pic_button_clicked()
         return;
     }
 
-    QFile::copy(image_path, "Profiles/" + myUsername + "P." + image_path.split(".").last());
-    image_path = myUsername + "P." + image_path.split(".").last();
+    if (QFile::exists("Profiles/" + id + "P." + image_path.split(".").last()))
+    {
+        QFile::remove("Profiles/" + id + "P." + image_path.split(".").last());
+    }
+    QFile::copy(image_path, "Profiles/" + ui->id_le->text() + "P." + image_path.split(".").last());
+    image_path = ui->id_le->text() + "P." + image_path.split(".").last();
 
     ui->profile_pic->setPixmap(QPixmap("Profiles/" + image_path));
 }

@@ -28,6 +28,7 @@ signals:
 
 private slots:
     void newMessagesCame(QString additionalInfo);
+    void roomUpdated(QString additionalInfo);
     void clickedProc(QString roomId);
 
     void on_roomName_linkActivated(const QString &link);

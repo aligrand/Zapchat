@@ -11,30 +11,30 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>200</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>310</width>
-    <height>719</height>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
    <property name="leftMargin">
     <number>5</number>
    </property>
@@ -47,7 +47,61 @@
    <property name="bottomMargin">
     <number>5</number>
    </property>
-   <item row="2" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
+    <widget class="QWidget" name="file" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>50</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="spacing">
+       <number>20</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="fileDownloadPushButton">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../res/icon/download_icon.png</normaloff>../res/icon/download_icon.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="fileLabel">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="imageLable">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -75,36 +129,57 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="senderNameLable">
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="dtLable">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>300</width>
-       <height>16777215</height>
-      </size>
-     </property>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="text">
-      <string>&lt;a style=&quot;text-decoration: none; color:black&quot; href=&quot;#&quot;&gt;Name&lt;/a&gt;</string>
+      <string>2022-06-23 # 22:30:30</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="0" column="0">
+    <widget class="QPushButton" name="profilePicLable">
+     <property name="minimumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../res/img/temp_profile_pic.jpg</normaloff>../res/img/temp_profile_pic.jpg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
     <widget class="QTextBrowser" name="text">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -148,35 +223,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="profilePicLable">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>30</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="pixmap">
-      <pixmap>../res/img/temp_profile_pic.jpg</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
     <widget class="QWidget" name="reply" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -230,50 +277,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QLabel" name="dtLable">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>2022-06-23 # 22:30:30</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QVideoWidget" name="video" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>135</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>300</width>
-       <height>135</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
+   <item row="5" column="0" colspan="2">
     <widget class="QWidget" name="audio" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -289,7 +293,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="maximumSize">
       <size>
-       <width>16777215</width>
+       <width>300</width>
        <height>50</height>
       </size>
      </property>
@@ -333,8 +337,8 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QWidget" name="file" native="true">
+   <item row="4" column="0" colspan="2">
+    <widget class="QVideoWidget" name="video" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -344,47 +348,44 @@ p, li { white-space: pre-wrap; }
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>50</height>
+       <height>135</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>300</width>
-       <height>50</height>
+       <height>135</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <property name="spacing">
-       <number>20</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="fileDownloadPushButton">
-        <property name="minimumSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../res/icon/download_icon.png</normaloff>../res/icon/download_icon.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="fileLabel">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="senderNameLable">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>&lt;a style=&quot;text-decoration: none; color:black&quot; href=&quot;#&quot;&gt;Name&lt;/a&gt;</string>
+     </property>
     </widget>
    </item>
   </layout>

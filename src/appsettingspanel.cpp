@@ -8,6 +8,7 @@ AppSettingsPanel::AppSettingsPanel(QWidget *parent) :
     ui->setupUi(this);
 
     ui->BGLable->setPixmap(QPixmap(iniFile["chat-bg-image"]));
+    image_path = iniFile["chat-bg-image"];
 }
 
 AppSettingsPanel::~AppSettingsPanel()

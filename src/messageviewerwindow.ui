@@ -23,6 +23,12 @@
    <iconset>
     <normaloff>../res/icon/Zapchat-icon.png</normaloff>../res/icon/Zapchat-icon.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#MessagesViewerWindow
+{
+	background-color: rgb(230, 230, 230);
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>

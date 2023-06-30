@@ -50,7 +50,6 @@ private slots:
     void messageAsCommandProc(QByteArray rData);
     void sendRun();
     void notConnectedProc();
-    void dataArrivedProc(int channel, qint64 bytes);
     void connectedProc();
     void reConnect();
 
@@ -58,21 +57,16 @@ signals:
     void sendData(QByteArray sData);
     void messageAsData(QByteArray rData);
     void messageAsCommand(QByteArray rData);
-    void dataArrived();
-    void start_sendRun();
 
 private:
     QTcpSocket *socket;
     QVector<QString> job;
-    QVector<QString> forceJob;
-    QVector<QString> job_delPending;
-    QVector<QString> forceJob_delPending;
+    QVector<QString> fJob;
+    QVector<QString> j_delPending;
     NetworkState ns = NetworkState::Offline;
     QTimer readyReadTimer;
     QTimer hostConn;
-    bool is_login = false;
-    int dataSize = INT_MAX;
-    char job_order; // f->force , j->not force
+    QTimer sendTimer;
 };
 
 #endif // SERVERMAN_H

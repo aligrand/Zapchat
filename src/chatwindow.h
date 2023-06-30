@@ -46,8 +46,6 @@ private slots:
 
     void on_settingsButton_clicked();
 
-    void on_search_le_textChanged(const QString &arg1);
-
     void on_profile_lable_linkActivated(const QString &link);
 
     void on_refoButton_clicked();
@@ -76,6 +74,8 @@ private slots:
 
     void nConnProc();
 
+    void on_search_le_textChanged(const QString &arg1);
+
 private:
     void delRoomListItems();
     void printRoomsList(QString additionalInfo = "1=1");
@@ -100,9 +100,9 @@ private:
     EmojiTable *emoTable = nullptr;
     bool is_emoTable_open = false;
     QSqlQuery sqlQuery;
-    QVBoxLayout roomPanelLayout;
+    QVBoxLayout *roomPanelLayout;
     QMenu *menu = nullptr;
-    QString replyID = "", text = "", imagePath = "", videoPath = "", audioPath = "", filePath = "";
+    QString replyID = "", imagePath = "", videoPath = "", audioPath = "", filePath = "";
     QString room_id = "";
     bool is_typeof_room_user;
 };

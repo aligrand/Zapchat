@@ -54,6 +54,10 @@ int main(int argc, char *argv[])
     db.setDatabaseName("clientDB.sqlite3");
     db.open();
 
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare("PRAGMA foreign_keys = 1;");
+    sqlQuery.exec();
+
     QFile userpassFile("userinfo.txt");
     userpassFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
@@ -96,7 +100,10 @@ int main(int argc, char *argv[])
         password = userpassFile.readLine().trimmed();
         userpassFile.close();
 
-        emit server->command("LOGIN " + myUsername + " " + password);
+        if (server->getNetworkState() == NetworkState::Online)
+        {
+            emit server->command("LOGIN " + myUsername + " " + password);
+        }
     }
 
     QFile mIndex("message-index.txt");
