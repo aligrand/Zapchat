@@ -76,6 +76,8 @@ private slots:
 
     void on_search_le_textChanged(const QString &arg1);
 
+    void loginResult(int result);
+
 private:
     void delRoomListItems();
     void printRoomsList(QString additionalInfo = "1=1");

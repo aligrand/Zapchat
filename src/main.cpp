@@ -11,13 +11,18 @@
 #include <QMessageBox>
 #include <QTime>
 
+#include <assert.h>
+
 ServerMan *server;
 QString myUsername;
 qint64 myMessageIndex;
 
-void delay(int sec)
+// min : 200 milisec
+void delay(int milisec)
 {
-    QTime dieTime= QTime::currentTime().addSecs(sec);
+    assert(milisec >= 200);
+
+    QTime dieTime= QTime::currentTime().addMSecs(milisec);
     while (QTime::currentTime() < dieTime)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -63,7 +68,7 @@ int main(int argc, char *argv[])
 
     server = new ServerMan;
 
-    delay(2);
+    delay(2000);
 
     if(!is_user_avalable())
     {
@@ -71,7 +76,7 @@ int main(int argc, char *argv[])
         {
             QMessageBox::critical(nullptr, "Erorr", "Youu are offline");
 
-            exit(0);
+            qApp->exit(0);
         }
 
         lp_window = new landing_page;

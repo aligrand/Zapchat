@@ -7,11 +7,20 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSqlQuery sqlQuery;
+
     if (isUser)
     {
-        QSqlQuery sqlQuery;
-        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
+        sqlQuery.prepare("SELECT * FROM participants WHERE roomID=? AND NOT userID=?");
         sqlQuery.addBindValue(id);
+        sqlQuery.addBindValue(myUsername);
+        sqlQuery.exec();
+        sqlQuery.first();
+
+        QString uid = sqlQuery.value("userID").toString();
+
+        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
+        sqlQuery.addBindValue(uid);
         sqlQuery.exec();
         sqlQuery.first();
 

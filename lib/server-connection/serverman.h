@@ -31,6 +31,7 @@ public:
     ~ServerMan();
 
     NetworkState getNetworkState();
+    bool getIsLogin();
 
 signals:
     void userNameExistResult(bool result, QString un);
@@ -67,6 +68,7 @@ private:
     QTimer readyReadTimer;
     QTimer hostConn;
     QTimer sendTimer;
+    bool isLogin = true;
 };
 
 #endif // SERVERMAN_H

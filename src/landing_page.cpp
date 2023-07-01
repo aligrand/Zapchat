@@ -25,5 +25,5 @@ void landing_page::on_goto_signiu_button_clicked()
 
 void landing_page::closeByServer()
 {
-    exit(0);
+    qApp->exit(0);
 }

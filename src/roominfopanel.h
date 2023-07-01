@@ -5,6 +5,8 @@
 #include <QString>
 #include <QSqlQuery>
 
+extern QString myUsername;
+
 namespace Ui {
 class RoomInfoPanel;
 }

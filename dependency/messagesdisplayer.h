@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QSqlQuery>
 #include <QScrollBar>
+#include <QTimer>
 
 #include "../lib/server-connection/serverman.h"
 #include "../src/messagewidget.h"
@@ -26,15 +27,13 @@ public:
     explicit MessagesDisplayer(QString queryCondition, QString room_id = "", QWidget *parent = nullptr);
     ~MessagesDisplayer();
 
-signals:
-    void recreateList();
-
 private slots:
     void updateMessagesQuery(QString additionalInfo);
     void loadMessage(int value);
 
 private:
     void delListItem(QHBoxLayout *layout);
+    void scrollbarMax();
 
 private:
     Ui::MessagesDisplayer *ui;
@@ -43,6 +42,8 @@ private:
     QString rid, qc;
     QVBoxLayout *contentLayout = new QVBoxLayout;
     int lastVScrollBarValue;
+    int upAt;
+    int downAt;
 };
 
 #endif // MESSAGESDISPLAYER_H

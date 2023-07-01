@@ -84,6 +84,7 @@ void signIU_page::signin_result(int result)
 
         QFile u_info("userinfo.txt");
         u_info.open(QIODevice::WriteOnly | QIODevice::Text);
+        u_info.resize(0);
         u_info.write((sign_info[0] + "\n").toStdString().c_str());
         u_info.write((sign_info[1] + "\n").toStdString().c_str());
         u_info.close();
@@ -120,7 +121,7 @@ void signIU_page::auth_result(qint8 res)
         emit server->command(QString("ADD-USER ") + record);
         emit server->command("SET-PASS " + sign_info[0] + " " + sign_info[1]);
 
-        delay(1);
+        delay(1000);
 
         emit server->command("LOGIN " + sign_info[0] + " " + sign_info[1]);
 
@@ -128,6 +129,7 @@ void signIU_page::auth_result(qint8 res)
 
         QFile u_info("userinfo.txt");
         u_info.open(QIODevice::WriteOnly | QIODevice::Text);
+        u_info.resize(0);
         u_info.write((sign_info[0] + "\n").toStdString().c_str());
         u_info.write((sign_info[1] + "\n").toStdString().c_str());
         u_info.close();
@@ -184,5 +186,5 @@ void signIU_page::uiw_result(QString name, QString info, QString image_path)
 
 void signIU_page::closeByServer()
 {
-    exit(0);
+    qApp->exit(0);
 }

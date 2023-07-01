@@ -12,15 +12,18 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
     connect(server, &ServerMan::databaseUpdated, this, &MessagesDisplayer::updateMessagesQuery);
 
     contentLayout->setMargin(0);
-    ui->scrollAreaWidgetContents->setLayout(contentLayout);
+    contentLayout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
 
-    ui->scrollArea->verticalScrollBar()->setSingleStep(1);
+    ui->scrollArea->verticalScrollBar()->setSingleStep(5);
+    ui->scrollArea->verticalScrollBar()->setVisible(false);
 
     sqlQuery.prepare("SELECT * FROM messages WHERE " + qc);
     sqlQuery.exec();
     if (sqlQuery.last())
     {
-        for (int i = 0; i < 50; ++i)
+        downAt = sqlQuery.at();
+
+        for (int i = 0; i < 20; ++i)
         {
             QHBoxLayout *tmpLayout = new QHBoxLayout;
             QBoxLayout::Direction direction;
@@ -47,16 +50,17 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
 
             messagesList.push_back(tmpLayout);
 
-            int tmpValue = ui->scrollArea->verticalScrollBar()->value();
+            contentLayout->insertLayout(1, tmpLayout);
 
-            contentLayout->insertLayout(0, tmpLayout);
-            ui->scrollArea->verticalScrollBar()->setValue(tmpValue + 1);
+            upAt = sqlQuery.at();
 
             if (sqlQuery.previous() == false)
             {
                 break;
             }
         }
+
+        QTimer::singleShot(25, this, &MessagesDisplayer::scrollbarMax);
 
         connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::valueChanged,
                 this, &MessagesDisplayer::loadMessage);
@@ -78,70 +82,116 @@ void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
 {
     if (additionalInfo == ("messages-" + rid + "-remove"))
     {
-        emit recreateList();
+
     }
     else if (additionalInfo == ("messages-" + rid))
     {
-        sqlQuery.prepare("SELECT * FROM messages WHERE " + qc);
-        sqlQuery.exec();
 
-        sqlQuery.seek(sqlQuery.at());
     }
 }
 
 void MessagesDisplayer::loadMessage(int value)
 {
-    if(value > lastVScrollBarValue && value - lastVScrollBarValue < 10)
+    QHBoxLayout *tmpLayout = new QHBoxLayout;
+    QBoxLayout::Direction direction;
+    MessageWidget *mw;
+    QString css;
+    int height;
+
+    // go down
+    if(value > lastVScrollBarValue && ui->scrollArea->verticalScrollBar()->maximum() - value < 30)
     {
-        if (sqlQuery.seek(sqlQuery.at() + messagesList.size()) == false)
+        if (!sqlQuery.seek(downAt + 1))
         {
+            delete tmpLayout;
             return;
         }
 
-        QHBoxLayout *tmpLayout = new QHBoxLayout;
+        if (sqlQuery.value("userID").toString() == myUsername)
+        {
+            direction = QBoxLayout::Direction::RightToLeft;
+            css = "background: #9fcd6e;";
+        }
+        else
+        {
+            direction = QBoxLayout::Direction::LeftToRight;
+            css = "background: #fff;";
+        }
 
-        QBoxLayout::Direction direction = (sqlQuery.value("userID").toString() == myUsername)
-                ? QBoxLayout::Direction::RightToLeft : QBoxLayout::Direction::LeftToRight;
+        mw = new MessageWidget(sqlQuery.value("id").toString());
+        mw->setStyleSheet(css);
+        height = mw->sizeHint().height();
 
-        tmpLayout->addWidget(new MessageWidget(sqlQuery.value("id").toString()));
+        tmpLayout->insertWidget(0, mw);
         tmpLayout->setDirection(direction);
+        tmpLayout->addStretch();
 
-        messagesList.push_front(tmpLayout);
-        delListItem(messagesList.back());
+        delListItem(messagesList.last());
         messagesList.pop_back();
+        messagesList.push_front(tmpLayout);
 
-        contentLayout->addLayout(tmpLayout);
+        contentLayout->insertLayout(messagesList.size(), tmpLayout);
 
-        sqlQuery.seek(sqlQuery.at() - (messagesList.size() - 1));
+        ++downAt;
+        ++upAt;
     }
-    else if (value < lastVScrollBarValue && lastVScrollBarValue - value < 10)
+    // go up
+    else if (value < lastVScrollBarValue && value - ui->scrollArea->verticalScrollBar()->minimum() < 30)
     {
-        if (sqlQuery.seek(sqlQuery.at() - 1) == false)
+        if (!sqlQuery.seek(upAt - 1))
         {
+            delete tmpLayout;
             return;
         }
 
-        QHBoxLayout *tmpLayout = new QHBoxLayout;
+        if (sqlQuery.value("userID").toString() == myUsername)
+        {
+            direction = QBoxLayout::Direction::RightToLeft;
+            css = "background: #9fcd6e;";
+        }
+        else
+        {
+            direction = QBoxLayout::Direction::LeftToRight;
+            css = "background: #fff;";
+        }
 
-        QBoxLayout::Direction direction = (sqlQuery.value("userID").toString() == myUsername)
-                ? QBoxLayout::Direction::RightToLeft : QBoxLayout::Direction::LeftToRight;
+        qDebug() << sqlQuery.value("id").toString();
 
-        tmpLayout->addWidget(new MessageWidget(sqlQuery.value("id").toString()));
+        mw = new MessageWidget(sqlQuery.value("id").toString());
+        mw->setStyleSheet(css);
+        height = mw->sizeHint().height();
+
+        tmpLayout->insertWidget(0, mw);
         tmpLayout->setDirection(direction);
+        tmpLayout->addStretch();
 
-        messagesList.push_back(tmpLayout);
         delListItem(messagesList.front());
         messagesList.pop_front();
+        messagesList.push_back(tmpLayout);
 
-        int tmpValue = ui->scrollArea->verticalScrollBar()->value();
+        contentLayout->insertLayout(1, tmpLayout);
 
-        contentLayout->insertLayout(0, tmpLayout);
-        ui->scrollArea->verticalScrollBar()->setValue(tmpValue + 1);
+        --downAt;
+        --upAt;
     }
+    else
+    {
+        return;
+    }
+
+    qDebug() << height;
+    lastVScrollBarValue = ui->scrollArea->verticalScrollBar()->value() + height;
+    ui->scrollArea->verticalScrollBar()->setValue(lastVScrollBarValue);
 }
 
 void MessagesDisplayer::delListItem(QHBoxLayout *layout)
 {
     layout->takeAt(0)->widget()->deleteLater();
     delete layout->takeAt(0);
+}
+
+void MessagesDisplayer::scrollbarMax()
+{
+    lastVScrollBarValue = ui->scrollArea->verticalScrollBar()->maximum();
+    ui->scrollArea->verticalScrollBar()->setValue(lastVScrollBarValue);
 }

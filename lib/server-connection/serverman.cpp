@@ -22,13 +22,13 @@ ServerMan::ServerMan()
     if (ip_port.split(":").first().isEmpty())
     {
         qDebug() << "no IP";
-        exit(0);
+        qApp->exit(0);
     }
 
     if (ip_port.split(":").last().isEmpty())
     {
         qDebug() << "no PORT";
-        exit(0);
+        qApp->exit(0);
     }
 
     QFile _jFile("job-queue.txt");
@@ -122,8 +122,6 @@ void ServerMan::sendRun()
         return;
     }
 
-    j_delPending.push_front(final_cmd);
-
     qDebug() << "<SEND>" << final_cmd;
 
     if (final_cmd.split(" ").first() == "_UPLOAD_")
@@ -135,7 +133,15 @@ void ServerMan::sendRun()
 
         QString filePath = QString::fromStdString(final_cmd.toStdString().substr(static_cast<size_t>(final_cmd.indexOf(" ")) + 1));
         QFile _file(filePath);
-        _file.open(QIODevice::ReadOnly);
+        if (!_file.open(QIODevice::ReadOnly))
+        {
+            qDebug() << "File not found -> " << filePath;
+
+            return;
+        }
+
+        j_delPending.push_front(final_cmd);
+
         data = _file.readAll();
         _file.close();
 
@@ -147,6 +153,8 @@ void ServerMan::sendRun()
     }
     else
     {
+        j_delPending.push_front(final_cmd);
+
         data = final_cmd.toUtf8();
 
         header.append(char(0));
@@ -164,6 +172,11 @@ void ServerMan::sendRun()
 NetworkState ServerMan::getNetworkState()
 {
     return ns;
+}
+
+bool ServerMan::getIsLogin()
+{
+    return isLogin;
 }
 
 void ServerMan::notConnectedProc()
@@ -285,6 +298,7 @@ void ServerMan::messageAsDataProc(QByteArray rData)
 
     emit command("ARRIVE");
 
+    QFile::remove(dir + fileName + "." + fileFormat);
     QFile file(dir + fileName + "." + fileFormat);
     file.open(QIODevice::WriteOnly);
     file.write(rData.mid(71));
@@ -366,8 +380,6 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         }
 
         emit databaseUpdated("users");
-
-        emit command("DOWNLOAD " + dbMatch.captured(4));
     }
     else if (cmdName == "ADD-PARTICIPANT")
     {
@@ -380,7 +392,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         sqlQuery.addBindValue(dbList[2]);
         sqlQuery.exec();
 
-        emit databaseUpdated("particpants");
+        emit databaseUpdated("participants");
     }
     else if (cmdName == "ADD-MESSAGE")
     {
@@ -407,7 +419,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         sqlQuery.addBindValue(dbList[1]);
         sqlQuery.exec();
 
-        emit databaseUpdated("messages");
+        emit databaseUpdated("messages-" + dbList[1]);
     }
     else if (cmdName == "REMOVE-MESSAGE")
     {
@@ -425,7 +437,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         sqlQuery.addBindValue(_roomID);
         sqlQuery.exec();
 
-        emit databaseUpdated("messages");
+        emit databaseUpdated("messages-" + _roomID + "-remove");
     }
     else if (cmdName == "REMOVE-USER")
     {
@@ -465,7 +477,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
         sqlQuery.addBindValue(dbList[0]);
         sqlQuery.exec();
 
-        emit databaseUpdated("rooms");
+        emit databaseUpdated("rooms-edit");
     }
     else if (cmdName == "EDIT-USER")
     {
@@ -487,6 +499,8 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     }
     else if (cmdName == "LOGIN-RESULT")
     {
+        (cmdArgs == 1) ? (isLogin = true) : (isLogin = false);
+
         emit loginResult(cmdArgs.toInt());
     }
     else if (cmdName == "UN-EXIST-RESULT")
@@ -505,7 +519,7 @@ void ServerMan::messageAsCommandProc(QByteArray rData)
     {
         QFile _file("message-index.txt");
         _file.open(QIODevice::WriteOnly | QIODevice::Text);
-
+        _file.resize(0);
         _file.write(cmdArgs.toStdString().c_str());
         _file.close();
     }

@@ -10,6 +10,7 @@ ChatWindow::ChatWindow(QWidget *parent) :
     connect(server, &ServerMan::databaseUpdated, this, &ChatWindow::updateRoomList);
     connect(server, &ServerMan::connected, this, &ChatWindow::connProc);
     connect(server, &ServerMan::notConnected, this, &ChatWindow::nConnProc);
+    connect(server, &ServerMan::loginResult, this, &ChatWindow::loginResult);
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -28,9 +29,16 @@ ChatWindow::ChatWindow(QWidget *parent) :
                                      "background-image: url('" + ini["chat-bg-image"] + "');"
                                      "}");
 
+    delay(1000);
+
     if (server->getNetworkState() == NetworkState::Offline)
     {
         this->setWindowTitle("Zapchat - OFFLINE");
+    }
+
+    if (server->getIsLogin() == false)
+    {
+        qApp->exit(0);
     }
 
     roomPanelLayout = qobject_cast<QVBoxLayout *>(ui->roomPanelContents->layout());
@@ -151,12 +159,14 @@ void ChatWindow::on_emojiButton_clicked()
         emoTable->deleteLater();
 
         is_emoTable_open = false;
+        return;
     }
 
-    emoTable = new EmojiTable(ui->widget_3);
+    emoTable = new EmojiTable(this);
 
-    emoTable->setGeometry(ui->emojiButton->pos().x(), ui->emojiButton->pos().y() - 250,
-                          100, 200);
+    emoTable->setGeometry(ui->widget_3->mapTo(this, ui->emojiButton->pos()).x() - 100,
+                          ui->widget_3->mapTo(this, ui->emojiButton->pos()).y() - 320,
+                          200, 300);
     connect(emoTable, &EmojiTable::_itemClicked, this, &ChatWindow::emojiProc);
 
     emoTable->show();
@@ -278,6 +288,8 @@ void ChatWindow::on_sendButton_clicked()
                                      "<p><span style=\" font-weight:600;\">File: </span>&quot;&quot;</p>"
                                      "</body>"
                                      "</html>");
+
+    server->databaseUpdated("messages-" + room_id);
 }
 
 void ChatWindow::on_pinButton_clicked()
@@ -452,7 +464,7 @@ void ChatWindow::buttonsProc(QAction *action)
     {
         emit server->command("REMOVE-USER " + myUsername);
 
-        delay(2);
+        delay(2000);
 
         sqlQuery.prepare("DELETE FROM rooms");
         sqlQuery.exec();
@@ -475,7 +487,7 @@ void ChatWindow::buttonsProc(QAction *action)
         QDir("Profiles").removeRecursively();
         QDir().mkdir("Profiles");
 
-        exit(0);
+        qApp->exit(0);
     }
     else if (action->text() == "Logout")
     {
@@ -500,7 +512,7 @@ void ChatWindow::buttonsProc(QAction *action)
         QDir("Profiles").removeRecursively();
         QDir().mkdir("Profiles");
 
-        exit(0);
+        qApp->exit(0);
     }
     else if (action->text() == "Image")
     {
@@ -775,4 +787,12 @@ void ChatWindow::on_search_le_textChanged(const QString &arg1)
     delRoomListItems();
 
     printRoomsList("id LIKE '%" + arg1 + "%' OR name LIKE '%" + arg1 + "%'");
+}
+
+void ChatWindow::loginResult(int result)
+{
+    if (server->getIsLogin() == false)
+    {
+        qApp->exit(0);
+    }
 }
