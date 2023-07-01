@@ -393,7 +393,7 @@ void ChatWindow::on_moreButton_clicked()
     delete menu;
 
     menu = new QMenu(this);
-    menu->addAction(QIcon("../res/icon/search_icon.png"), "Serch");
+    menu->addAction(QIcon("../res/icon/search_icon.png"), "Search");
     menu->addAction(QIcon("../res/icon/leave_icon.png"), "Left");
 
     sqlQuery.prepare("SELECT role FROM participants WHERE roomID=? AND userID=?");
@@ -691,6 +691,7 @@ void ChatWindow::buttonsProc(QAction *action)
 
         pinMessageViewerWindow->deleteLater();
         pinMessageViewerWindow = new MessageViewerWindow("id='" + sqlQuery.value("pin").toString() + "'");
+        pinMessageViewerWindow->show();
     }
     else if (action->text() == "Remove Pin")
     {
@@ -717,6 +718,7 @@ void ChatWindow::buttonsProc(QAction *action)
 
         searchMessageViewerWindow->deleteLater();
         searchMessageViewerWindow = new MessageViewerWindow("text LIKE '%" + pattern + "%'");
+        searchMessageViewerWindow->show();
     }
     else if (action->text() == "Left")
     {
