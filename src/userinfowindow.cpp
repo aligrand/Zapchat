@@ -6,6 +6,8 @@ UserInfoWindow::UserInfoWindow(QWidget *parent) :
     ui(new Ui::UserInfoWindow)
 {
     ui->setupUi(this);
+
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 UserInfoWindow::~UserInfoWindow()

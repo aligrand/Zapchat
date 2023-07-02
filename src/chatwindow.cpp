@@ -180,10 +180,10 @@ void ChatWindow::on_sendButton_clicked()
 
     if (imagePath != "")
     {
-        if (QFile::exists( "Images/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists("Images/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "I." + imagePath.split(".").last()))
         {
-            QFile::remove( "Images/" + room_id + "-" + myUsername + "-" +
+            QFile::remove("Images/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "I." + imagePath.split(".").last());
         }
         QFile::copy(imagePath, "Images/" + room_id + "-" + myUsername + "-" +
@@ -194,10 +194,10 @@ void ChatWindow::on_sendButton_clicked()
     }
     if (videoPath != "")
     {
-        if (QFile::exists( "Videos/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists("Videos/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "V." + imagePath.split(".").last()))
         {
-            QFile::remove( "Videos/" + room_id + "-" + myUsername + "-" +
+            QFile::remove("Videos/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "V." + imagePath.split(".").last());
         }
         QFile::copy(videoPath, "Videos/" + room_id + "-" + myUsername + "-" +
@@ -208,10 +208,10 @@ void ChatWindow::on_sendButton_clicked()
     }
     if (audioPath != "")
     {
-        if (QFile::exists( "Audios/" + room_id + "-" + myUsername + "-" +
+        if (QFile::exists("Audios/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "A." + imagePath.split(".").last()))
         {
-            QFile::remove( "Audios/" + room_id + "-" + myUsername + "-" +
+            QFile::remove("Audios/" + room_id + "-" + myUsername + "-" +
                            QString::number(myMessageIndex) + "A." + imagePath.split(".").last());
         }
         QFile::copy(audioPath, "Audios/" + room_id + "-" + myUsername + "-" +
@@ -222,14 +222,15 @@ void ChatWindow::on_sendButton_clicked()
     }
     if (filePath != "")
     {
-        if (QFile::exists( "Files/" + room_id + "-" + myUsername + "-" +
-                           QString::number(myMessageIndex) + "F." + imagePath.split(".").last()))
+        if (QFile::exists("Files/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "F." + filePath.split(".").last()))
         {
-            QFile::remove( "Files/" + room_id + "-" + myUsername + "-" +
-                           QString::number(myMessageIndex) + "F." + imagePath.split(".").last());
+            QFile::remove("Files/" + room_id + "-" + myUsername + "-" +
+                           QString::number(myMessageIndex) + "F." + filePath.split(".").last());
         }
         QFile::copy(filePath, "Files/" + room_id + "-" + myUsername + "-" +
                     QString::number(myMessageIndex) + "F." + filePath.split(".").last());
+
         filePath = room_id + "-" + myUsername + "-" + QString::number(myMessageIndex) + "F." + filePath.split(".").last();
 
         emit server->command("_UPLOAD_ Files/" + filePath);

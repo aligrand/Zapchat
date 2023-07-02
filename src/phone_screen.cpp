@@ -6,6 +6,8 @@ phone_screen::phone_screen(QWidget *parent) :
     ui(new Ui::phone_screen)
 {
     ui->setupUi(this);
+
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void phone_screen::set_sms(QString sms)

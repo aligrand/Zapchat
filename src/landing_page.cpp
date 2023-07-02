@@ -9,6 +9,8 @@ landing_page::landing_page(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     connect(server, &ServerMan::notConnected, this, &landing_page::closeByServer);
 }
 

@@ -7,6 +7,8 @@ AddRoomWindow::AddRoomWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     connect(server, &ServerMan::idExistResult, this, &AddRoomWindow::addRoom);
 }
 

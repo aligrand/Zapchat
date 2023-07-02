@@ -7,6 +7,8 @@ EnterRoomWindow::EnterRoomWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     connect(server, &ServerMan::userNameExistResult, this, &EnterRoomWindow::enterRoom);
     connect(server, &ServerMan::idExistResult, this, &EnterRoomWindow::enterRoom);
 }

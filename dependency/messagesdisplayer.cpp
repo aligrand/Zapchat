@@ -9,8 +9,6 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
 {
     ui->setupUi(this);
 
-    connect(server, &ServerMan::databaseUpdated, this, &MessagesDisplayer::updateMessagesQuery);
-
     contentLayout->setMargin(0);
     contentLayout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
 
@@ -76,18 +74,6 @@ MessagesDisplayer::~MessagesDisplayer()
 
     delete ui;
     delete contentLayout;
-}
-
-void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
-{
-    if (additionalInfo == ("messages-" + rid + "-remove"))
-    {
-
-    }
-    else if (additionalInfo == ("messages-" + rid))
-    {
-
-    }
 }
 
 void MessagesDisplayer::loadMessage(int value)

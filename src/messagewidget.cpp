@@ -229,7 +229,7 @@ void MessageWidget::on_fileDownloadPushButton_clicked()
         return;
     }
 
-    QDesktopServices::openUrl(QUrl("Files/" + fPath));
+    QDesktopServices::openUrl(QUrl::fromLocalFile("Files/" + fPath));
 }
 
 void MessageWidget::on_imageLable_customContextMenuRequested(const QPoint &pos)

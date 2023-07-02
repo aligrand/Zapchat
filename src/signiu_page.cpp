@@ -11,6 +11,8 @@ signIU_page::signIU_page(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     si_w = new signin_widget(this);
     si_w->setVisible(false);
     si_w->move(293, 85);
