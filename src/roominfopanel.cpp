@@ -1,7 +1,7 @@
 #include "roominfopanel.h"
 #include "ui_roominfopanel.h"
 
-RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
+RoomInfoPanel::RoomInfoPanel(int type, QString id, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RoomInfoPanel)
 {
@@ -9,7 +9,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
 
     QSqlQuery sqlQuery;
 
-    if (isUser)
+    if (type == 1)
     {
         sqlQuery.prepare("SELECT * FROM participants WHERE roomID=? AND NOT userID=?");
         sqlQuery.addBindValue(id);
@@ -31,7 +31,7 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         ui->emailField->setText(sqlQuery.value("emailADDRESS").toString());
         ui->pnField->setText(sqlQuery.value("phoneNumber").toString());
     }
-    else
+    else if (type == 0)
     {
         QSqlQuery sqlQuery;
         sqlQuery.prepare("SELECT * FROM rooms WHERE id=?");
@@ -45,6 +45,21 @@ RoomInfoPanel::RoomInfoPanel(bool isUser, QString id, QWidget *parent) :
         ui->pofile_pic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
         delete ui->groupBox_3;
         delete ui->groupBox_4;
+    }
+    else
+    {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare("SELECT * FROM users WHERE username=?");
+        sqlQuery.addBindValue(id);
+        sqlQuery.exec();
+        sqlQuery.first();
+
+        ui->nameField->setText(sqlQuery.value("name").toString());
+        ui->IDField->setText(sqlQuery.value("username").toString());
+        ui->infoField->setText(sqlQuery.value("info").toString());
+        ui->pofile_pic->setPixmap(QPixmap("Profiles/" + sqlQuery.value("photoADDRESS").toString()));
+        ui->emailField->setText(sqlQuery.value("emailADDRESS").toString());
+        ui->pnField->setText(sqlQuery.value("phoneNumber").toString());
     }
 }
 

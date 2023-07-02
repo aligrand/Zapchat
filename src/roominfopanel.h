@@ -16,7 +16,8 @@ class RoomInfoPanel : public QWidget
     Q_OBJECT
 
 public:
-    explicit RoomInfoPanel(bool isUser, QString id, QWidget *parent = nullptr);
+    // type -> 0:group 1:private 2:user
+    explicit RoomInfoPanel(int type, QString id, QWidget *parent = nullptr);
     ~RoomInfoPanel();
 
 private:
