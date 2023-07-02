@@ -80,54 +80,58 @@ MessagesDisplayer::~MessagesDisplayer()
 
 void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
 {
-    if ((additionalInfo == "messages-" + rid) &&
-            (messagesList.size() < 20))
+    if (additionalInfo == "messages-" + rid)
     {
         sqlQuery.prepare("SELECT * FROM messages WHERE " + qc);
         sqlQuery.exec();
 
-        QHBoxLayout *tmpLayout = new QHBoxLayout;
-        QBoxLayout::Direction direction;
-        MessageWidget *mw;
-        QString css;
-        int height;
-
-        if (!sqlQuery.seek(downAt + 1))
+        if (messagesList.size() < 20)
         {
-            delete tmpLayout;
-            return;
+
+            QHBoxLayout *tmpLayout = new QHBoxLayout;
+            QBoxLayout::Direction direction;
+            MessageWidget *mw;
+            QString css;
+            int height;
+
+            if (!sqlQuery.seek(downAt + 1))
+            {
+                delete tmpLayout;
+                return;
+            }
+
+            if (sqlQuery.value("userID").toString() == myUsername)
+            {
+                direction = QBoxLayout::Direction::RightToLeft;
+                css = "background: #9fcd6e;";
+            }
+            else
+            {
+                direction = QBoxLayout::Direction::LeftToRight;
+                css = "background: #fff;";
+            }
+
+            mw = new MessageWidget(sqlQuery.value("id").toString());
+            mw->setStyleSheet(css);
+            height = mw->sizeHint().height();
+
+            tmpLayout->insertWidget(0, mw);
+            tmpLayout->setDirection(direction);
+            tmpLayout->addStretch();
+
+            messagesList.push_front(tmpLayout);
+
+            contentLayout->insertLayout(messagesList.size() + 1, tmpLayout);
+
+            ++downAt;
+
+            qDebug() << height;
+            lastVScrollBarValue = ui->scrollArea->verticalScrollBar()->value() - height;
+            ui->scrollArea->verticalScrollBar()->setValue(lastVScrollBarValue);
         }
-
-        if (sqlQuery.value("userID").toString() == myUsername)
-        {
-            direction = QBoxLayout::Direction::RightToLeft;
-            css = "background: #9fcd6e;";
-        }
-        else
-        {
-            direction = QBoxLayout::Direction::LeftToRight;
-            css = "background: #fff;";
-        }
-
-        mw = new MessageWidget(sqlQuery.value("id").toString());
-        mw->setStyleSheet(css);
-        height = mw->sizeHint().height();
-
-        tmpLayout->insertWidget(0, mw);
-        tmpLayout->setDirection(direction);
-        tmpLayout->addStretch();
-
-        messagesList.push_front(tmpLayout);
-
-        contentLayout->insertLayout(messagesList.size() + 1, tmpLayout);
-
-        ++downAt;
-
-        qDebug() << height;
-        lastVScrollBarValue = ui->scrollArea->verticalScrollBar()->value() - height;
-        ui->scrollArea->verticalScrollBar()->setValue(lastVScrollBarValue);
     }
 }
+
 
 void MessagesDisplayer::loadMessage(int value)
 {
