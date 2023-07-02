@@ -12,6 +12,8 @@ MessagesDisplayer::MessagesDisplayer(QString queryCondition, QString room_id, QW
     contentLayout->setMargin(0);
     contentLayout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
 
+    connect(server, &ServerMan::databaseUpdated, this, &MessagesDisplayer::updateMessagesQuery);
+
     ui->scrollArea->verticalScrollBar()->setSingleStep(5);
     ui->scrollArea->verticalScrollBar()->setVisible(false);
 
@@ -76,6 +78,44 @@ MessagesDisplayer::~MessagesDisplayer()
     delete contentLayout;
 }
 
+void MessagesDisplayer::updateMessagesQuery(QString additionalInfo)
+{
+    if ((additionalInfo == "messages-" + rid) &&
+            (messagesList.size() < 20))
+    {
+        QHBoxLayout *tmpLayout = new QHBoxLayout;
+        QBoxLayout::Direction direction;
+        MessageWidget *mw;
+        QString css;
+        int height;
+
+        if (sqlQuery.value("userID").toString() == myUsername)
+        {
+            direction = QBoxLayout::Direction::RightToLeft;
+            css = "background: #9fcd6e;";
+        }
+        else
+        {
+            direction = QBoxLayout::Direction::LeftToRight;
+            css = "background: #fff;";
+        }
+
+        mw = new MessageWidget(sqlQuery.value("id").toString());
+        mw->setStyleSheet(css);
+        height = mw->sizeHint().height();
+
+        tmpLayout->insertWidget(0, mw);
+        tmpLayout->setDirection(direction);
+        tmpLayout->addStretch();
+
+        messagesList.push_front(tmpLayout);
+
+        contentLayout->insertLayout(messagesList.size() + 1, tmpLayout);
+
+        ++downAt;
+    }
+}
+
 void MessagesDisplayer::loadMessage(int value)
 {
     QHBoxLayout *tmpLayout = new QHBoxLayout;
@@ -116,7 +156,7 @@ void MessagesDisplayer::loadMessage(int value)
         messagesList.pop_back();
         messagesList.push_front(tmpLayout);
 
-        contentLayout->insertLayout(messagesList.size(), tmpLayout);
+        contentLayout->insertLayout(messagesList.size() + 1, tmpLayout);
 
         ++downAt;
         ++upAt;
