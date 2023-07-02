@@ -453,6 +453,11 @@ void MessageWidget::contextMenuProc(QAction *action)
     }
     else
     {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare("DELETE FROM messages WHERE id=?");
+        sqlQuery.addBindValue(mID);
+        sqlQuery.exec();
+
         emit server->command("REMOVE-MESSAGE " + mID);
     }
 }
