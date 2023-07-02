@@ -110,6 +110,10 @@ MessageWidget::MessageWidget(QString messageID, QWidget *parent) :
             ui->audioPlayPushButton->setIcon(QIcon("../res/icon/play_icon.png"));
 
             aPathExist = true;
+
+            connect(audioPlayer, &QMediaPlayer::positionChanged, this, &MessageWidget::audioBarChange);
+
+            audioPlayer->setNotifyInterval(10);
         }
 
         aPath = sqlQuery.value("audioADDRESS").toString();
@@ -178,15 +182,17 @@ MessageWidget::~MessageWidget()
 
 void MessageWidget::on_replyButton_clicked()
 {
-    replyMes = new MessageViewerWindow("id=" + mID);
+    replyMes = new MessageViewerWindow("id='" + ui->replyLable->text() + "'");
 
     replyMes->show();
 }
 
 void MessageWidget::on_horizontalSlider_sliderMoved(int position)
 {
-    qint64 seekTime = (position / 100) * audioPlayer->duration();
+    audioPlayer->pause();
+    qint64 seekTime = (position * audioPlayer->duration()) / 100;
     audioPlayer->setPosition(seekTime);
+    audioPlayer->play();
 }
 
 void MessageWidget::on_profilePicLable_clicked()
@@ -460,6 +466,12 @@ void MessageWidget::contextMenuProc(QAction *action)
 
         emit server->command("REMOVE-MESSAGE " + mID);
     }
+}
+
+void MessageWidget::audioBarChange(qint64 pos)
+{
+    qint64 tmpPos = (pos * ui->horizontalSlider->maximum()) / audioPlayer->duration();
+    ui->horizontalSlider->setValue(tmpPos);
 }
 
 void MessageWidget::checkResUpdated()

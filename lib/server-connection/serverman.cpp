@@ -48,7 +48,7 @@ ServerMan::ServerMan()
     _fjFile.close();
 
     QString cmd;
-    for (int i = 0; i < job.size() ; --i)
+    for (int i = 0; i < job.size() ; ++i)
     {
         cmd = job[i];
 

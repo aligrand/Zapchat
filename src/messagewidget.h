@@ -61,6 +61,8 @@ private slots:
 
     void contextMenuProc(QAction *action);
 
+    void audioBarChange(qint64 pos);
+
 private:
     QString userID = "", iPath = "", vPath = "", aPath = "", fPath = "", mID = "", rID = "";
     bool iPathExist = false, vPathExist = false, aPathExist = false, fPathExist = false;

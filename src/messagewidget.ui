@@ -323,6 +323,12 @@ p, li { white-space: pre-wrap; }
       </item>
       <item>
        <widget class="QSlider" name="horizontalSlider">
+        <property name="minimumSize">
+         <size>
+          <width>228</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximum">
          <number>100</number>
         </property>
