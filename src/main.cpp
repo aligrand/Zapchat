@@ -126,5 +126,7 @@ int main(int argc, char *argv[])
     mIndex.write(QString::number(myMessageIndex).toStdString().c_str());
     mIndex.close();
 
+    delete server;
+
     return exec_ret;
 }
