@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         {
             QMessageBox::critical(nullptr, "Erorr", "Youu are offline");
 
-            qApp->exit(0);
+            return 0;
         }
 
         lp_window = new landing_page;

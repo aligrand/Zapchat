@@ -121,6 +121,9 @@ void signIU_page::auth_result(qint8 res)
         record.end();
 
         emit server->command(QString("ADD-USER ") + record);
+
+        delay(1000);
+
         emit server->command("SET-PASS " + sign_info[0] + " " + sign_info[1]);
 
         delay(1000);
